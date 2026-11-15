@@ -11,6 +11,10 @@ import './App.css'
 const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
 const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
 
+// Prix affichés sur les boutons Stripe (USD).
+// À garder identiques aux tarifs fixés dans l'interface admin.
+const STRIPE_DISPLAY_PRICES = { monthly: '5 $', annual: '50 $' }
+
 const layoutModels = [
   { id: 'classique', name: 'Classique', description: 'Sections verticales' },
   { id: 'colonnes', name: 'Deux colonnes', description: 'Deux zones par ligne' },
@@ -143,15 +147,31 @@ function App() {
           body: JSON.stringify({
             currency: 'USD',
             period,
+            // Permet au serveur de renvoyer l'utilisateur vers le bon chemin
+            // après le paiement (ex. https://musrh.github.io/mon-repo/).
+            returnUrl: window.location.origin + window.location.pathname,
           }),
         }
       )
 
-      const result = await response.json()
+      let result
+
+      try {
+        result = await response.json()
+      } catch {
+        throw new Error(
+          `Réponse invalide du serveur (HTTP ${response.status}). Vérifiez que le serveur Railway est en ligne.`
+        )
+      }
 
       if (!response.ok || !result.success || !result.url) {
+        // "details" n'est renvoyé par le serveur qu'au compte administrateur.
         throw new Error(
-          result.error || result.message || 'Impossible de créer la session Stripe.'
+          [
+            result.error || result.message || 'Impossible de créer la session Stripe.',
+            result.code ? `(code : ${result.code})` : '',
+            result.details || '',
+          ].filter(Boolean).join(' ')
         )
       }
 
@@ -316,8 +336,8 @@ function App() {
       }
 
       // Les pages intérieures commencent toujours en page 2.
-      
-            for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
         doc.addPage()
 
         doc.setFillColor(...backgroundRgb)
@@ -566,12 +586,12 @@ function App() {
       // Le PDF est téléchargé uniquement après autorisation du serveur.
       const pdfBlob = doc.output('blob')
 
-    console.log('PDF généré :', {
-      taille: pdfBlob.size,
-      type: pdfBlob.type,
-    })
+      console.log('PDF généré :', {
+        taille: pdfBlob.size,
+        type: pdfBlob.type,
+      })
 
-    doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
 
       if (
         result.unlimited ||
@@ -631,10 +651,10 @@ function App() {
         )}
 
         {isAdmin && (
-        <Link to="/admin" className="mockup-dev-toggle">
-          Administration
-        </Link>
-      )}
+          <Link to="/admin" className="mockup-dev-toggle">
+            Administration
+          </Link>
+        )}
       </header>
 
       <section className="welcome" id="top">
@@ -699,7 +719,7 @@ function App() {
         </aside>
 
         <section className="preview-column">
-            <div className="preview-toolbar">
+          <div className="preview-toolbar">
             <div>
               <p className="eyebrow">APERÇU EN DIRECT</p>
               <h2>{selected.name}</h2>
@@ -1330,7 +1350,9 @@ function App() {
                   cursor: 'pointer',
                 }}
               >
-                {stripeLoading === 'monthly' ? 'Préparation...' : 'Payer par carte avec Stripe'}
+                {stripeLoading === 'monthly'
+                  ? 'Préparation...'
+                  : `Payer par carte avec Stripe · ${STRIPE_DISPLAY_PRICES.monthly}`}
               </button>
 
               <a
@@ -1384,7 +1406,9 @@ function App() {
                   cursor: 'pointer',
                 }}
               >
-                {stripeLoading === 'annual' ? 'Préparation...' : 'Payer par carte avec Stripe'}
+                {stripeLoading === 'annual'
+                  ? 'Préparation...'
+                  : `Payer par carte avec Stripe · ${STRIPE_DISPLAY_PRICES.annual}`}
               </button>
 
               <a
@@ -1407,8 +1431,9 @@ function App() {
           </div>
 
           <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
-            Le paiement est traité sur Whop. L’activation et la prolongation
-            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+            Le paiement est traité par Stripe (carte) ou par Whop. L’activation
+            et la prolongation de l’abonnement sont confirmées par le webhook
+            sécurisé du serveur.
           </small>
         </section>
       )}
