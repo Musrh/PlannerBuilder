@@ -1,0 +1,69 @@
+    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+  },
+}
+
+function App() {
+  const { plan, isAdmin } = usePlannerBuilderAuth()
+  const isUnlimited = plan === 'pro' || isAdmin
+
+  const [showMockups, setShowMockups] = useState(false)
+  const [selectedId, setSelectedId] = useState('food')
+  const [visualStyle, setVisualStyle] = useState('minimaliste')
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+        <span className="private-label"><span /> Espace de création</span>
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowMockups((value) => !value)}
+          >
+            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+          </button>
+        )}
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>

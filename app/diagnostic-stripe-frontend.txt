@@ -1,0 +1,212 @@
+]633;E;echo "===== DEBUT APP.JSX =====";560057e5-cc76-4cdb-ade0-e3eccd9d4c11]633;C===== DEBUT APP.JSX =====
+import { useRef, useState } from 'react'
+import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import CoverEditor from './CoverEditor.jsx'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import Admin from './Admin.jsx'
+import AuthGate from './AuthGate.jsx'
+import { usePlannerBuilderAuth } from './AuthGate.jsx'
+import './App.css'
+
+const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+
+const layoutModels = [
+  { id: 'classique', name: 'Classique', description: 'Sections verticales' },
+  { id: 'colonnes', name: 'Deux colonnes', description: 'Deux zones par ligne' },
+  { id: 'grille', name: 'Grille', description: 'Blocs compacts' },
+  { id: 'epure', name: 'Épuré', description: 'Présentation aérée' },
+]
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+]
+
+const pageContent = {
+  daily: {
+    title: 'Ma journée',
+    subtitle: 'Organiser chaque instant avec intention.',
+    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+    rows: ['Priorité 1', 'Priorité 2', 'Priorité 3'],
+  },
+  weekly: {
+    title: 'Ma semaine',
+    subtitle: 'Une semaine organisée à mon rythme.',
+    sections: ['Mes objectifs', 'Lundi – Dimanche', 'Rendez-vous', 'Notes'],
+    rows: ['Objectif principal', 'Tâches importantes', 'Moment pour moi'],
+  },
+  monthly: {
+    title: 'Mon mois',
+    subtitle: 'Prendre du recul et préparer la suite.',
+    sections: ['Objectifs du mois', 'Dates importantes', 'Projets', 'Bilan du mois'],
+    rows: ['Objectif 1', 'Objectif 2', 'Objectif 3'],
+  },
+  food: {
+    title: 'Mon planner alimentaire',
+    subtitle: 'Mieux manger, planifier et savourer.',
+    sections: ['Menu de la semaine', 'Liste de courses', 'Préparation des repas', 'Notes nutrition'],
+    rows: ['Petit-déjeuner', 'Déjeuner', 'Dîner'],
+  },
+  student: {
+    title: 'Mon planner étudiant',
+    subtitle: 'Apprendre, progresser et réussir.',
+    sections: ['Objectifs scolaires', 'Devoirs et examens', 'Planning de révision', 'Notes de cours'],
+    rows: ['Matière 1', 'Matière 2', 'Matière 3'],
+  },
+  budget: {
+    title: 'Mon budget',
+    subtitle: 'Garder le contrôle de mes finances.',
+    sections: ['Revenus du mois', 'Dépenses prévues', 'Épargne', 'Bilan financier'],
+    rows: ['Logement', 'Alimentation', 'Transport'],
+  },
+  habits: {
+    title: 'Mes habitudes',
+    subtitle: 'Les petits gestes créent de grands changements.',
+    sections: ['Habitudes à suivre', 'Suivi de la semaine', 'Mes progrès', 'Réflexions'],
+    rows: ['Boire de l’eau', 'Bouger chaque jour', 'Lire 10 minutes'],
+  },
+  business: {
+    title: 'Mon planner professionnel',
+    subtitle: 'Donner de la clarté à mes projets.',
+    sections: ['Objectifs professionnels', 'Tâches prioritaires', 'Réunions', 'Prochaines étapes'],
+    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+  },
+}
+
+function App() {
+  const { user, plan, isAdmin } = usePlannerBuilderAuth()
+  const isUnlimited = plan === 'pro' || isAdmin
+
+  const [showMockups, setShowMockups] = useState(false)
+  const [selectedId, setSelectedId] = useState('food')
+  const [visualStyle, setVisualStyle] = useState('minimaliste')
+  const [layoutModel, setLayoutModel] = useState('classique')
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const coverEditorRef = useRef(null)
+  const [coverMode, setCoverMode] = useState('preset')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+
+  // Le compteur affiché est alimenté par la réponse de Railway.
+  // null signifie que le serveur n'a pas encore communiqué le compteur.
+  const [freeExports, setFreeExports] = useState(null)
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  async function exportPDF() {
+  console.log('TEST : clic sur Télécharger le PDF détecté')
+
+    if (coverMode === 'preset' && !coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+    }
+
+    if (!user) {
+      setNotice('Connectez-vous pour exporter votre PDF.')
+      return
+    }
+
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+          parseInt(value.substring(4, 6), 16),
+        ]
+      }
+
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const titleBackgroundRgb = toRgb(titleBackground)
+      const titleTextRgb = toRgb(titleTextColor)
+
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+
+      const pdfFont = fontMap[font] || 'helvetica'
+
+      // PAGE 1 : couverture indépendante du style intérieur.
+      const coverThemes = {
+        minimaliste: { bg: [250, 249, 246], accent: [55, 55, 55], shape: 'minimal' },
+        nature: { bg: [237, 242, 231], accent: [74, 112, 76], shape: 'nature' },
+        professionnelle: { bg: [238, 242, 248], accent: [39, 63, 95], shape: 'professional' },
+        coloree: { bg: [255, 239, 220], accent: [190, 75, 67], shape: 'color' },
+        elegante: { bg: [247, 241, 235], accent: [128, 91, 72], shape: 'elegant' },
+        florale: { bg: [250, 237, 242], accent: [160, 83, 119], shape: 'floral' },
+        geometrique: { bg: [237, 239, 247], accent: [70, 75, 150], shape: 'geometric' },
+        sombre: { bg: [35, 38, 43], accent: [225, 192, 125], shape: 'dark' },
+      }
+
+
+===== AUTHENTIFICATION ET ETATS =====
+1:import { useRef, useState } from 'react'
+8:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+11:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+12:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+84:  const { user, plan, isAdmin } = usePlannerBuilderAuth()
+87:  const [showMockups, setShowMockups] = useState(false)
+88:  const [selectedId, setSelectedId] = useState('food')
+89:  const [visualStyle, setVisualStyle] = useState('minimaliste')
+90:  const [layoutModel, setLayoutModel] = useState('classique')
+91:  const [coverId, setCoverId] = useState('')
+92:  const [coverImage, setCoverImage] = useState('')
+94:  const [coverMode, setCoverMode] = useState('preset')
+95:  const [pages, setPages] = useState(12)
+96:  const [primary, setPrimary] = useState('#718B70')
+97:  const [background, setBackground] = useState('#F7F5EF')
+98:  const [titleBackground, setTitleBackground] = useState('#718B70')
+99:  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+100:  const [font, setFont] = useState('moderne')
+101:  const [density, setDensity] = useState('confortable')
+102:  const [category, setCategory] = useState('Tous')
+103:  const [notice, setNotice] = useState('')
+107:  const [freeExports, setFreeExports] = useState(null)
+470:      const token = await user.getIdToken()
+1268:                href={WHOP_MONTHLY_URL}
+1302:                href={WHOP_ANNUAL_URL}
+1342:  const { isAdmin } = usePlannerBuilderAuth()
+
+===== CONFIGURATION API BRUTE =====
+VITE_PLANNERBUILDER_API_URL=https://plannerbuilder-server-production.up.railway.app

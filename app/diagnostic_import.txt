@@ -1,0 +1,128 @@
+13-  const [loading, setLoading] = useState(false)
+14-  const [customImage, setCustomImage] = useState('')
+15-  const [customTitle, setCustomTitle] = useState('YOUR NEXT CHAPTER')
+16-  const [customBackground, setCustomBackground] = useState('#e5eadc')
+17-  const [backgroundType, setBackgroundType] = useState('solid')
+18-  const [backgroundPattern, setBackgroundPattern] = useState('dots')
+19-  const [patternSize, setPatternSize] = useState(50)
+20-  const [patternRepeat, setPatternRepeat] = useState('repeat')
+21:  const [customPatternImage, setCustomPatternImage] = useState('')
+22-  const [downloadFormat, setDownloadFormat] = useState('png')
+23-
+24-  const [savedPatterns, setSavedPatterns] = useState([])
+25-  const [patternName, setPatternName] = useState('')
+26-  const [libraryLoading, setLibraryLoading] = useState(true)
+27-
+28-  const openPatternDatabase = () => new Promise((resolve, reject) => {
+29-    if (!window.indexedDB) {
+30-      reject(new Error('IndexedDB indisponible dans ce navigateur.'))
+31-      return
+32-    }
+33-
+34-    const request = window.indexedDB.open('plannerbuilder-mockup-library', 1)
+35-
+36-    request.onupgradeneeded = () => {
+37-      const db = request.result
+38-      if (!db.objectStoreNames.contains('patterns')) {
+39-        db.createObjectStore('patterns', { keyPath: 'id' })
+--
+151-      setMessage(`Motif « ${name} » enregistré dans la bibliothèque.`)
+152-    } catch (error) {
+153-      console.error('Enregistrement du motif impossible :', error)
+154-      setMessage('Échec de l’enregistrement. Vérifie l’espace disponible du navigateur.')
+155-    }
+156-  }
+157-
+158-  const applySavedPattern = (pattern) => {
+159:    setCustomPatternImage(pattern.dataUrl)
+160-    setBackgroundType('upload')
+161-    setPreview('')
+162-    setMessage(`Motif « ${pattern.name} » sélectionné.`)
+163-  }
+164-
+165-  const renameSavedPattern = async (pattern) => {
+166-    const proposedName = window.prompt('Nouveau nom du motif :', pattern.name)
+167-    if (proposedName === null) return
+168-
+169-    const name = proposedName.trim()
+170-    if (!name) {
+171-      setMessage('Le nom du motif ne peut pas être vide.')
+172-      return
+173-    }
+174-
+175-    try {
+176-      await writePatternLibrary({ ...pattern, name, updatedAt: Date.now() })
+177-      setSavedPatterns(await readPatternLibrary())
+--
+613-
+614-            if (!['image/png', 'image/jpeg', 'image/webp'].includes(nextFile.type)) {
+615-              event.target.value = ''
+616-              setCustomImage('')
+617-              setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+618-              return
+619-            }
+620-
+621:            const reader = new FileReader()
+622-            reader.onload = () => {
+623-              setCustomImage(String(reader.result || ''))
+624-              setMessage('Image importée. Personnalisez le texte et le fond.')
+625-            }
+626-            reader.onerror = () => setMessage('Impossible de lire ce fichier image.')
+627-            reader.readAsDataURL(nextFile)
+628-          }}
+629-        />
+630-
+631-        <label htmlFor="mockup-custom-title">Texte à afficher sous l’image</label>
+632-        <input
+633-          id="mockup-custom-title"
+634-          type="text"
+635-          maxLength={100}
+636-          value={customTitle}
+637-          onChange={(event) => {
+638-            setCustomTitle(event.target.value)
+639-            setPreview('')
+--
+691-            <input
+692-              id="mockup-pattern-image"
+693-              type="file"
+694-              accept="image/png,image/jpeg,image/webp"
+695-              onChange={(event) => {
+696-                const f = event.target.files?.[0]
+697-                setPreview('')
+698-                if (!f) {
+699:                  setCustomPatternImage('')
+700-                  return
+701-                }
+702-                if (f.size > 20 * 1024 * 1024) {
+703-                  event.target.value = ''
+704:                  setCustomPatternImage('')
+705-                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+706-                  return
+707-                }
+708-                if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type)) {
+709-                  event.target.value = ''
+710:                  setCustomPatternImage('')
+711-                  setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+712-                  return
+713-                }
+714:                const reader = new FileReader()
+715-                reader.onload = () => {
+716:                  setCustomPatternImage(String(reader.result || ''))
+717-                  setMessage('Image de motif importée.')
+718-                }
+719-                reader.onerror = () => setMessage('Impossible de lire cette image de motif.')
+720-                reader.readAsDataURL(f)
+721-              }}
+722-            />
+723-          </>
+724-        )}
+725-
+726-        {backgroundType !== 'solid' && (
+727-          <>
+728-            <label htmlFor="mockup-pattern-size">Taille du motif : {patternSize}</label>
+729-            <input
+730-              id="mockup-pattern-size"
+731-              type="range"
+732-              min="20"
+733-              max="100"
+734-              step="5"

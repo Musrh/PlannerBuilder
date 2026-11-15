@@ -1,0 +1,59 @@
+8:  whop: { enabled: true },
+9:  stripe: {
+11:    prices: {
+12:      EUR: { monthly: null, annual: null },
+13:      USD: { monthly: null, annual: null },
+16:  paypal: {
+18:    prices: {
+19:      EUR: { monthly: null, annual: null },
+20:      USD: { monthly: null, annual: null },
+52:          throw new Error('URL du serveur Railway manquante.')
+70:            throw new Error(result.error || 'Erreur du serveur.')
+89:          whop: {
+90:            ...DEFAULT_SETTINGS.whop,
+91:            ...(paymentData.settings?.whop || {}),
+93:          stripe: {
+94:            ...DEFAULT_SETTINGS.stripe,
+95:            ...(paymentData.settings?.stripe || {}),
+96:            prices: {
+97:              EUR: {
+98:                ...DEFAULT_SETTINGS.stripe.prices.EUR,
+99:                ...(paymentData.settings?.stripe?.prices?.EUR || {}),
+101:              USD: {
+102:                ...DEFAULT_SETTINGS.stripe.prices.USD,
+103:                ...(paymentData.settings?.stripe?.prices?.USD || {}),
+107:          paypal: {
+108:            ...DEFAULT_SETTINGS.paypal,
+109:            ...(paymentData.settings?.paypal || {}),
+110:            prices: {
+111:              EUR: {
+112:                ...DEFAULT_SETTINGS.paypal.prices.EUR,
+113:                ...(paymentData.settings?.paypal?.prices?.EUR || {}),
+115:              USD: {
+116:                ...DEFAULT_SETTINGS.paypal.prices.USD,
+117:                ...(paymentData.settings?.paypal?.prices?.USD || {}),
+170:        prices: {
+171:          ...current[provider].prices,
+173:            ...current[provider].prices[currency],
+189:        throw new Error('URL du serveur Railway manquante.')
+216:      setSettingsError(err.message || 'Erreur lors de l’enregistrement.')
+222:  function renderProviderPrices(provider, label) {
+245:        <div className="admin-prices-grid">
+246:          {['EUR', 'USD'].map((currency) => (
+257:                  value={settings.prices[currency].monthly ?? ''}
+262:                      'monthly',
+276:                  value={settings.prices[currency].annual ?? ''}
+281:                      'annual',
+293:            Tous les tarifs EUR et USD doivent être renseignés avant
+307:          <p>Gestion des utilisateurs et des abonnements.</p>
+311:          Retour au générateur
+327:              <span>Utilisateurs</span>
+350:                <h2>Utilisateurs</h2>
+386:                      <td colSpan="5">Aucun utilisateur trouvé.</td>
+431:                      <h3>Whop</h3>
+432:                      <p>Gestion de l'accès au paiement Whop.</p>
+438:                        checked={paymentSettings.whop.enabled}
+440:                          updateProvider('whop', event.target.checked)
+444:                        {paymentSettings.whop.enabled ? 'Activé' : 'Désactivé'}
+450:                {renderProviderPrices('stripe', 'Stripe')}
+451:                {renderProviderPrices('paypal', 'PayPal')}

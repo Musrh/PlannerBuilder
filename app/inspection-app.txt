@@ -1,0 +1,107 @@
+]633;E;echo "=== Début de App.jsx ===";7ed2dbcc-ab96-49e0-ab03-7ce30042715a]633;C=== Début de App.jsx ===
+
+import { useState } from 'react'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import AuthGate from './AuthGate.jsx'
+import './App.css'
+
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+]
+
+const pageContent = {
+  daily: {
+    title: 'Ma journée',
+    subtitle: 'Organiser chaque instant avec intention.',
+    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+    rows: ['Priorité 1', 'Priorité 2', 'Priorité 3'],
+  },
+  weekly: {
+    title: 'Ma semaine',
+    subtitle: 'Une semaine organisée à mon rythme.',
+    sections: ['Mes objectifs', 'Lundi – Dimanche', 'Rendez-vous', 'Notes'],
+    rows: ['Objectif principal', 'Tâches importantes', 'Moment pour moi'],
+  },
+  monthly: {
+    title: 'Mon mois',
+    subtitle: 'Prendre du recul et préparer la suite.',
+    sections: ['Objectifs du mois', 'Dates importantes', 'Projets', 'Bilan du mois'],
+    rows: ['Objectif 1', 'Objectif 2', 'Objectif 3'],
+  },
+  food: {
+    title: 'Mon planner alimentaire',
+    subtitle: 'Mieux manger, planifier et savourer.',
+    sections: ['Menu de la semaine', 'Liste de courses', 'Préparation des repas', 'Notes nutrition'],
+    rows: ['Petit-déjeuner', 'Déjeuner', 'Dîner'],
+  },
+  student: {
+    title: 'Mon planner étudiant',
+    subtitle: 'Apprendre, progresser et réussir.',
+    sections: ['Objectifs scolaires', 'Devoirs et examens', 'Planning de révision', 'Notes de cours'],
+    rows: ['Matière 1', 'Matière 2', 'Matière 3'],
+  },
+  budget: {
+    title: 'Mon budget',
+    subtitle: 'Garder le contrôle de mes finances.',
+    sections: ['Revenus du mois', 'Dépenses prévues', 'Épargne', 'Bilan financier'],
+    rows: ['Logement', 'Alimentation', 'Transport'],
+  },
+  habits: {
+    title: 'Mes habitudes',
+    subtitle: 'Les petits gestes créent de grands changements.',
+    sections: ['Habitudes à suivre', 'Suivi de la semaine', 'Mes progrès', 'Réflexions'],
+    rows: ['Boire de l’eau', 'Bouger chaque jour', 'Lire 10 minutes'],
+  },
+  business: {
+    title: 'Mon planner professionnel',
+    subtitle: 'Donner de la clarté à mes projets.',
+    sections: ['Objectifs professionnels', 'Tâches prioritaires', 'Réunions', 'Prochaines étapes'],
+    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+  },
+}
+
+function App() {
+  const [showMockups, setShowMockups] = useState(false)
+  const [selectedId, setSelectedId] = useState('food')
+  const [visualStyle, setVisualStyle] = useState('minimaliste')
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+  const [freeExports, setFreeExports] = useState(() => {
+    const saved = Number(localStorage.getItem('plannerbuilder_free_exports') || 0)
+
+    return Number.isFinite(saved) && saved >= 0
+      ? Math.floor(saved)
+      : 0
+  })
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+
+=== Utilisation de AuthGate ===
+src/xApp.jsx:5:import AuthGate from './AuthGate.jsx'
+src/App.jsx:5:import AuthGate from './AuthGate.jsx'
+src/App.jsx:708:      <AuthGate>
+src/App.jsx:710:                </AuthGate>

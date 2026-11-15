@@ -1,0 +1,12 @@
+src/App.css
+src/App.css.backup-20261028-062034
+src/App.css.backup-avant-correction
+src/App.css.backup-impression
+src/App.jsx
+src/App.jsx.backup-20261028-062034
+src/App.jsx.backup-auth
+src/App.jsx.backup-pdf
+src/App.jsx.backup-polices-couleurs
+src/AuthGate.css
+src/AuthGate.jsx
+src/firebase.js

@@ -1,0 +1,10 @@
+520:    console.log('PDF généré :', {
+521-      taille: pdfBlob.size,
+522-      type: pdfBlob.type,
+523-    })
+524-
+525-    doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+526-
+527-      if (
+528-        result.unlimited ||
+529-        result.role === 'pro' ||

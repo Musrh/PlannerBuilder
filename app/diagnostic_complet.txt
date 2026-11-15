@@ -1,0 +1,390 @@
+]633;E;echo "===== BOUTON ET FONCTIONS DE SAUVEGARDE =====";b535d9b1-5403-4ccf-877e-2e0576c0f2a1]633;C===== BOUTON ET FONCTIONS DE SAUVEGARDE =====
+14-  const [customImage, setCustomImage] = useState('')
+15-  const [customTitle, setCustomTitle] = useState('YOUR NEXT CHAPTER')
+16-  const [customBackground, setCustomBackground] = useState('#e5eadc')
+17-  const [backgroundType, setBackgroundType] = useState('solid')
+18-  const [backgroundPattern, setBackgroundPattern] = useState('dots')
+19-  const [patternSize, setPatternSize] = useState(50)
+20-  const [patternRepeat, setPatternRepeat] = useState('repeat')
+21-  const [customPatternImage, setCustomPatternImage] = useState('')
+22-  const [downloadFormat, setDownloadFormat] = useState('png')
+23-
+24:  const [savedPatterns, setSavedPatterns] = useState([])
+25-  const [patternName, setPatternName] = useState('')
+26-  const [libraryLoading, setLibraryLoading] = useState(true)
+27-
+28-  const openPatternDatabase = () => new Promise((resolve, reject) => {
+29:    if (!window.indexedDB) {
+30:      reject(new Error('IndexedDB indisponible dans ce navigateur.'))
+31-      return
+32-    }
+33-
+34:    const request = window.indexedDB.open('plannerbuilder-mockup-library', 1)
+35-
+36-    request.onupgradeneeded = () => {
+37-      const db = request.result
+38-      if (!db.objectStoreNames.contains('patterns')) {
+39-        db.createObjectStore('patterns', { keyPath: 'id' })
+40-      }
+41-    }
+42-
+43-    request.onsuccess = () => resolve(request.result)
+44-    request.onerror = () => reject(request.error)
+45-  })
+46-
+47-  const readPatternLibrary = async () => {
+48-    const db = await openPatternDatabase()
+49-    return new Promise((resolve, reject) => {
+50-      const transaction = db.transaction('patterns', 'readonly')
+51-      const request = transaction.objectStore('patterns').getAll()
+52-
+53-      request.onsuccess = () => {
+54-        resolve(request.result.sort((a, b) => b.updatedAt - a.updatedAt))
+--
+100-        reject(transaction.error || new Error('Suppression annulée.'))
+101-      }
+102-    })
+103-  }
+104-
+105-  useEffect(() => {
+106-    let active = true
+107-
+108-    readPatternLibrary()
+109-      .then((patterns) => {
+110:        if (active) setSavedPatterns(patterns)
+111-      })
+112-      .catch(() => {
+113-        if (active) {
+114-          setMessage('Impossible de lire la bibliothèque locale de motifs.')
+115-        }
+116-      })
+117-      .finally(() => {
+118-        if (active) setLibraryLoading(false)
+119-      })
+120-
+121-    return () => {
+122-      active = false
+123-    }
+124-  }, [])
+125-
+126:  const saveCurrentPattern = async () => {
+127-    if (!customPatternImage) {
+128-      setMessage('Importe d’abord une image de motif.')
+129-      return
+130-    }
+131-
+132-    const name = patternName.trim()
+133-    if (!name) {
+134-      setMessage('Donne un nom à ce motif avant de l’enregistrer.')
+135-      return
+136-    }
+137-
+138-    try {
+139-      const pattern = {
+140-        id: window.crypto?.randomUUID
+141-          ? window.crypto.randomUUID()
+142-          : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+143-        name,
+144-        dataUrl: customPatternImage,
+145-        updatedAt: Date.now(),
+146-      }
+147-
+148-      await writePatternLibrary(pattern)
+149:      setSavedPatterns(await readPatternLibrary())
+150-      setPatternName('')
+151-      setMessage(`Motif « ${name} » enregistré dans la bibliothèque.`)
+152-    } catch (error) {
+153-      console.error('Enregistrement du motif impossible :', error)
+154-      setMessage('Échec de l’enregistrement. Vérifie l’espace disponible du navigateur.')
+155-    }
+156-  }
+157-
+158:  const applySavedPattern = (pattern) => {
+159-    setCustomPatternImage(pattern.dataUrl)
+160-    setBackgroundType('upload')
+161-    setPreview('')
+162-    setMessage(`Motif « ${pattern.name} » sélectionné.`)
+163-  }
+164-
+165:  const renameSavedPattern = async (pattern) => {
+166-    const proposedName = window.prompt('Nouveau nom du motif :', pattern.name)
+167-    if (proposedName === null) return
+168-
+169-    const name = proposedName.trim()
+170-    if (!name) {
+171-      setMessage('Le nom du motif ne peut pas être vide.')
+172-      return
+173-    }
+174-
+175-    try {
+176-      await writePatternLibrary({ ...pattern, name, updatedAt: Date.now() })
+177:      setSavedPatterns(await readPatternLibrary())
+178-      setMessage('Nom du motif mis à jour.')
+179-    } catch (error) {
+180-      console.error('Renommage impossible :', error)
+181-      setMessage('Impossible de renommer ce motif.')
+182-    }
+183-  }
+184-
+185:  const deleteSavedPattern = async (pattern) => {
+186-    if (!window.confirm(`Supprimer le motif « ${pattern.name} » de la bibliothèque ?`)) {
+187-      return
+188-    }
+189-
+190-    try {
+191-      await removePatternFromLibrary(pattern.id)
+192:      setSavedPatterns(await readPatternLibrary())
+193-      setMessage(`Motif « ${pattern.name} » supprimé de la bibliothèque.`)
+194-    } catch (error) {
+195-      console.error('Suppression impossible :', error)
+196-      setMessage('Impossible de supprimer ce motif.')
+197-    }
+198-  }
+199-
+200-
+201-  async function createCustomMockup() {
+202-    if (!customImage) {
+203-      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+204-      return
+205-    }
+206-
+207-    setLoading(true)
+208-    setMessage('')
+209-
+210-    try {
+211-      const image = new Image()
+212-      image.src = customImage
+--
+786-                id="mockup-pattern-name"
+787-                type="text"
+788-                value={patternName}
+789-                onChange={(event) => setPatternName(event.target.value)}
+790-                placeholder="Ex. Motif floral beige"
+791-                maxLength={80}
+792-              />
+793-              <button
+794-                type="button"
+795-                className="mockup-secondary-button"
+796:                onClick={saveCurrentPattern}
+797-              >
+798-                Enregistrer dans ma bibliothèque
+799-              </button>
+800-            </div>
+801-          )}
+802-
+803-          {libraryLoading ? (
+804-            <p>Chargement de la bibliothèque…</p>
+805:          ) : savedPatterns.length === 0 ? (
+806-            <p className="mockup-library-empty">
+807-              Aucun motif enregistré pour le moment.
+808-            </p>
+809-          ) : (
+810-            <div className="mockup-library-grid">
+811:              {savedPatterns.map((pattern) => (
+812-                <article className="mockup-library-card" key={pattern.id}>
+813-                  <img src={pattern.dataUrl} alt={`Aperçu : ${pattern.name}`} />
+814-                  <strong title={pattern.name}>{pattern.name}</strong>
+815-                  <button
+816-                    type="button"
+817-                    className="mockup-secondary-button"
+818:                    onClick={() => applySavedPattern(pattern)}
+819-                  >
+820-                    Utiliser ce motif
+821-                  </button>
+822-                  <div className="mockup-library-actions">
+823-                    <button
+824-                      type="button"
+825:                      onClick={() => renameSavedPattern(pattern)}
+826-                    >
+827-                      Renommer
+828-                    </button>
+829-                    <button
+830-                      type="button"
+831:                      onClick={() => deleteSavedPattern(pattern)}
+832-                    >
+833-                      Supprimer
+834-                    </button>
+835-                  </div>
+836-                </article>
+837-              ))}
+838-            </div>
+839-          )}
+840-        </div>
+841-
+842-{message && <p className="mockup-message" role="status">{message}</p>}
+843-      </div>
+844-
+845-      {preview && (
+846-        <div className="mockup-result">
+847-          <h3>Aperçu publicitaire</h3>
+848-          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+849-          <button
+850-            className="mockup-primary-button"
+851-            type="button"
+
+===== ORDRE DES SECTIONS =====
+750-              <option value="repeat">Répéter le motif</option>
+751-              <option value="stretch">Étendre sur tout le fond</option>
+752-            </select>
+753-          </>
+754-        )}
+755-
+756-        <button
+757-          className="mockup-primary-button"
+758-          type="button"
+759-          onClick={createCustomMockup}
+760-          disabled={!customImage || loading}
+761-        >
+762:          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+763-        </button>
+764-
+765:        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+766-        <select
+767-          id="mockup-export-format"
+768-          value={downloadFormat}
+769-          onChange={(event) => setDownloadFormat(event.target.value)}
+770-        >
+771-          <option value="png">PNG — qualité sans perte</option>
+772-          <option value="jpg">JPG — fichier compressé</option>
+773-        </select>
+774-
+775-        
+776-        <div className="mockup-pattern-library">
+777:          <h3>Ma bibliothèque de motifs</h3>
+778-          <p className="mockup-library-help">
+779-            Enregistre tes motifs importés pour les réutiliser plus tard dans ce navigateur.
+780-          </p>
+781-
+782-          {customPatternImage && (
+783-            <div className="mockup-library-save">
+784-              <label htmlFor="mockup-pattern-name">Nom du motif à enregistrer</label>
+785-              <input
+786-                id="mockup-pattern-name"
+787-                type="text"
+788-                value={patternName}
+789-                onChange={(event) => setPatternName(event.target.value)}
+790-                placeholder="Ex. Motif floral beige"
+791-                maxLength={80}
+792-              />
+793-              <button
+794-                type="button"
+795-                className="mockup-secondary-button"
+796-                onClick={saveCurrentPattern}
+797-              >
+798-                Enregistrer dans ma bibliothèque
+799-              </button>
+800-            </div>
+801-          )}
+802-
+803-          {libraryLoading ? (
+804-            <p>Chargement de la bibliothèque…</p>
+805-          ) : savedPatterns.length === 0 ? (
+806-            <p className="mockup-library-empty">
+807-              Aucun motif enregistré pour le moment.
+808-            </p>
+809-          ) : (
+810-            <div className="mockup-library-grid">
+811-              {savedPatterns.map((pattern) => (
+812-                <article className="mockup-library-card" key={pattern.id}>
+
+===== STRUCTURE DU COMPOSANT =====
+          onChange={(event) => setDownloadFormat(event.target.value)}
+        >
+          <option value="png">PNG — qualité sans perte</option>
+          <option value="jpg">JPG — fichier compressé</option>
+        </select>
+
+        
+        <div className="mockup-pattern-library">
+          <h3>Ma bibliothèque de motifs</h3>
+          <p className="mockup-library-help">
+            Enregistre tes motifs importés pour les réutiliser plus tard dans ce navigateur.
+          </p>
+
+          {customPatternImage && (
+            <div className="mockup-library-save">
+              <label htmlFor="mockup-pattern-name">Nom du motif à enregistrer</label>
+              <input
+                id="mockup-pattern-name"
+                type="text"
+                value={patternName}
+                onChange={(event) => setPatternName(event.target.value)}
+                placeholder="Ex. Motif floral beige"
+                maxLength={80}
+              />
+              <button
+                type="button"
+                className="mockup-secondary-button"
+                onClick={saveCurrentPattern}
+              >
+                Enregistrer dans ma bibliothèque
+              </button>
+            </div>
+          )}
+
+          {libraryLoading ? (
+            <p>Chargement de la bibliothèque…</p>
+          ) : savedPatterns.length === 0 ? (
+            <p className="mockup-library-empty">
+              Aucun motif enregistré pour le moment.
+            </p>
+          ) : (
+            <div className="mockup-library-grid">
+              {savedPatterns.map((pattern) => (
+                <article className="mockup-library-card" key={pattern.id}>
+                  <img src={pattern.dataUrl} alt={`Aperçu : ${pattern.name}`} />
+                  <strong title={pattern.name}>{pattern.name}</strong>
+                  <button
+                    type="button"
+                    className="mockup-secondary-button"
+                    onClick={() => applySavedPattern(pattern)}
+                  >
+                    Utiliser ce motif
+                  </button>
+                  <div className="mockup-library-actions">
+                    <button
+                      type="button"
+                      onClick={() => renameSavedPattern(pattern)}
+                    >
+                      Renommer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => deleteSavedPattern(pattern)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+
+{message && <p className="mockup-message" role="status">{message}</p>}
+      </div>
+
+      {preview && (
+        <div className="mockup-result">
+          <h3>Aperçu publicitaire</h3>
+          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+          <button
+            className="mockup-primary-button"
+            type="button"
+            onClick={downloadMockup}
+          >
+            Télécharger le mockup {downloadFormat.toUpperCase()}
+          </button>
+        </div>
+      )}
+
+      <p className="mockup-local-note">
+        Prototype local : le PDF est traité dans le navigateur et n’est pas
+        envoyé à un serveur par ce composant. Cette page n’est pas encore
+        protégée par une authentification administrateur.
+      </p>
+    </section>
+  )
+}
+
+export default AdminMockups

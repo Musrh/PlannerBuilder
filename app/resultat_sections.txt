@@ -1,0 +1,3 @@
+762:          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+765:        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+777:          <h3>Ma bibliothèque de motifs</h3>

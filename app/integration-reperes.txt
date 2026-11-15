@@ -1,0 +1,33 @@
+]633;E;echo "===== REPERES POUR L'INTEGRATION RAILWAY =====";2bdb6acc-d266-4b58-919e-c182c409f087]633;C===== REPERES POUR L'INTEGRATION RAILWAY =====
+84:  const isUnlimited = plan === 'pro' || isAdmin
+87:  const exportStorageKey = user?.uid
+108:  const [notice, setNotice] = useState('')
+110:  function readFreeExports(storageKey) {
+114:      const saved = Number(localStorage.getItem(storageKey) || 0)
+124:  const [freeExports, setFreeExports] = useState(() =>
+125:    readFreeExports(exportStorageKey)
+130:    setFreeExports(readFreeExports(exportStorageKey))
+131:  }, [exportStorageKey])
+143:    setNotice('')
+146:  async function exportPDF() {
+148:      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+152:    if (!isUnlimited && !exportStorageKey) {
+153:      setNotice('Connectez-vous pour exporter votre PDF.')
+157:    if (!isUnlimited && freeExports >= 3) {
+158:      setNotice(
+493:      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+495:      if (isUnlimited) {
+496:        setNotice(`PDF créé : ${pages + 1} page(s), couverture comprise.`)
+498:        const nextExports = freeExports + 1
+501:          localStorage.setItem(exportStorageKey, String(nextExports))
+508:        setNotice(
+514:      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+907:                  setNotice('Image trop volumineuse : limite de 10 Mo.')
+918:                  setNotice('Couverture personnelle chargée.')
+922:                  setNotice('Impossible de lire cette image.')
+936:                  setNotice(
+1120:              setNotice('')
+1143:                {isUnlimited
+1145:                  : `${Math.max(0, 3 - freeExports)} export(s) gratuit(s) restant(s)`}
+1155:                {isUnlimited ? 'PRO' : `${Math.min(freeExports, 3)} / 3`}
+1165:              onClick={exportPDF}

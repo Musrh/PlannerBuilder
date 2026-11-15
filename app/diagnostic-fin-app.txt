@@ -1,0 +1,40 @@
+]633;E;echo "===== FIN EXACTE APP JSX =====";ebcab0a9-c1b1-4808-91c1-b4cd4941d840]633;C===== FIN EXACTE APP JSX =====
+      )}$
+$
+      {notice && ($
+        <div className="notice" role="status">$
+          {notice}$
+        </div>$
+      )}$
+$
+      <footer className="app-footer">$
+        <span>PlannerBuilder</span>$
+        <span>CrM-CM-)ez avec intention. Organisez avec simplicitM-CM-).</span>$
+      </footer>$
+    </main>$
+  )$
+}$
+$
+function AppWithAuth() {$
+  return ($
+    <AuthGate>$
+      <App />$
+    </AuthGate>$
+  )$
+}$
+$
+export default AppWithAuth
+===== ETAT DES IMPORTS =====
+import { useRef, useState } from 'react'
+import CoverEditor from './CoverEditor.jsx'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import AdminLocalPanel from './AdminLocalPanel.jsx'
+import AuthGate from './AuthGate.jsx'
+import { usePlannerBuilderAuth } from './AuthGate.jsx'
+import './App.css'
+
+const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+
+===== SAUVEGARDE DISPONIBLE =====
+-rw-rw-rw- 1 codespace codespace 46532 Nov 14 21:34 src/App.jsx.backup-before-admin-route

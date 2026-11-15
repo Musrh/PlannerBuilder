@@ -1,0 +1,198 @@
+]633;E;echo "===== FIN DE APP.JSX =====";d5e8200d-b56e-43be-9ab2-6ea8f50cd587]633;C===== FIN DE APP.JSX =====
+            <label className="field-label" htmlFor="pages">Nombre de pages</label>
+            <div className="number-control">
+              <button type="button" onClick={() => setPages((value) => Math.max(1, value - 1))} aria-label="Diminuer le nombre de pages">−</button>
+              <input id="pages" type="number" min="1" max="365" value={pages} onChange={(event) => setPages(Math.max(1, Math.min(365, Number(event.target.value) || 1)))} />
+              <button type="button" onClick={() => setPages((value) => Math.min(365, value + 1))} aria-label="Augmenter le nombre de pages">+</button>
+            </div>
+            <small className="helper">De 1 à 365 pages dans cette version de démonstration.</small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur principale</span>
+            <div className="color-control">
+              <label className="color-swatch" style={{ background: primary }} htmlFor="primary-color" />
+              <input id="primary-color" type="color" value={primary} onChange={(event) => setPrimary(event.target.value)} />
+              <code>{primary.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Fond des pages</span>
+            <div className="color-control">
+              <label className="color-swatch paper-swatch" style={{ background: background }} htmlFor="background-color" />
+              <input id="background-color" type="color" value={background} onChange={(event) => setBackground(event.target.value)} />
+              <code>{background.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">Typographie</label>
+            <select id="font" value={font} onChange={(event) => setFont(event.target.value)}>
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button key={value} type="button" className={density === value ? 'active' : ''} onClick={() => setDensity(value)}>
+                  {value === 'compacte' ? 'Compacte' : 'Aérée'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button className="reset-button" type="button" onClick={() => {
+            setPrimary('#718B70')
+            setBackground('#F7F5EF')
+            setFont('moderne')
+            setDensity('confortable')
+            setNotice('')
+          }}>
+            ↺ Réinitialiser le style
+          </button>
+
+          <div className="export-area">
+            <button className="export-button" type="button" onClick={exportPDF}>
+              <span>↓</span> Exporter en PDF
+            </button>
+            <p>Votre aperçu sera envoyé à la fenêtre d’impression du navigateur.</p>
+          </div>
+        </aside>
+      </div>
+
+      {notice && <div className="notice" role="status">{notice}</div>}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+export default App
+
+===== STYLES DES SECTIONS =====
+423-  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+424-  border-radius: 8px;
+425-  background: color-mix(in srgb, white 36%, transparent);
+426-}
+427-
+428:.planner-section h3 {
+429-  margin: 0 0 9px;
+430-  color: var(--primary);
+431-  font-size: 9px;
+432-  line-height: 1.45;
+433-  overflow-wrap: anywhere;
+434-}
+435-
+436:.planner-section h3 span {
+437-  margin-right: 3px;
+438-}
+439-
+440-.writing-lines {
+441-  display: grid;
+442-  gap: 11px;
+443-}
+444-
+445-.writing-row {
+446-  display: flex;
+447-  align-items: center;
+448-  gap: 5px;
+449-  min-width: 0;
+450-  min-height: 8px;
+451-  padding-bottom: 5px;
+452-  border-bottom: 1px solid color-mix(in srgb, var(--primary) 19%, transparent);
+453-  color: #777b70;
+454-  font-size: 8px;
+--
+524-
+525-.settings .panel-heading {
+526-  margin-bottom: 25px;
+527-}
+528-
+529:.setting-group {
+530-  margin-bottom: 22px;
+531-}
+532-
+533-.number-control {
+534-  display: grid;
+535-  grid-template-columns: 40px minmax(0, 1fr) 40px;
+536-  gap: 6px;
+537-}
+538-
+539-.number-control button {
+540-  border: 1px solid var(--line);
+541-  border-radius: 9px;
+542-  background: #f8f9f5;
+543-  color: var(--primary);
+544-  font-size: 20px;
+545-  cursor: pointer;
+546-}
+547-
+--
+617-  color: var(--primary);
+618-  font-weight: 700;
+619-  box-shadow: 0 1px 4px rgb(0 0 0 / 4%);
+620-}
+621-
+622:.reset-button {
+623-  width: 100%;
+624-  padding: 10px;
+625-  border: 1px solid var(--line);
+626-  border-radius: 9px;
+627-  background: white;
+628-  color: #777b70;
+629-  font-size: 11px;
+630-  cursor: pointer;
+631-}
+632-
+633:.reset-button:hover {
+634-  border-color: var(--primary);
+635-}
+636-
+637-.export-area {
+638-  margin-top: 25px;
+639-  padding-top: 19px;
+640-  border-top: 1px solid var(--line);
+641-}
+642-
+643-.export-button {
+644-  display: flex;
+645-  align-items: center;
+646-  justify-content: center;
+647-  gap: 9px;
+648-  width: 100%;
+649-  min-height: 45px;
+650-  padding: 12px;
+651-  border: 0;
+--
+746-    gap: 0 22px;
+747-  }
+748-
+749-  .settings .panel-heading,
+750-  .settings .export-area,
+751:  .settings .reset-button {
+752-    grid-column: 1 / -1;
+753-  }
+754-}
+755-
+756-@media (max-width: 650px) {
+757-  .topbar {
+758-    min-height: 64px;
+759-    padding: 12px 17px;
+760-  }
+761-
+762-  .brand {
+763-    font-size: 17px;
+764-  }
+765-
+766-  .brand-mark {
+767-    width: 33px;
+768-    height: 33px;
+769-  }

@@ -1,0 +1,18 @@
+
+===== src/AdminMockups.jsx =====
+Taille : 13071 caractères
+3 occurrence(s) : customBackground
+2 occurrence(s) : createCustomMockup
+12 occurrence(s) : ctx.fillStyle
+6 occurrence(s) : ctx.fillRect
+1 occurrence(s) : Couleur de fond
+1 occurrence(s) : export default AdminMockups
+
+===== src/AdminMockups.css =====
+Taille : 2651 caractères
+11 occurrence(s) : .mockup-controls
+2 occurrence(s) : input[type='color']
+3 occurrence(s) : .mockup-primary-button
+1 occurrence(s) : @media
+
+===== FIN DU DIAGNOSTIC =====

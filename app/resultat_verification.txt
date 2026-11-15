@@ -1,0 +1,48 @@
+]633;E;echo "===== DOSSIER DU PROJET =====";8627d5f1-591f-467c-8448-cd11e7ba0d99]633;C===== DOSSIER DU PROJET =====
+drwxrwxrwx+ 7 codespace codespace 4096 Oct 29 03:41 /workspaces/PlannerBuilder/app
+
+===== FICHIERS DU DOSSIER SRC =====
+total 212
+drwxrwxrwx+ 3 codespace codespace  4096 Oct 29 02:26 .
+drwxrwxrwx+ 7 codespace codespace  4096 Oct 29 03:41 ..
+-rw-rw-rw-  1 codespace codespace  4378 Oct 28 17:44 AdminMockups.css
+-rw-rw-rw-  1 codespace codespace 27876 Oct 28 17:44 AdminMockups.jsx
+-rw-r--r--  1 codespace codespace 18416 Oct 28 14:27 App.css
+-rw-r--r--  1 codespace codespace 15904 Oct 28 04:47 App.css.backup-20261028-062034
+-rw-r--r--  1 codespace codespace 15096 Oct 28 04:46 App.css.backup-avant-correction
+-rw-r--r--  1 codespace codespace 15096 Oct 28 04:39 App.css.backup-impression
+-rw-r--r--  1 codespace codespace 27359 Oct 28 14:27 App.jsx
+-rw-r--r--  1 codespace codespace 18292 Oct 28 05:52 App.jsx.backup-20261028-062034
+-rw-r--r--  1 codespace codespace 13226 Oct 28 02:04 App.jsx.backup-pdf
+-rw-r--r--  1 codespace codespace 18302 Oct 28 04:32 App.jsx.backup-polices-couleurs
+drwxrwxrwx+ 2 codespace codespace  4096 Oct 27 23:54 assets
+-rw-r--r--  1 codespace codespace   827 Oct 28 01:33 index.css
+-rw-r--r--  1 codespace codespace   229 Oct 27 23:54 main.jsx
+-rw-rw-rw-  1 codespace codespace   355 Oct 29 02:26 plannerBuilderConfig.js
+
+===== RECHERCHE DE FIREBASE.JS =====
+
+===== RECHERCHE DE PLANNERBUILDERCONFIG.JS =====
+/workspaces/PlannerBuilder/app/src/plannerBuilderConfig.js
+
+===== DEBUT DE APP.JSX =====
+import { useState } from 'react'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import './App.css'
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+]
+
+const pageContent = {
+  daily: {
+    title: 'Ma journée',
+    subtitle: 'Organiser chaque instant avec intention.',

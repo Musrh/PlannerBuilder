@@ -1,0 +1,39 @@
+===== DIAGNOSTIC =====
+5:import AdminLocalPanel from './AdminLocalPanel.jsx'
+87:  const [showAdminPanel, setShowAdminPanel] = useState(false)
+590:            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+608:      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+1346:function AdminRoute() {
+1351:function AppWithAuth() {
+1355:        <Route path="/" element={<App />} />
+1356:        <Route path="/admin" element={<AdminRoute />} />
+1357:        <Route path="*" element={<Navigate to="/" replace />} />
+1363:export default AppWithAuth
+      )}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+function AdminRoute() {
+  const { isAdmin } = usePlannerBuilderAuth()
+  return isAdmin ? <Admin /> : <Navigate to="/" replace />
+}
+
+function AppWithAuth() {
+  return (
+    <AuthGate>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/admin" element={<AdminRoute />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthGate>
+  )
+}
+
+export default AppWithAuth

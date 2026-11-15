@@ -1,0 +1,13 @@
+=== PREPARATION BIBLIOTHEQUE DE MOTIFS ===
+Fichier : src/AdminMockups.jsx
+
+Import React useState : 1 occurrence(s)
+Etat customPatternImage : 1 occurrence(s)
+Import motif : 1 occurrence(s)
+Zone après import motif : 1 occurrence(s)
+Fin des contrôles : 1 occurrence(s)
+Fin du composant : 1 occurrence(s)
+
+=== ETAT ===
+OK : les points d'insertion sont uniques.
+Aucune modification du composant n'a été effectuée.

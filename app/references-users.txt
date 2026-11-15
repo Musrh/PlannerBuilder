@@ -1,0 +1,20 @@
+src/AdminMockups.jsx.before-500kb:42:    const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx.before-500kb:102:      const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx.before-500kb:145:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx.before-500kb:169:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx:42:    const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx:102:      const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx:145:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx:169:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx.before-pattern-render:42:    const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx.before-pattern-render:102:      const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx.before-pattern-render:145:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx.before-pattern-render:169:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AuthGate.jsx:79:        const profileRef = doc(db, 'users', currentUser.uid)
+src/AuthGate.jsx:176:      await setDoc(doc(db, 'users', credential.user.uid), {
+src/AdminMockups.jsx.before-error-detail:42:    const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx.before-error-detail:102:      const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx.before-error-detail:143:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx.before-error-detail:167:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+src/AuthGate.jsx.backup-abonnements:79:        const profileRef = doc(db, 'users', currentUser.uid)
+src/AuthGate.jsx.backup-abonnements:169:      await setDoc(doc(db, 'users', credential.user.uid), {

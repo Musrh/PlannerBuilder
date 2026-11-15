@@ -1,0 +1,235 @@
+]633;E;echo "===== EXPORTS ET AUTHENTIFICATION =====";5547229f-c970-4bde-b440-c8609d904700]633;C===== EXPORTS ET AUTHENTIFICATION =====
+6:import AuthGate from './AuthGate.jsx'
+7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+82:function App() {
+83:  const { user, plan, isAdmin } = usePlannerBuilderAuth()
+556:  return (
+828:                return (
+1346:function AppWithAuth() {
+1347:  return (
+1348:    <AuthGate>
+1350:    </AuthGate>
+1354:export default AppWithAuth
+
+===== FIN DE APP JSX =====
+          </p>
+
+          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+            {plan === 'pro'
+              ? 'Renouvelez votre abonnement'
+              : 'Libérez tout votre potentiel'}
+          </h2>
+
+          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+            {plan === 'pro'
+              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+          </p>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 16,
+            }}
+          >
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro mensuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                2 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                30 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_MONTHLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#718B70',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 30 jours' : 'Choisir mensuel'}
+              </a>
+            </article>
+
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro annuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                20 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                365 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_ANNUAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#263b2b',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 365 jours' : 'Choisir annuel'}
+              </a>
+            </article>
+          </div>
+
+          <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+            Le paiement est traité sur Whop. L’activation et la prolongation
+            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+          </small>
+        </section>
+      )}
+
+      {notice && (
+        <div className="notice" role="status">
+          {notice}
+        </div>
+      )}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+function AppWithAuth() {
+  return (
+    <AuthGate>
+      <App />
+    </AuthGate>
+  )
+}
+
+export default AppWithAuth
+===== FIN DE AUTHGATE =====
+                <input
+                  id="register-password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  minLength={6}
+                  required
+                />
+
+                <label htmlFor="register-confirm">
+                  Confirmer le mot de passe
+                </label>
+                <input
+                  id="register-confirm"
+                  type="password"
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  minLength={6}
+                  required
+                />
+
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Création…' : 'Créer mon compte'}
+                </button>
+              </form>
+
+              <button
+                type="button"
+                onClick={() => changeMode('login')}
+              >
+                Déjà un compte ? Se connecter
+              </button>
+            </>
+          )}
+
+          {mode === 'reset' && (
+            <>
+              <p>
+                Recevez un lien pour choisir un nouveau mot de passe.
+              </p>
+
+              <form onSubmit={handlePasswordReset}>
+                <label htmlFor="reset-email">Adresse e-mail</label>
+                <input
+                  id="reset-email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
+
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Envoi…' : 'Envoyer le lien'}
+                </button>
+              </form>
+
+              <button
+                type="button"
+                onClick={() => changeMode('login')}
+              >
+                Retour à la connexion
+              </button>
+            </>
+          )}
+
+          {error && (
+            <p className="auth-error" role="alert">
+              {error}
+            </p>
+          )}
+
+          {notice && <p role="status">{notice}</p>}
+        </section>
+      </main>
+    )
+  }
+
+  const isAdmin = isPlannerBuilderAdmin(user)
+
+  return (
+    <AuthContext.Provider value={{ user, plan, isAdmin }}>
+      <div className="authenticated-app">
+        <div className="auth-session-bar">
+          <span>Connecté : {user.email}</span>
+
+          <button type="button" onClick={handleLogout}>
+            Se déconnecter
+          </button>
+        </div>
+
+        {children}
+      </div>
+    </AuthContext.Provider>
+  )
+}
+
+

@@ -1,0 +1,568 @@
+]633;E;echo "===== APP.JSX : ETATS ET EXPORT PDF =====";d872d25c-0626-4261-ac38-9f6ea0916082]633;C===== APP.JSX : ETATS ET EXPORT PDF =====
+    title: 'Mon planner professionnel',
+    subtitle: 'Donner de la clarté à mes projets.',
+    sections: ['Objectifs professionnels', 'Tâches prioritaires', 'Réunions', 'Prochaines étapes'],
+    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+  },
+}
+
+function App() {
+  const [selectedId, setSelectedId] = useState('food')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  function exportPDF() {
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+          parseInt(value.substring(4, 6), 16),
+        ]
+      }
+
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const titleBackgroundRgb = toRgb(titleBackground)
+      const titleTextRgb = toRgb(titleTextColor)
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+      const pdfFont = fontMap[font] || 'helvetica'
+      const compact = density === 'compacte'
+      const sectionGap = compact ? 5 : 8
+      const lineGap = compact ? 6 : 8
+
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+        if (pageIndex > 0) doc.addPage()
+
+        doc.setFillColor(...backgroundRgb)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.8)
+        doc.line(margin, 13, pageWidth - margin, 13)
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('MON PLANNER', margin, 10)
+        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+          align: 'right',
+        })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(...primaryRgb)
+        doc.text(selected.category.toUpperCase(), margin, 26)
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(23)
+        doc.setTextColor(0, 0, 0)
+        const titleLines = doc.splitTextToSize(content.title, usableWidth)
+        doc.text(titleLines, margin, 37)
+
+        let y = 37 + titleLines.length * 9
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(90, 95, 85)
+        const subtitleLines = doc.splitTextToSize(content.subtitle, usableWidth)
+        doc.text(subtitleLines, margin, y)
+        y += subtitleLines.length * 5 + 8
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('DATE', margin, y)
+        doc.setDrawColor(190, 195, 180)
+        doc.setLineWidth(0.3)
+        doc.line(margin + 15, y + 1, pageWidth - margin, y + 1)
+        y += 10
+
+        content.sections.forEach((section, sectionIndex) => {
+          const bottomLimit = pageHeight - 19
+          if (y + 25 > bottomLimit) return
+
+          doc.setFillColor(255, 255, 255)
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(0.25)
+
+===== APP.JSX : APERCU DU PLANNER =====
+          </select>
+
+          <div className="template-list">
+            {filtered.map((template) => (
+              <button
+                className={`template-option ${selectedId === template.id ? 'selected' : ''}`}
+                key={template.id}
+                onClick={() => chooseTemplate(template)}
+                type="button"
+              >
+                <span className="template-icon">{template.icon}</span>
+                <span className="template-name">
+                  <strong>{template.name}</strong>
+                  <small>{template.category}</small>
+                </span>
+                {selectedId === template.id && <span className="selected-check">✓</span>}
+              </button>
+            ))}
+          </div>
+
+          <div className="sidebar-tip">
+            <span>✦</span>
+            <p>Votre créativité, vos règles. Personnalisez votre document à tout moment.</p>
+          </div>
+        </aside>
+
+        <section className="preview-column">
+          <div className="preview-toolbar">
+            <div>
+              <p className="eyebrow">APERÇU EN DIRECT</p>
+              <h2>{selected.name}</h2>
+            </div>
+            <span className="preview-status"><span /> Prévisualisation</span>
+          </div>
+
+          <div className="paper-stage">
+            <article className="planner-page" style={{ backgroundColor: background }}>
+              <div className="page-topline">
+                <span>MON PLANNER</span>
+                <span>✳</span>
+              </div>
+              <div className="planner-cover-mark">❋</div>
+              <p className="planner-kicker">{selected.category.toUpperCase()}</p>
+              <h2 className="planner-title">{content.title}</h2>
+              <p className="planner-subtitle">{content.subtitle}</p>
+
+              <div className="planner-date">
+                <span>DATE</span>
+                <span className="date-line" />
+              </div>
+
+              <div className="planner-sections">
+                {content.sections.map((section, index) => (
+                  <section className={`planner-section section-${index}`} key={section}>
+                    <h3><span>{['✳', '◇', '○', '✦'][index]}</span> {section}</h3>
+                    {index === 1 && selectedId === 'weekly' ? (
+                      <div className="week-grid">
+                        {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, i) => (
+                          <div key={`${day}-${i}`}><b>{day}</b><span /></div>
+                        ))}
+                      </div>
+                    ) : index === 1 && selectedId === 'monthly' ? (
+                      <div className="month-grid">
+                        {Array.from({ length: 21 }, (_, i) => <span key={i}>{i + 1}</span>)}
+                      </div>
+                    ) : (
+                      <div className="writing-lines">
+                        {(index === 0 ? content.rows : ['', '', '']).map((row, i) => (
+                          <div className="writing-row" key={i}>
+                            {selectedId === 'habits' || selectedId === 'student' || selectedId === 'food'
+                              ? <span className="empty-check" />
+                              : null}
+                            <span>{row}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                ))}
+              </div>
+              <footer className="page-footer">
+                <span>UNE PAGE À LA FOIS</span>
+                <span>01</span>
+              </footer>
+            </article>
+          </div>
+          <p className="preview-caption">Aperçu indicatif · Le document final pourra contenir plusieurs pages.</p>
+        </section>
+
+        <aside className="settings panel">
+          <div className="panel-heading">
+
+===== APP.JSX : DEBUT DES PARAMETRES =====
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 2</p>
+              <h2>Personnaliser</h2>
+            </div>
+            <span className="settings-icon">⚙</span>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="pages">Nombre de pages</label>
+            <div className="number-control">
+              <button type="button" onClick={() => setPages((value) => Math.max(1, value - 1))} aria-label="Diminuer le nombre de pages">−</button>
+              <input id="pages" type="number" min="1" max="365" value={pages} onChange={(event) => setPages(Math.max(1, Math.min(365, Number(event.target.value) || 1)))} />
+              <button type="button" onClick={() => setPages((value) => Math.min(365, value + 1))} aria-label="Augmenter le nombre de pages">+</button>
+            </div>
+            <small className="helper">De 1 à 365 pages dans cette version de démonstration.</small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur principale</span>
+            <div className="color-control">
+              <label className="color-swatch" style={{ background: primary }} htmlFor="primary-color" />
+              <input id="primary-color" type="color" value={primary} onChange={(event) => setPrimary(event.target.value)} />
+              <code>{primary.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Fond des pages</span>
+            <div className="color-control">
+              <label className="color-swatch paper-swatch" style={{ background: background }} htmlFor="background-color" />
+              <input id="background-color" type="color" value={background} onChange={(event) => setBackground(event.target.value)} />
+              <code>{background.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Arrière-plan des titres</span>
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleBackground }}
+                htmlFor="title-background-color"
+              />
+              <input
+                id="title-background-color"
+                type="color"
+                value={titleBackground}
+                onChange={(event) => setTitleBackground(event.target.value)}
+              />
+              <code>{titleBackground.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur du texte des titres</span>
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleTextColor }}
+                htmlFor="title-text-color"
+              />
+              <input
+                id="title-text-color"
+                type="color"
+                value={titleTextColor}
+                onChange={(event) => setTitleTextColor(event.target.value)}
+              />
+              <code>{titleTextColor.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">Typographie</label>
+            <select id="font" value={font} onChange={(event) => setFont(event.target.value)}>
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button key={value} type="button" className={density === value ? 'active' : ''} onClick={() => setDensity(value)}>
+                  {value === 'compacte' ? 'Compacte' : 'Aérée'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button className="reset-button" type="button" onClick={() => {
+            setPrimary('#718B70')
+            setBackground('#F7F5EF')
+            setTitleBackground('#718B70')
+            setTitleTextColor('#FFFFFF')
+            setFont('moderne')
+            setDensity('confortable')
+            setNotice('')
+          }}>
+
+===== CSS : APERCU ET SECTIONS =====
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+  font-size: 10px;
+}
+
+.paper-stage {
+  display: flex;
+  justify-content: center;
+  padding: 20px 12px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background-color: #efeee8;
+  background-image: radial-gradient(#d9d9cf 0.7px, transparent 0.7px);
+  background-size: 12px 12px;
+}
+
+.planner-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 385px;
+  min-height: 540px;
+  padding: 25px 26px 18px;
+  overflow: hidden;
+  box-shadow: 0 7px 23px rgb(39 44 34 / 12%);
+  color: var(--ink);
+  transition: background-color 0.15s;
+}
+
+.page-topline {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  color: var(--primary);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.planner-cover-mark {
+  margin-top: 19px;
+  color: var(--primary);
+  font-size: 27px;
+  line-height: 1;
+}
+
+.planner-kicker {
+  margin: 10px 0 5px;
+  color: var(--primary);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.planner-title {
+  margin: 0;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(23px, 2.5vw, 32px);
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.planner-subtitle {
+  margin: 8px 0 15px;
+  color: #777b70;
+  font-family: Georgia, serif;
+  font-size: 10px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.planner-date {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: var(--primary);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.date-line {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.planner-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+}
+
+.planner-section {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, white 36%, transparent);
+}
+
+.planner-section h3 {
+  margin: 0 0 9px;
+  padding: 5px 6px;
+  border-radius: 4px;
+  background: var(--title-background, var(--primary));
+  color: var(--title-text, #ffffff);
+  font-size: 9px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.planner-section h3 span {
+  margin-right: 3px;
+}
+
+.writing-lines {
+  display: grid;
+  gap: 11px;
+}
+
+.writing-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid color-mix(in srgb, var(--primary) 19%, transparent);
+  color: #777b70;
+  font-size: 8px;
+  overflow-wrap: anywhere;
+}
+
+.empty-check {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--primary);
+
+===== CSS : CONTENEUR PRINCIPAL =====
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  --primary: #718b70;
+  --paper: #f7f5ef;
+  --ink: #454b43;
+  --muted: #858a80;
+  --line: #e7e8df;
+  --soft-green: #edf1e9;
+  color: var(--ink);
+  min-height: 100vh;
+  background: #fbfaf7;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.app-shell.font-classique {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.app-shell.font-elegante {
+  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+.topbar {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 5%;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 13px 13px 13px 4px;
+  background: var(--primary);
+  color: white;
+  font-family: Georgia, serif;
+  font-size: 24px;
+}
+
+.brand-light {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.private-label,
+.preview-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #697267;
+  font-size: 12px;
+}
+
+.private-label > span,
+.preview-status > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.welcome {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 195px;
+  padding: 34px 6%;
+  overflow: hidden;
+  background: linear-gradient(110deg, #f1f3eb 0%, #f8f6f0 75%);
+}
+
+.eyebrow {
+  margin: 0 0 9px;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.welcome h1 {

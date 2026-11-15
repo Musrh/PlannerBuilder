@@ -1,0 +1,136 @@
+]633;E;echo "=== FIN DU COMPOSANT REACT ===";c7faf30d-1059-425f-9ec8-1d8e38866e7e]633;C=== FIN DU COMPOSANT REACT ===
+                if (f.size > 20 * 1024 * 1024) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+                  return
+                }
+                if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type)) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+                  return
+                }
+                const reader = new FileReader()
+                reader.onload = () => {
+                  setCustomPatternImage(String(reader.result || ''))
+                  setMessage('Image de motif importée.')
+                }
+                reader.onerror = () => setMessage('Impossible de lire cette image de motif.')
+                reader.readAsDataURL(f)
+              }}
+            />
+          </>
+        )}
+
+        {backgroundType !== 'solid' && (
+          <>
+            <label htmlFor="mockup-pattern-size">Taille du motif : {patternSize}</label>
+            <input
+              id="mockup-pattern-size"
+              type="range"
+              min="20"
+              max="100"
+              step="5"
+              value={patternSize}
+              onChange={(event) => {
+                setPatternSize(Number(event.target.value))
+                setPreview('')
+              }}
+            />
+            <label htmlFor="mockup-pattern-repeat">Disposition du motif</label>
+            <select
+              id="mockup-pattern-repeat"
+              value={patternRepeat}
+              onChange={(event) => {
+                setPatternRepeat(event.target.value)
+                setPreview('')
+              }}
+            >
+              <option value="repeat">Répéter le motif</option>
+              <option value="stretch">Étendre sur tout le fond</option>
+            </select>
+          </>
+        )}
+
+        <button
+          className="mockup-primary-button"
+          type="button"
+          onClick={createCustomMockup}
+          disabled={!customImage || loading}
+        >
+          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+        </button>
+
+        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+        <select
+          id="mockup-export-format"
+          value={downloadFormat}
+          onChange={(event) => setDownloadFormat(event.target.value)}
+        >
+          <option value="png">PNG — qualité sans perte</option>
+          <option value="jpg">JPG — fichier compressé</option>
+        </select>
+
+        {message && <p className="mockup-message" role="status">{message}</p>}
+      </div>
+
+      {preview && (
+        <div className="mockup-result">
+          <h3>Aperçu publicitaire</h3>
+          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+          <button
+            className="mockup-primary-button"
+            type="button"
+            onClick={downloadMockup}
+          >
+            Télécharger le mockup {downloadFormat.toUpperCase()}
+          </button>
+        </div>
+      )}
+
+      <p className="mockup-local-note">
+        Prototype local : le PDF est traité dans le navigateur et n’est pas
+        envoyé à un serveur par ce composant. Cette page n’est pas encore
+        protégée par une authentification administrateur.
+      </p>
+    </section>
+  )
+}
+
+export default AdminMockups
+
+=== STRUCTURE DES BLOCS JSX ===
+26:      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+31:    setMessage('')
+185:      setMessage('Mockup personnalisé créé. Vous pouvez le télécharger.')
+188:      setMessage('Impossible de créer le mockup. Essayez une autre image.')
+196:      setMessage('Importez d’abord un fichier PDF.')
+201:    setMessage('')
+305:      setMessage(`Mockup créé à partir de la première page de « ${file.name} ».`)
+309:      setMessage(
+345:        setMessage('Impossible de préparer l’export JPG.')
+355:    image.onerror = () => setMessage('Impossible de convertir l’image en JPG.')
+359:  return (
+360:    <section className="admin-mockups">
+361:      <div className="admin-mockups-heading">
+368:      </div>
+370:      <div className="mockup-controls">
+381:            setMessage('')
+385:              setMessage('Le PDF dépasse la limite de 40 Mo.')
+423:            setMessage('')
+433:              setMessage('L’image dépasse la limite de 20 Mo.')
+440:              setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+447:              setMessage('Image importée. Personnalisez le texte et le fond.')
+449:            reader.onerror = () => setMessage('Impossible de lire ce fichier image.')
+528:                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+534:                  setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+540:                  setMessage('Image de motif importée.')
+542:                reader.onerror = () => setMessage('Impossible de lire cette image de motif.')
+599:      </div>
+602:        <div className="mockup-result">
+612:        </div>
+620:    </section>
+
+=== DÉPENDANCES REACT ===
+15:    "react": "^19.3.1",

@@ -1,0 +1,42 @@
+]633;E;echo "===== IDENTIFIANT ADMIN CONFIGURE =====";94b5b532-8403-4e9c-ae34-b7f91fbf27fa]633;C===== IDENTIFIANT ADMIN CONFIGURE =====
+// Configuration temporaire de développement PlannerBuilder.
+// Ce fichier sert uniquement à l'affichage de l'interface.
+// Il ne constitue PAS une protection de sécurité.
+
+export const PLANNERBUILDER_ADMIN_UID =
+  's4R51uEux5Rmo48OgALEwW55F0k1'
+
+export const isPlannerBuilderAdmin = (user) =>
+  Boolean(user && user.uid === PLANNERBUILDER_ADMIN_UID)
+
+===== CONTEXTE AUTHENTIFICATION =====
+24:  const [user, setUser] = useState(null)
+25:  const [plan, setPlan] = useState('free')
+41:      setUser(null)
+44:        setPlan('free')
+70:        setPlan(storedPlan)
+71:        setUser(currentUser)
+83:        setPlan('free')
+180:  const isAdmin = isPlannerBuilderAdmin(user)
+183:    <AuthContext.Provider value={{ user, plan, isAdmin }}>
+193:    </AuthContext.Provider>
+
+===== ETAT GIT =====
+?? ../abonnements.txt
+?? ./
+?? ../authgate-verification.txt
+?? ../backup-avant-modifications.tar.gz
+?? ../backup-couverture-20261028-131937/
+?? ../backup-plannerbuilder-20261028-130012/
+?? ../backup-styles-20261028-131313/
+?? ../config-admin.txt
+?? ../controle-export.txt
+?? ../controle-limite.txt
+?? ../firebase-verification.txt
+?? ../inspection_auth_plannerbuilder.txt
+?? ../resultat.txt
+?? ../sauvegardes/
+?? ../suivi.txt
+?? ../verification-sauvegarde.txt
+?? ../verification.txt
+?? ../versions.txt

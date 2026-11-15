@@ -1,0 +1,39 @@
+27:  const [backgroundType, setBackgroundType] = useState('solid')
+29:  const [patternSize, setPatternSize] = useState(50)
+200:      if (backgroundType === 'upload') {
+217:      canvas.width = 1200
+218:      canvas.height = 900
+226:      ctx.fillRect(0, 0, canvas.width, canvas.height)
+228:      if (backgroundType === 'pattern') {
+229:        const size = Math.max(16, Math.min(160, patternSize * 1.2))
+274:            ctx.fillRect(0, 0, canvas.width, canvas.height)
+277:          ctx.drawImage(tile, 0, 0, canvas.width, canvas.height)
+279:      } else if (backgroundType === 'upload' && patternImage) {
+281:          const size = Math.max(24, Math.min(320, patternSize * 2))
+291:            ctx.fillRect(0, 0, canvas.width, canvas.height)
+294:          ctx.drawImage(patternImage, 0, 0, canvas.width, canvas.height)
+299:      const maxWidth = canvas.width - margin * 2
+300:      const maxHeight = 650
+302:        maxWidth / image.width,
+303:        maxHeight / image.height
+307:      const x = (canvas.width - width) / 2
+308:      const y = 40 + (maxHeight - height) / 2
+327:        const maxTextWidth = canvas.width - 100
+336:        ctx.fillText(displayedTitle, canvas.width / 2, 790)
+381:      canvas.width = 1200
+382:      canvas.height = 900
+398:      ctx.fillRect(0, 0, canvas.width, canvas.height)
+420:      const maxWidth = 440
+421:      const maxHeight = 620
+422:      let imageWidth = maxWidth
+425:      if (imageHeight > maxHeight) {
+426:        imageHeight = maxHeight
+495:      canvas.width = image.naturalWidth
+496:      canvas.height = image.naturalHeight
+505:      ctx.fillRect(0, 0, canvas.width, canvas.height)
+636:          value={backgroundType}
+647:        {backgroundType === 'pattern' && (
+666:        {backgroundType === 'upload' && (
+704:        {backgroundType !== 'solid' && (
+706:            <label htmlFor="mockup-pattern-size">Taille du motif : {patternSize}</label>
+713:              value={patternSize}

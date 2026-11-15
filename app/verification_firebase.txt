@@ -1,0 +1,20 @@
+]633;E;echo "===== DEPENDANCE FIREBASE =====";8627d5f1-591f-467c-8448-cd11e7ba0d99]633;C===== DEPENDANCE FIREBASE =====
+app@0.0.0 /workspaces/PlannerBuilder/app
+└── firebase@13.1.0
+
+
+===== PACKAGE.JSON =====
+6:  "scripts": {
+8:    "build": "vite build",
+13:    "firebase": "^13.1.0",
+
+===== CONFIGURATION ADMIN =====
+// Configuration temporaire de développement PlannerBuilder.
+// Ce fichier sert uniquement à l'affichage de l'interface.
+// Il ne constitue PAS une protection de sécurité.
+
+export const PLANNERBUILDER_ADMIN_UID =
+  's4R51uEux5Rmo48OgALEwW55F0k1'
+
+export const isPlannerBuilderAdmin = (user) =>
+  Boolean(user && user.uid === PLANNERBUILDER_ADMIN_UID)

@@ -1,0 +1,7 @@
+]633;E;echo "=== Vérification du dossier ===";94b5b532-8403-4e9c-ae34-b7f91fbf27fa]633;C=== Vérification du dossier ===
+Dossier trouvé.
+
+=== Fichiers présents ===
+total 32K
+-rw-rw-rw- 1 codespace codespace  28K Oct 30 22:47 App_AVANT_MODIFICATION.jsx
+-rw-rw-rw- 1 codespace codespace 2.8K Oct 30 22:47 AuthGate_AVANT_MODIFICATION.jsx

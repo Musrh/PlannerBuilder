@@ -1,0 +1,5 @@
+../app/package.json
+../backup-plannerbuilder-20261028-130012/package.json
+../sauvegardes/avant-mockups-20261028-135713/package.json
+../sauvegardes/avant-mockups-admin-20261028-140404/package.json
+../sauvegardes/avant-mockups-admin-20261028-140507/package.json

@@ -1,0 +1,227 @@
+]633;E;echo "=== SAUVEGARDE DE SÉCURITÉ ===";c7faf30d-1059-425f-9ec8-1d8e38866e7e]633;C=== SAUVEGARDE DE SÉCURITÉ ===
+../sauvegardes/bibliotheque-motifs-20261028-173605
+
+=== FICHIERS SAUVEGARDÉS ===
+total 24K
+-rw-rw-rw- 1 codespace codespace 2.8K Oct 28 17:36 AdminMockups.css
+-rw-rw-rw- 1 codespace codespace  20K Oct 28 17:36 AdminMockups.jsx
+
+=== ZONE DES ÉTATS REACT ===
+import { useState } from 'react'
+import * as pdfjsLib from 'pdfjs-dist'
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import './AdminMockups.css'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+
+function AdminMockups() {
+  const [file, setFile] = useState(null)
+  const [style, setStyle] = useState('nature')
+  const [preview, setPreview] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [customImage, setCustomImage] = useState('')
+  const [customTitle, setCustomTitle] = useState('YOUR NEXT CHAPTER')
+  const [customBackground, setCustomBackground] = useState('#e5eadc')
+  const [backgroundType, setBackgroundType] = useState('solid')
+  const [backgroundPattern, setBackgroundPattern] = useState('dots')
+  const [patternSize, setPatternSize] = useState(50)
+  const [patternRepeat, setPatternRepeat] = useState('repeat')
+  const [customPatternImage, setCustomPatternImage] = useState('')
+  const [downloadFormat, setDownloadFormat] = useState('png')
+
+  async function createCustomMockup() {
+    if (!customImage) {
+      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+      return
+    }
+
+    setLoading(true)
+    setMessage('')
+
+    try {
+      const image = new Image()
+      image.src = customImage
+
+      await new Promise((resolve, reject) => {
+        image.onload = resolve
+        image.onerror = () => reject(
+          new Error('Impossible de lire cette image.')
+        )
+      })
+
+      let patternImage = null
+      if (backgroundType === 'upload') {
+        if (!customPatternImage) {
+          throw new Error('Importez une image pour le motif de fond.')
+        }
+
+        patternImage = new Image()
+        patternImage.src = customPatternImage
+
+        await new Promise((resolve, reject) => {
+          patternImage.onload = resolve
+          patternImage.onerror = () => reject(
+            new Error('Impossible de lire l’image du motif.')
+          )
+        })
+      }
+
+      const canvas = document.createElement('canvas')
+      canvas.width = 1200
+      canvas.height = 900
+
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        throw new Error('Impossible de préparer le canvas.')
+      }
+
+      ctx.fillStyle = customBackground
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      if (backgroundType === 'pattern') {
+        const size = Math.max(16, Math.min(160, patternSize * 1.2))
+        const tile = document.createElement('canvas')
+
+=== ZONE DES CONTRÔLES DU FOND ===
+            reader.readAsDataURL(nextFile)
+          }}
+        />
+
+        <label htmlFor="mockup-custom-title">Texte à afficher sous l’image</label>
+        <input
+          id="mockup-custom-title"
+          type="text"
+          maxLength={100}
+          value={customTitle}
+          onChange={(event) => {
+            setCustomTitle(event.target.value)
+            setPreview('')
+          }}
+          placeholder="Ex. : YOUR NEXT CHAPTER"
+        />
+
+        <label htmlFor="mockup-custom-background">Couleur de fond</label>
+        <input
+          id="mockup-custom-background"
+          type="color"
+          value={customBackground}
+          onChange={(event) => {
+            setCustomBackground(event.target.value)
+            setPreview('')
+          }}
+        />
+
+        <label htmlFor="mockup-background-type">Style du fond</label>
+        <select
+          id="mockup-background-type"
+          value={backgroundType}
+          onChange={(event) => {
+            setBackgroundType(event.target.value)
+            setPreview('')
+          }}
+        >
+          <option value="solid">Couleur unie</option>
+          <option value="pattern">Motif prédéfini</option>
+          <option value="upload">Image de motif importée</option>
+        </select>
+
+        {backgroundType === 'pattern' && (
+          <>
+            <label htmlFor="mockup-background-pattern">Motif</label>
+            <select
+              id="mockup-background-pattern"
+              value={backgroundPattern}
+              onChange={(event) => {
+                setBackgroundPattern(event.target.value)
+                setPreview('')
+              }}
+            >
+              <option value="dots">Points</option>
+              <option value="grid">Grille</option>
+              <option value="stripes">Rayures</option>
+              <option value="leaves">Feuilles</option>
+            </select>
+          </>
+        )}
+
+        {backgroundType === 'upload' && (
+          <>
+            <label htmlFor="mockup-pattern-image">Importer une image de motif</label>
+            <input
+              id="mockup-pattern-image"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={(event) => {
+                const f = event.target.files?.[0]
+                setPreview('')
+                if (!f) {
+                  setCustomPatternImage('')
+                  return
+                }
+                if (f.size > 20 * 1024 * 1024) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+                  return
+                }
+                if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type)) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+                  return
+                }
+                const reader = new FileReader()
+                reader.onload = () => {
+                  setCustomPatternImage(String(reader.result || ''))
+                  setMessage('Image de motif importée.')
+                }
+                reader.onerror = () => setMessage('Impossible de lire cette image de motif.')
+                reader.readAsDataURL(f)
+              }}
+            />
+          </>
+        )}
+
+        {backgroundType !== 'solid' && (
+          <>
+            <label htmlFor="mockup-pattern-size">Taille du motif : {patternSize}</label>
+            <input
+              id="mockup-pattern-size"
+              type="range"
+              min="20"
+              max="100"
+              step="5"
+              value={patternSize}
+              onChange={(event) => {
+                setPatternSize(Number(event.target.value))
+                setPreview('')
+              }}
+            />
+            <label htmlFor="mockup-pattern-repeat">Disposition du motif</label>
+            <select
+              id="mockup-pattern-repeat"
+              value={patternRepeat}
+              onChange={(event) => {
+                setPatternRepeat(event.target.value)
+                setPreview('')
+              }}
+            >
+              <option value="repeat">Répéter le motif</option>
+              <option value="stretch">Étendre sur tout le fond</option>
+            </select>
+          </>
+        )}
+
+        <button
+          className="mockup-primary-button"
+          type="button"
+          onClick={createCustomMockup}
+          disabled={!customImage || loading}
+        >
+          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+        </button>
+
+        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+        <select
+          id="mockup-export-format"

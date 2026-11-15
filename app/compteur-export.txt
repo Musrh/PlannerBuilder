@@ -1,0 +1,49 @@
+79-  const [background, setBackground] = useState('#F7F5EF')
+80-  const [titleBackground, setTitleBackground] = useState('#718B70')
+81-  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+82-  const [font, setFont] = useState('moderne')
+83-  const [density, setDensity] = useState('confortable')
+84-  const [category, setCategory] = useState('Tous')
+85-  const [notice, setNotice] = useState('')
+86-  const [freeExports, setFreeExports] = useState(() => {
+87:    const saved = Number(localStorage.getItem('plannerbuilder_free_exports') || 0)
+88-
+89-    return Number.isFinite(saved) && saved >= 0
+90-      ? Math.floor(saved)
+91-      : 0
+92-  })
+93-
+94-  const selected = templates.find((item) => item.id === selectedId)
+95-  const content = pageContent[selectedId]
+96-  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+97-  const filtered = category === 'Tous'
+98-    ? templates
+99-    : templates.filter((item) => item.category === category)
+100-
+101-  function chooseTemplate(template) {
+102-    setSelectedId(template.id)
+--
+356-        .toLowerCase()
+357-        .replace(/[^a-z0-9]+/g, '-')
+358-        .replace(/^-|-$/g, '')
+359-
+360-      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+361-
+362-      const nextExports = freeExports + 1
+363-      localStorage.setItem(
+364:        'plannerbuilder_free_exports',
+365-        String(nextExports)
+366-      )
+367-      setFreeExports(nextExports)
+368-
+369-      setNotice(
+370-        `PDF créé : ${pages + 1} page(s), couverture comprise. ${3 - nextExports} export(s) gratuit(s) restant(s).`
+371-      )
+372-    } catch (error) {
+373-      console.error('Erreur export PDF :', error)
+374-      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+375-    }
+376-  }
+377-
+378-  return (
+379-    <main

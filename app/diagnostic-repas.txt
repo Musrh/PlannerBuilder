@@ -1,0 +1,213 @@
+]633;E;echo "===== APP.JSX : APERCU DU PLANNER =====";16ac2d09-7108-4244-952e-c35f69eceeb0]633;C===== APP.JSX : APERCU DU PLANNER =====
+              <p className="eyebrow">APERÇU EN DIRECT</p>
+              <h2>{selected.name}</h2>
+            </div>
+            <span className="preview-status"><span /> Prévisualisation</span>
+          </div>
+
+          <div className="paper-stage">
+            <article className="planner-page" style={{ backgroundColor: background }}>
+              <div className="page-topline">
+                <span>MON PLANNER</span>
+                <span>✳</span>
+              </div>
+              <div className="planner-cover-mark">❋</div>
+              <p className="planner-kicker">{selected.category.toUpperCase()}</p>
+              <h2 className="planner-title">{content.title}</h2>
+              <p className="planner-subtitle">{content.subtitle}</p>
+
+              <div className="planner-date">
+                <span>DATE</span>
+                <span className="date-line" />
+              </div>
+
+              <div className="planner-sections">
+                {content.sections.map((section, index) => (
+                  <section className={`planner-section section-${index}`} key={section}>
+                    <h3><span>{['✳', '◇', '○', '✦'][index]}</span> {section}</h3>
+                    {index === 1 && selectedId === 'weekly' ? (
+                      <div className="week-grid">
+                        {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, i) => (
+                          <div key={`${day}-${i}`}><b>{day}</b><span /></div>
+                        ))}
+                      </div>
+                    ) : index === 1 && selectedId === 'monthly' ? (
+                      <div className="month-grid">
+                        {Array.from({ length: 21 }, (_, i) => <span key={i}>{i + 1}</span>)}
+                      </div>
+                    ) : (
+                      <div className="writing-lines">
+                        {(index === 0 ? content.rows : ['', '', '']).map((row, i) => (
+                          <div className="writing-row" key={i}>
+                            {selectedId === 'habits' || selectedId === 'student' || selectedId === 'food'
+                              ? <span className="empty-check" />
+                              : null}
+                            <span>{row}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                ))}
+              </div>
+              <footer className="page-footer">
+                <span>UNE PAGE À LA FOIS</span>
+                <span>01</span>
+              </footer>
+            </article>
+          </div>
+          <p className="preview-caption">Aperçu indicatif · Le document final pourra contenir plusieurs pages.</p>
+        </section>
+
+        <aside className="settings panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 2</p>
+              <h2>Personnaliser</h2>
+            </div>
+            <span className="settings-icon">⚙</span>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="pages">Nombre de pages</label>
+
+===== APP.CSS : SECTIONS DU PLANNER =====
+  background: color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.planner-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+}
+
+.planner-section {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, white 36%, transparent);
+}
+
+.planner-section h3 {
+  margin: 0 0 9px;
+  color: var(--primary);
+  font-size: 9px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.planner-section h3 span {
+  margin-right: 3px;
+}
+
+.writing-lines {
+  display: grid;
+  gap: 11px;
+}
+
+.writing-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid color-mix(in srgb, var(--primary) 19%, transparent);
+  color: #777b70;
+  font-size: 8px;
+  overflow-wrap: anywhere;
+}
+
+.empty-check {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--primary);
+  border-radius: 2px;
+}
+
+
+===== APP.CSS : REGLES D'IMPRESSION =====
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  body,
+  #root,
+  .app-shell {
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: white !important;
+  }
+
+  .topbar,
+  .welcome,
+  .sidebar,
+  .preview-toolbar,
+  .preview-caption,
+  .settings,
+  .notice,
+  .app-footer {
+    display: none !important;
+  }
+
+  .workspace {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  .paper-stage {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: white !important;
+  }
+
+  .planner-page {
+    width: 100%;
+    max-width: none;
+    min-height: 260mm;
+    padding: 10mm;
+    box-shadow: none;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* Impression : conserver la typographie et les couleurs choisies */
+@media print {
+  .app-shell.font-moderne .planner-page,
+  .app-shell.font-moderne .planner-page * {
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+  }
+
+  .app-shell.font-classique .planner-page,
+  .app-shell.font-classique .planner-page * {
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  .app-shell.font-elegante .planner-page,
+  .app-shell.font-elegante .planner-page * {
+    font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  }
+
+  .planner-page {
+    background-color: var(--paper) !important;
+    color: var(--ink) !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .planner-page * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

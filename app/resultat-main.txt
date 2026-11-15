@@ -1,0 +1,43 @@
+]633;E;echo "===== VERIFICATION MAIN.JSX =====";95a7fdfa-b5e0-4a53-ba39-abbc4e2c71fd]633;C===== VERIFICATION MAIN.JSX =====
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+const rootElement = document.getElementById('root')
+
+if (!rootElement) {
+  throw new Error("Élément HTML #root introuvable.")
+}
+
+createRoot(rootElement).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+)
+
+===== COMPILATION =====
+
+> app@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 247 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              0.45 kB │ gzip:   0.29 kB
+dist/assets/pdf.worker.min-CjEcRF4W.mjs  1,264.34 kB
+dist/assets/index-k5d_KpCn.css              19.75 kB │ gzip:   4.74 kB
+dist/assets/purify.es-Dqk5qvad.js           29.02 kB │ gzip:  11.45 kB
+dist/assets/index.es-B5JDwqzk.js           151.37 kB │ gzip:  48.88 kB
+dist/assets/html2canvas-DUK3XDvc.js        199.39 kB │ gzip:  46.73 kB
+dist/assets/index--xTStqAu.js            1,651.27 kB │ gzip: 509.07 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.28s
+Code de sortie : 0

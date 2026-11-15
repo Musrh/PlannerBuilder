@@ -1,0 +1,112 @@
+===== INITIALISATION DU COMPTEUR =====
+
+  const [showMockups, setShowMockups] = useState(false)
+  const [showAdminPanel, setShowAdminPanel] = useState(false)
+  const [selectedId, setSelectedId] = useState('food')
+  const [visualStyle, setVisualStyle] = useState('minimaliste')
+  const [layoutModel, setLayoutModel] = useState('classique')
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const coverEditorRef = useRef(null)
+  const [coverMode, setCoverMode] = useState('preset')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+
+  // Le compteur affiché est alimenté par la réponse de Railway.
+  // null signifie que le serveur n'a pas encore communiqué le compteur.
+  const [freeExports, setFreeExports] = useState(null)
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  async function exportPDF() {
+    if (coverMode === 'preset' && !coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+    }
+
+    if (!user) {
+      setNotice('Connectez-vous pour exporter votre PDF.')
+      return
+    }
+
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+
+===== VARIABLES PDF =====
+        }
+
+        const customImage = await coverEditorRef.current.exportImage()
+        doc.addImage(customImage, 'PNG', 0, 0, pageWidth, pageHeight)
+      } else if (coverImage) {
+        const format = coverImage.startsWith('data:image/png')
+          ? 'PNG'
+          : coverImage.startsWith('data:image/webp')
+            ? 'WEBP'
+            : 'JPEG'
+
+        doc.addImage(coverImage, format, 0, 0, pageWidth, pageHeight)
+        doc.setFillColor(255, 255, 255)
+        doc.roundedRect(18, 95, pageWidth - 36, 90, 4, 4, 'F')
+        doc.setTextColor(30, 30, 30)
+      } else {
+        if (!cover) {
+          throw new Error('Veuillez choisir une couverture prédéfinie.')
+        }
+
+        doc.setFillColor(...cover.bg)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+        doc.setFillColor(...cover.accent)
+
+        if (cover.shape === 'nature') {
+          doc.circle(175, 45, 30, 'F')
+
+===== UTILISATIONS DU COMPTEUR =====
+107:  const [freeExports, setFreeExports] = useState(null)
+493:          setFreeExports(3)
+509:        setFreeExports(
+513:        setFreeExports(null)
+1174:                  : freeExports === null
+1176:                    : `${Math.max(0, 3 - freeExports)} export(s) gratuit(s) restant(s)`}
+1188:                  : freeExports === null
+1190:                    : `${Math.min(freeExports, 3)} / 3`}
+
+===== TEST ESLINT =====
+
+> app@0.0.0 lint
+> eslint .
+
+
+/workspaces/PlannerBuilder/app/src/App.jsx
+  1238:17  error  Parsing error: Unterminated string constant
+
+✖ 1 problem (1 error, 0 warnings)
+

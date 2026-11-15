@@ -1,0 +1,817 @@
+]633;E;echo "===== POLICES ET COULEURS CSS =====";a57775f1-bce1-4d04-9813-c85bac304065]633;C===== POLICES ET COULEURS CSS =====
+1-#root {
+2-  min-height: 100vh;
+3-}
+4-
+5-.app-shell {
+6:  --primary: #718b70;
+7:  --paper: #f7f5ef;
+8-  --ink: #454b43;
+9-  --muted: #858a80;
+10-  --line: #e7e8df;
+11-  --soft-green: #edf1e9;
+12:  color: var(--ink);
+13-  min-height: 100vh;
+14:  background: #fbfaf7;
+15:  font-family: Inter, "Segoe UI", Arial, sans-serif;
+16-}
+17-
+18:.app-shell.font-classique {
+19:  font-family: Georgia, "Times New Roman", serif;
+20-}
+21-
+22:.app-shell.font-elegante {
+23:  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+24-}
+25-
+26-.topbar {
+27-  min-height: 76px;
+28-  display: flex;
+29-  align-items: center;
+30-  justify-content: space-between;
+31-  padding: 16px 5%;
+32-  border-bottom: 1px solid var(--line);
+33:  background: #fff;
+34-}
+35-
+36-.brand {
+37-  display: inline-flex;
+38-  align-items: center;
+39-  gap: 11px;
+40:  color: var(--ink);
+41-  text-decoration: none;
+42:  font-size: 20px;
+43:  font-weight: 800;
+44-  letter-spacing: -0.7px;
+45-}
+46-
+47-.brand-mark {
+48-  display: grid;
+49-  place-items: center;
+50-  width: 38px;
+51-  height: 38px;
+52-  border-radius: 13px 13px 13px 4px;
+53:  background: var(--primary);
+54:  color: white;
+55:  font-family: Georgia, serif;
+56:  font-size: 24px;
+57-}
+58-
+59-.brand-light {
+60:  color: var(--primary);
+61:  font-weight: 500;
+62-}
+63-
+64-.private-label,
+65-.preview-status {
+66-  display: inline-flex;
+67-  align-items: center;
+68-  gap: 8px;
+69:  color: #697267;
+70:  font-size: 12px;
+71-}
+72-
+73-.private-label > span,
+74-.preview-status > span {
+75-  width: 7px;
+76-  height: 7px;
+77-  border-radius: 50%;
+78:  background: var(--primary);
+79-}
+80-
+81-.welcome {
+82-  position: relative;
+83-  display: flex;
+84-  align-items: center;
+85-  justify-content: space-between;
+86-  min-height: 195px;
+87-  padding: 34px 6%;
+88-  overflow: hidden;
+89:  background: linear-gradient(110deg, #f1f3eb 0%, #f8f6f0 75%);
+90-}
+91-
+92-.eyebrow {
+93-  margin: 0 0 9px;
+94:  color: var(--primary);
+95:  font-size: 10px;
+96:  font-weight: 800;
+97-  letter-spacing: 1.8px;
+98-}
+99-
+100-.welcome h1 {
+101-  max-width: 650px;
+102-  margin: 0;
+103:  font-size: clamp(27px, 4vw, 42px);
+104-  line-height: 1.15;
+105-  letter-spacing: -1.5px;
+106-}
+107-
+108-.welcome h1 em {
+109:  color: var(--primary);
+110:  font-family: Georgia, serif;
+111:  font-weight: 500;
+112-}
+113-
+114-.welcome-text {
+115-  max-width: 540px;
+116-  margin: 13px 0 0;
+117:  color: #74796f;
+118:  font-size: 14px;
+119-  line-height: 1.7;
+120-}
+121-
+122-.welcome-decoration {
+123-  position: absolute;
+124-  right: 8%;
+125:  color: var(--primary);
+126-  opacity: 0.13;
+127:  font-size: 150px;
+128-  line-height: 1;
+129-  transform: rotate(-15deg);
+130-}
+131-
+132-.workspace {
+133-  display: grid;
+134-  grid-template-columns: minmax(210px, 0.8fr) minmax(300px, 1.35fr) minmax(225px, 0.85fr);
+135-  align-items: start;
+--
+142-.panel {
+143-  min-width: 0;
+144-  padding: 21px;
+145-  border: 1px solid var(--line);
+146-  border-radius: 17px;
+147:  background: #fff;
+148-  box-shadow: 0 5px 24px rgb(57 65 49 / 3%);
+149-}
+150-
+151-.panel-heading,
+152-.preview-toolbar {
+153-  display: flex;
+154-  align-items: center;
+155-  justify-content: space-between;
+--
+161-}
+162-
+163-.panel-heading .eyebrow,
+164-.preview-toolbar .eyebrow {
+165-  margin-bottom: 5px;
+166:  font-size: 9px;
+167-}
+168-
+169-.panel-heading h2,
+170-.preview-toolbar h2 {
+171-  margin: 0;
+172:  font-size: 18px;
+173-  letter-spacing: -0.5px;
+174-}
+175-
+176-.count,
+177-.settings-icon {
+178-  display: grid;
+179-  place-items: center;
+180-  flex-shrink: 0;
+181-  width: 31px;
+182-  height: 31px;
+183-  border-radius: 10px;
+184:  background: var(--soft-green);
+185:  color: var(--primary);
+186:  font-size: 13px;
+187-}
+188-
+189-.field-label {
+190-  display: block;
+191-  margin-bottom: 9px;
+192:  color: #4c5149;
+193:  font-size: 12px;
+194:  font-weight: 700;
+195-}
+196-
+197-select,
+198-.number-control input {
+199-  width: 100%;
+200-  min-height: 40px;
+201-  padding: 9px 11px;
+202-  border: 1px solid var(--line);
+203-  border-radius: 9px;
+204-  outline: none;
+205:  background: white;
+206:  color: var(--ink);
+207-  font: inherit;
+208:  font-size: 12px;
+209-}
+210-
+211-select:focus,
+212-.number-control input:focus {
+213:  border-color: var(--primary);
+214-  box-shadow: 0 0 0 3px rgb(113 139 112 / 12%);
+215-}
+216-
+217-.template-list {
+218-  display: grid;
+219-  gap: 7px;
+220-  margin-top: 16px;
+221-}
+--
+227-  width: 100%;
+228-  min-width: 0;
+229-  padding: 10px 8px;
+230-  border: 1px solid transparent;
+231-  border-radius: 11px;
+232:  background: transparent;
+233:  color: var(--ink);
+234-  text-align: left;
+235-  cursor: pointer;
+236:  transition: background 0.15s, border-color 0.15s;
+237-}
+238-
+239-.template-option:hover {
+240:  background: #f8f9f5;
+241-}
+242-
+243-.template-option.selected {
+244:  border-color: #d5dfd0;
+245:  background: #f1f5ed;
+246-}
+247-
+248-.template-icon {
+249-  display: grid;
+250-  place-items: center;
+251-  flex-shrink: 0;
+252-  width: 36px;
+253-  height: 36px;
+254-  border-radius: 10px;
+255:  background: var(--paper);
+256:  font-size: 18px;
+257-}
+258-
+259-.template-name {
+260-  display: grid;
+261-  min-width: 0;
+262-  gap: 4px;
+263-  flex: 1;
+264-}
+265-
+266-.template-name strong {
+267-  overflow-wrap: anywhere;
+268:  font-size: 11px;
+269:  font-weight: 700;
+270-}
+271-
+272-.template-name small {
+273:  color: var(--muted);
+274:  font-size: 10px;
+275-}
+276-
+277-.selected-check {
+278:  color: var(--primary);
+279:  font-size: 15px;
+280:  font-weight: 800;
+281-}
+282-
+283-.sidebar-tip {
+284-  display: flex;
+285-  align-items: flex-start;
+286-  gap: 9px;
+287-  margin-top: 23px;
+288-  padding: 12px;
+289-  border-radius: 11px;
+290:  background: #f7f6f0;
+291:  color: #73796c;
+292-}
+293-
+294-.sidebar-tip > span {
+295:  color: var(--primary);
+296-}
+297-
+298-.sidebar-tip p {
+299-  margin: 0;
+300:  font-size: 10px;
+301-  line-height: 1.65;
+302-}
+303-
+304-.preview-column {
+305-  min-width: 0;
+306-}
+307-
+308-.preview-toolbar {
+309-  min-height: 48px;
+310-  margin-bottom: 13px;
+311-}
+312-
+313-.preview-toolbar h2 {
+314:  font-size: 16px;
+315-}
+316-
+317-.preview-status {
+318-  flex-shrink: 0;
+319-  padding: 8px 10px;
+320-  border: 1px solid var(--line);
+321-  border-radius: 20px;
+322:  background: #fff;
+323:  font-size: 10px;
+324-}
+325-
+326-.paper-stage {
+327-  display: flex;
+328-  justify-content: center;
+329-  padding: 20px 12px;
+330-  border: 1px solid var(--line);
+331-  border-radius: 15px;
+332:  background-color: #efeee8;
+333:  background-image: radial-gradient(#d9d9cf 0.7px, transparent 0.7px);
+334:  background-size: 12px 12px;
+335-}
+336-
+337:.planner-page {
+338-  position: relative;
+339-  display: flex;
+340-  flex-direction: column;
+341-  width: 100%;
+342-  max-width: 385px;
+343-  min-height: 540px;
+344-  padding: 25px 26px 18px;
+345-  overflow: hidden;
+346-  box-shadow: 0 7px 23px rgb(39 44 34 / 12%);
+347:  color: var(--ink);
+348:  transition: background-color 0.15s;
+349-}
+350-
+351-.page-topline {
+352-  display: flex;
+353-  justify-content: space-between;
+354-  padding-bottom: 10px;
+355:  border-bottom: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+356:  color: var(--primary);
+357:  font-size: 8px;
+358:  font-weight: 800;
+359-  letter-spacing: 1.5px;
+360-}
+361-
+362-.planner-cover-mark {
+363-  margin-top: 19px;
+364:  color: var(--primary);
+365:  font-size: 27px;
+366-  line-height: 1;
+367-}
+368-
+369-.planner-kicker {
+370-  margin: 10px 0 5px;
+371:  color: var(--primary);
+372:  font-size: 8px;
+373:  font-weight: 800;
+374-  letter-spacing: 2px;
+375-}
+376-
+377-.planner-title {
+378-  margin: 0;
+379:  color: var(--ink);
+380:  font-family: Georgia, "Times New Roman", serif;
+381:  font-size: clamp(23px, 2.5vw, 32px);
+382:  font-weight: 500;
+383-  line-height: 1.2;
+384-  overflow-wrap: anywhere;
+385-}
+386-
+387-.planner-subtitle {
+388-  margin: 8px 0 15px;
+389:  color: #777b70;
+390:  font-family: Georgia, serif;
+391:  font-size: 10px;
+392:  font-style: italic;
+393-  line-height: 1.5;
+394-}
+395-
+396-.planner-date {
+397-  display: flex;
+398-  align-items: center;
+399-  gap: 12px;
+400-  margin-bottom: 12px;
+401:  color: var(--primary);
+402:  font-size: 8px;
+403:  font-weight: 800;
+404-  letter-spacing: 1px;
+405-}
+406-
+407-.date-line {
+408-  flex: 1;
+409-  height: 1px;
+410:  background: color-mix(in srgb, var(--primary) 35%, transparent);
+411-}
+412-
+413-.planner-sections {
+414-  display: grid;
+415-  grid-template-columns: 1fr 1fr;
+416-  gap: 12px;
+417-  flex: 1;
+418-}
+419-
+420-.planner-section {
+421-  min-width: 0;
+422-  padding: 10px;
+423:  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+424-  border-radius: 8px;
+425:  background: color-mix(in srgb, white 36%, transparent);
+426-}
+427-
+428-.planner-section h3 {
+429-  margin: 0 0 9px;
+430:  color: var(--primary);
+431:  font-size: 9px;
+432-  line-height: 1.45;
+433-  overflow-wrap: anywhere;
+434-}
+435-
+436-.planner-section h3 span {
+437-  margin-right: 3px;
+438-}
+439-
+--
+447-  align-items: center;
+448-  gap: 5px;
+449-  min-width: 0;
+450-  min-height: 8px;
+451-  padding-bottom: 5px;
+452:  border-bottom: 1px solid color-mix(in srgb, var(--primary) 19%, transparent);
+453:  color: #777b70;
+454:  font-size: 8px;
+455-  overflow-wrap: anywhere;
+456-}
+457-
+458-.empty-check {
+459-  flex-shrink: 0;
+460-  width: 9px;
+461-  height: 9px;
+462:  border: 1px solid var(--primary);
+463-  border-radius: 2px;
+464-}
+465-
+466-.week-grid {
+467-  display: grid;
+468-  grid-template-columns: repeat(7, minmax(0, 1fr));
+469-  gap: 3px;
+470-}
+--
+474-  gap: 5px;
+475-  text-align: center;
+476-}
+477-
+478-.week-grid b {
+479:  color: var(--primary);
+480:  font-size: 8px;
+481-}
+482-
+483-.week-grid span {
+484-  height: 47px;
+485:  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+486-  border-radius: 3px;
+487-}
+488-
+489-.month-grid {
+490-  display: grid;
+491-  grid-template-columns: repeat(7, minmax(0, 1fr));
+492-  gap: 3px;
+493-}
+494-
+495-.month-grid span {
+496-  display: grid;
+497-  place-items: center;
+498-  min-height: 20px;
+499:  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+500-  border-radius: 3px;
+501:  color: #74796f;
+502:  font-size: 7px;
+503-}
+504-
+505-.page-footer {
+506-  display: flex;
+507-  justify-content: space-between;
+508-  margin-top: 15px;
+509-  padding-top: 9px;
+510:  border-top: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+511:  color: var(--primary);
+512:  font-size: 7px;
+513:  font-weight: 700;
+514-  letter-spacing: 1px;
+515-}
+516-
+517-.preview-caption {
+518-  margin: 10px 0 0;
+519:  color: var(--muted);
+520:  font-size: 10px;
+521-  line-height: 1.5;
+522-  text-align: center;
+523-}
+524-
+525-.settings .panel-heading {
+526-  margin-bottom: 25px;
+527-}
+528-
+--
+537-}
+538-
+539-.number-control button {
+540-  border: 1px solid var(--line);
+541-  border-radius: 9px;
+542:  background: #f8f9f5;
+543:  color: var(--primary);
+544:  font-size: 20px;
+545-  cursor: pointer;
+546-}
+547-
+548-.number-control input {
+549-  min-width: 0;
+550-  text-align: center;
+551-}
+552-
+553-.helper {
+554-  display: block;
+555-  margin-top: 7px;
+556:  color: var(--muted);
+557:  font-size: 10px;
+558-  line-height: 1.5;
+559-}
+560-
+561-.color-control {
+562-  display: flex;
+563-  align-items: center;
+564-  gap: 10px;
+565-  min-height: 42px;
+--
+585-  overflow: hidden;
+586-  opacity: 0;
+587-}
+588-
+589-.color-control code {
+590:  color: #74796f;
+591:  font-size: 10px;
+592-}
+593-
+594-.segmented {
+595-  display: grid;
+596-  grid-template-columns: 1fr 1fr;
+597-  gap: 4px;
+598-  padding: 4px;
+599-  border: 1px solid var(--line);
+600-  border-radius: 10px;
+601:  background: #f8f8f4;
+602-}
+603-
+604-.segmented button {
+605-  min-height: 33px;
+606-  border: 1px solid transparent;
+607-  border-radius: 7px;
+608:  background: transparent;
+609:  color: #777b70;
+610:  font-size: 11px;
+611-  cursor: pointer;
+612-}
+613-
+614-.segmented button.active {
+615:  border-color: #d9e2d4;
+616:  background: white;
+617:  color: var(--primary);
+618:  font-weight: 700;
+619-  box-shadow: 0 1px 4px rgb(0 0 0 / 4%);
+620-}
+621-
+622-.reset-button {
+623-  width: 100%;
+624-  padding: 10px;
+625-  border: 1px solid var(--line);
+626-  border-radius: 9px;
+627:  background: white;
+628:  color: #777b70;
+629:  font-size: 11px;
+630-  cursor: pointer;
+631-}
+632-
+633-.reset-button:hover {
+634:  border-color: var(--primary);
+635-}
+636-
+637-.export-area {
+638-  margin-top: 25px;
+639-  padding-top: 19px;
+640-  border-top: 1px solid var(--line);
+641-}
+642-
+--
+648-  width: 100%;
+649-  min-height: 45px;
+650-  padding: 12px;
+651-  border: 0;
+652-  border-radius: 10px;
+653:  background: var(--primary);
+654:  color: white;
+655-  font: inherit;
+656:  font-size: 12px;
+657:  font-weight: 700;
+658-  cursor: pointer;
+659-  transition: filter 0.15s, transform 0.15s;
+660-}
+661-
+662-.export-button:hover {
+663-  filter: brightness(0.95);
+664-}
+665-
+666-.export-button:active {
+667-  transform: scale(0.99);
+668-}
+669-
+670-.export-button > span {
+671:  font-size: 18px;
+672-}
+673-
+674-.export-area p {
+675-  margin: 9px 0 0;
+676:  color: var(--muted);
+677:  font-size: 10px;
+678-  line-height: 1.55;
+679-  text-align: center;
+680-}
+681-
+682-.notice {
+683-  max-width: 800px;
+684-  margin: 0 auto 20px;
+685-  padding: 13px 17px;
+686-  border: 1px solid #d8e2d3;
+687-  border-radius: 10px;
+688:  background: #f0f5ec;
+689:  color: #4b6748;
+690:  font-size: 12px;
+691-  line-height: 1.6;
+692-}
+693-
+694-.app-footer {
+695-  display: flex;
+696-  justify-content: space-between;
+697-  gap: 15px;
+698-  padding: 22px 5%;
+699-  border-top: 1px solid var(--line);
+700:  color: var(--muted);
+701:  font-size: 10px;
+702-}
+703-
+704-.app-footer span:first-child {
+705:  color: var(--primary);
+706:  font-weight: 800;
+707-}
+708-
+709-.density-compacte .planner-sections {
+710-  gap: 7px;
+711-}
+712-
+713-.density-compacte .planner-section {
+714-  padding: 7px;
+--
+720-
+721-.density-compacte .planner-subtitle {
+722-  margin-bottom: 9px;
+723-}
+724-
+725:.density-compacte .planner-page {
+726-  min-height: 500px;
+727-}
+728-
+729-@media (min-width: 1450px) {
+730-  .workspace {
+731-    grid-template-columns: 280px minmax(400px, 1fr) 290px;
+732-  }
+733-}
+--
+758-    min-height: 64px;
+759-    padding: 12px 17px;
+760-  }
+761-
+762-  .brand {
+763:    font-size: 17px;
+764-  }
+765-
+766-  .brand-mark {
+767-    width: 33px;
+768-    height: 33px;
+769-  }
+770-
+771-  .private-label {
+772:    font-size: 10px;
+773-  }
+774-
+775-  .welcome {
+776-    min-height: 180px;
+777-    padding: 29px 20px;
+778-  }
+779-
+780-  .welcome h1 {
+781-    max-width: 330px;
+782:    font-size: 30px;
+783-  }
+784-
+785-  .welcome-text {
+786-    max-width: 320px;
+787:    font-size: 12px;
+788-  }
+789-
+790-  .welcome-decoration {
+791-    right: -22px;
+792-    bottom: -25px;
+793:    font-size: 115px;
+794-  }
+795-
+796-  .workspace {
+797-    grid-template-columns: minmax(0, 1fr);
+798-    gap: 15px;
+799-    padding: 17px 12px;
+800-  }
+801-
+--
+820-  }
+821-
+822-  .template-icon {
+823-    width: 30px;
+824-    height: 30px;
+825:    font-size: 15px;
+826-  }
+827-
+828-  .template-name strong {
+829:    font-size: 10px;
+830-  }
+831-
+832-  .selected-check {
+833-    display: none;
+834-  }
+835-
+836-  .sidebar-tip {
+837-    margin-top: 15px;
+838-  }
+839-
+840-  .preview-toolbar h2 {
+841:    font-size: 14px;
+842-  }
+843-
+844-  .preview-status {
+845-    padding: 7px;
+846:    font-size: 9px;
+847-  }
+848-
+849-  .paper-stage {
+850-    padding: 12px 8px;
+851-  }
+852-
+853:  .planner-page {
+854-    min-height: 520px;
+855-    padding: 22px 18px 15px;
+856-  }
+857-
+858-  .planner-title {
+859:    font-size: 27px;
+860-  }
+861-
+862-  .settings {
+863-    display: block;
+864-  }
+865-
+866-  .app-footer {
+867-    flex-direction: column;
+868-    padding: 19px;
+869-  }
+870-}
+871-
+872:@media print {
+873:  @page {
+874-    size: A4 portrait;
+875-    margin: 10mm;
+876-  }
+877-
+878-  body,
+879-  #root,
+880-  .app-shell {
+881-    min-height: 0;
+882-    margin: 0;
+883-    padding: 0;
+884:    background: white !important;
+885-  }
+886-
+887-  .topbar,
+888-  .welcome,
+889-  .sidebar,
+890-  .preview-toolbar,
+891-  .preview-caption,
+892-  .settings,
+--
+903-
+904-  .paper-stage {
+905-    display: block;
+906-    padding: 0;
+907-    border: 0;
+908:    background: white !important;
+909-  }
+910-
+911:  .planner-page {
+912-    width: 100%;
+913-    max-width: none;
+914-    min-height: 260mm;
+915-    padding: 10mm;
+916-    box-shadow: none;
+917-    print-color-adjust: exact;
+918-    -webkit-print-color-adjust: exact;
+919-  }

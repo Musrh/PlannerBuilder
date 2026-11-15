@@ -1,0 +1,106 @@
+          new Error('Impossible de lire cette image.')
+        )
+      })
+
+      let patternImage = null
+      if (backgroundType === 'upload') {
+        if (!customPatternImage) {
+          throw new Error('Importez une image pour le motif de fond.')
+        }
+
+        patternImage = new Image()
+        patternImage.src = customPatternImage
+
+        await new Promise((resolve, reject) => {
+          patternImage.onload = resolve
+          patternImage.onerror = () => reject(
+            new Error('Impossible de lire l’image du motif.')
+          )
+        })
+      }
+
+      const canvas = document.createElement('canvas')
+      canvas.width = 1200
+      canvas.height = 900
+
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        throw new Error('Impossible de préparer le canvas.')
+      }
+
+      ctx.fillStyle = customBackground
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      if (backgroundType === 'pattern') {
+        const size = Math.max(16, Math.min(160, patternSize * 1.2))
+        const tile = document.createElement('canvas')
+        tile.width = size
+        tile.height = size
+        const t = tile.getContext('2d')
+        if (!t) throw new Error('Impossible de préparer le motif.')
+
+        t.fillStyle = 'rgba(36, 52, 75, 0.22)'
+        t.strokeStyle = 'rgba(36, 52, 75, 0.22)'
+        t.lineWidth = Math.max(1, size / 45)
+
+        if (backgroundPattern === 'dots') {
+          t.beginPath()
+          t.arc(size / 2, size / 2, Math.max(1.5, size / 18), 0, Math.PI * 2)
+          t.fill()
+        } else if (backgroundPattern === 'grid') {
+          t.beginPath()
+          t.moveTo(0, 0)
+          t.lineTo(size, 0)
+          t.moveTo(0, 0)
+          t.lineTo(0, size)
+          t.stroke()
+        } else if (backgroundPattern === 'stripes') {
+          t.beginPath()
+          t.moveTo(0, size)
+          t.lineTo(size, 0)
+          t.stroke()
+        } else if (backgroundPattern === 'leaves') {
+          t.save()
+          t.translate(size / 2, size / 2)
+          t.rotate(-Math.PI / 4)
+          t.beginPath()
+          t.ellipse(0, 0, size * 0.16, size * 0.34, 0, 0, Math.PI * 2)
+          t.fill()
+          t.beginPath()
+          t.moveTo(-size * 0.16, 0)
+          t.lineTo(size * 0.16, 0)
+          t.stroke()
+          t.restore()
+        }
+
+        if (patternRepeat === 'repeat') {
+          const pattern = ctx.createPattern(tile, 'repeat')
+          if (pattern) {
+            ctx.fillStyle = pattern
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+          }
+        } else {
+          ctx.drawImage(tile, 0, 0, canvas.width, canvas.height)
+        }
+      } else if (backgroundType === 'upload' && patternImage) {
+        if (patternRepeat === 'repeat') {
+          const size = Math.max(24, Math.min(320, patternSize * 2))
+          const tile = document.createElement('canvas')
+          tile.width = size
+          tile.height = Math.max(1, Math.round(size * patternImage.height / patternImage.width))
+          const t = tile.getContext('2d')
+          if (!t) throw new Error('Impossible de préparer l’image du motif.')
+          t.drawImage(patternImage, 0, 0, tile.width, tile.height)
+          const pattern = ctx.createPattern(tile, 'repeat')
+          if (pattern) {
+            ctx.fillStyle = pattern
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+          }
+        } else {
+          ctx.drawImage(patternImage, 0, 0, canvas.width, canvas.height)
+        }
+      }
+
+      const margin = 70
+      const maxWidth = canvas.width - margin * 2
+      const maxHeight = 650

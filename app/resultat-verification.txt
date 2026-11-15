@@ -1,0 +1,7 @@
+===== VERIFICATION DES FICHIERS =====
+/workspaces/PlannerBuilder/app
+-rw-rw-rw- 1 codespace codespace 3.2K Nov 14 21:37 src/Admin.css
+-rw-rw-rw- 1 codespace codespace 5.6K Nov 14 21:34 src/Admin.jsx
+===== VERIFICATION DES SAUVEGARDES =====
+ls: cannot access 'src/Admin.jsx.backup-before-payments': No such file or directory
+ls: cannot access 'src/Admin.css.backup-before-payments': No such file or directory

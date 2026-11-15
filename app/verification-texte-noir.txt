@@ -1,0 +1,71 @@
+]633;E;echo "===== CONFIGURATION DES TITRES ET LIBELLES =====";5e088586-1fab-41d1-bdc0-0b740685c873]633;C===== CONFIGURATION DES TITRES ET LIBELLES =====
+          doc.roundedRect(margin, y, usableWidth, 9, 2, 2, 'F')
+          doc.rect(margin, y + 5, usableWidth, 4, 'F')
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(11)
+          doc.setTextColor(255, 0, 0)
+          doc.text(section, margin + 4, y + 6)
+
+          let rowY = y + 16
+          const rowCount = compact ? 3 : 3
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            if (rowY > y + (compact ? 35 : 40)) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+              : ''
+
+            if (['food', 'student', 'habits'].includes(selectedId)) {
+              doc.setDrawColor(...primaryRgb)
+              doc.roundedRect(margin + 4, rowY - 3, 3, 3, 0.5, 0.5, 'S')
+            }
+
+            if (rowText) {
+              doc.setFont(pdfFont, 'bold')
+              doc.setFontSize(11)
+              doc.setTextColor(0, 0, 0)
+              doc.text(rowText, margin + 10, rowY)
+            }
+
+            doc.setDrawColor(215, 218, 207)
+            doc.line(
+              margin + (['food', 'student', 'habits'].includes(selectedId) ? 34 : 5),
+              rowY + 2,
+              pageWidth - margin - 5,
+              rowY + 2
+            )
+            rowY += lineGap
+          }
+
+          y += (compact ? 39 : 44) + sectionGap
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+===== COMPILATION =====
+
+> app@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 218 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                        0.45 kB │ gzip:   0.29 kB
+dist/assets/index-CXoezZa5.css        13.20 kB │ gzip:   3.47 kB
+dist/assets/purify.es-Dqk5qvad.js     29.02 kB │ gzip:  11.45 kB
+dist/assets/index.es-Bvzox-YU.js     151.37 kB │ gzip:  48.88 kB
+dist/assets/html2canvas-DvhUYfE0.js  199.39 kB │ gzip:  46.73 kB
+dist/assets/index-Ts7k3gq3.js        633.86 kB │ gzip: 203.18 kB
+
+✓ built in 706ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

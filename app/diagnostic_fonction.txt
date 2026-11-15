@@ -1,0 +1,101 @@
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const saveCurrentPattern = async () => {
+    if (!customPatternImage) {
+      setMessage('Importe d’abord une image de motif.')
+      return
+    }
+
+    const name = patternName.trim()
+    if (!name) {
+      setMessage('Donne un nom à ce motif avant de l’enregistrer.')
+      return
+    }
+
+    try {
+      const pattern = {
+        id: window.crypto?.randomUUID
+          ? window.crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        name,
+        dataUrl: customPatternImage,
+        updatedAt: Date.now(),
+      }
+
+      await writePatternLibrary(pattern)
+      setSavedPatterns(await readPatternLibrary())
+      setPatternName('')
+      setMessage(`Motif « ${name} » enregistré dans la bibliothèque.`)
+    } catch (error) {
+      console.error('Enregistrement du motif impossible :', error)
+      setMessage('Échec de l’enregistrement. Vérifie l’espace disponible du navigateur.')
+    }
+  }
+
+  const applySavedPattern = (pattern) => {
+    setCustomPatternImage(pattern.dataUrl)
+    setBackgroundType('upload')
+    setPreview('')
+    setMessage(`Motif « ${pattern.name} » sélectionné.`)
+  }
+
+  const renameSavedPattern = async (pattern) => {
+    const proposedName = window.prompt('Nouveau nom du motif :', pattern.name)
+    if (proposedName === null) return
+
+    const name = proposedName.trim()
+    if (!name) {
+      setMessage('Le nom du motif ne peut pas être vide.')
+      return
+    }
+
+    try {
+      await writePatternLibrary({ ...pattern, name, updatedAt: Date.now() })
+      setSavedPatterns(await readPatternLibrary())
+      setMessage('Nom du motif mis à jour.')
+    } catch (error) {
+      console.error('Renommage impossible :', error)
+      setMessage('Impossible de renommer ce motif.')
+    }
+  }
+
+  const deleteSavedPattern = async (pattern) => {
+    if (!window.confirm(`Supprimer le motif « ${pattern.name} » de la bibliothèque ?`)) {
+      return
+    }
+
+    try {
+      await removePatternFromLibrary(pattern.id)
+      setSavedPatterns(await readPatternLibrary())
+      setMessage(`Motif « ${pattern.name} » supprimé de la bibliothèque.`)
+    } catch (error) {
+      console.error('Suppression impossible :', error)
+      setMessage('Impossible de supprimer ce motif.')
+    }
+  }
+
+
+  async function createCustomMockup() {
+    if (!customImage) {
+      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+      return
+    }
+
+    setLoading(true)
+    setMessage('')
+
+    try {
+      const image = new Image()
+      image.src = customImage
+
+      await new Promise((resolve, reject) => {
+        image.onload = resolve
+        image.onerror = () => reject(
+          new Error('Impossible de lire cette image.')
+        )
+      })
+

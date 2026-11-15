@@ -1,0 +1,2 @@
+]633;E;echo "=== Vérification du fichier AuthGate_MODIFIE.jsx ===";94b5b532-8403-4e9c-ae34-b7f91fbf27fa]633;C=== Vérification du fichier AuthGate_MODIFIE.jsx ===
+Statut : fichier introuvable

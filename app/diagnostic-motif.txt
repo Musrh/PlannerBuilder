@@ -1,0 +1,25 @@
+582-              return
+583-            }
+584-
+585:            if (nextFile.size > 20 * 1024 * 1024) {
+586-              event.target.value = ''
+587-              setCustomImage('')
+588-              setMessage('L’image dépasse la limite de 20 Mo.')
+589-              return
+590-            }
+591-
+592-            if (!['image/png', 'image/jpeg', 'image/webp'].includes(nextFile.type)) {
+593-              event.target.value = ''
+--
+677-                  setCustomPatternImage('')
+678-                  return
+679-                }
+680:                if (f.size > 20 * 1024 * 1024) {
+681-                  event.target.value = ''
+682-                  setCustomPatternImage('')
+683-                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+684-                  return
+685-                }
+686-                if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type)) {
+687-                  event.target.value = ''
+688-                  setCustomPatternImage('')

@@ -1,0 +1,53 @@
+]633;E;echo "===== VERIFICATION STRIPE =====";560057e5-cc76-4cdb-ade0-e3eccd9d4c11]633;C===== VERIFICATION STRIPE =====
+117:  async function handleStripeCheckout(period) {
+118-    if (!user) {
+119-      setNotice('Connectez-vous avant de procéder au paiement.')
+120-      return
+121-    }
+122-
+123-    setStripeLoading(period)
+124-    setNotice('Préparation du paiement Stripe...')
+125-
+126-    try {
+127-      const apiUrl = import.meta.env.VITE_PLANNERBUILDER_API_URL
+128-
+129-      if (!apiUrl) {
+130-        throw new Error('URL du serveur Railway manquante.')
+131-      }
+132-
+133-      const token = await user.getIdToken()
+134-
+135-      const response = await fetch(
+136-        `${apiUrl.replace(/\\/+$/, '')}/api/payments/stripe/create-session`,
+137-        {
+138-          method: 'POST',
+139-          headers: {
+140-            Authorization: `Bearer ${token}`,
+141-            'Content-Type': 'application/json',
+142-          },
+143-          body: JSON.stringify({
+144-            currency: 'USD',
+145-            period,
+146-          }),
+147-        }
+148-      )
+149-
+150-      const result = await response.json()
+151-
+152-      if (!response.ok || !result.success || !result.url) {
+153-        throw new Error(
+154-          result.error || result.message || 'Impossible de créer la session Stripe.'
+155-        )
+156-      }
+157-
+158-      window.location.assign(result.url)
+159-    } catch (error) {
+160-      setNotice(error.message || 'Erreur lors de la préparation du paiement.')
+161-      setStripeLoading('')
+162-    }
+163-  }
+164-
+165-  function chooseTemplate(template) {
+
+===== VERIFICATION ETAT =====
+108:  const [stripeLoading, setStripeLoading] = useState('')

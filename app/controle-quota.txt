@@ -1,0 +1,51 @@
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+  const [freeExports, setFreeExports] = useState(() => {
+    const saved = Number(localStorage.getItem('plannerbuilder_free_exports') || 0)
+
+    return Number.isFinite(saved) && saved >= 0
+      ? Math.floor(saved)
+      : 0
+  })
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  function exportPDF() {
+    if (!coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+    }
+
+    if (freeExports >= 3) {
+      setNotice(
+        'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+      )
+      return
+    }
+
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })

@@ -1,0 +1,237 @@
+]633;E;echo "===== APPEL API EXISTANT =====";0621b8bb-3752-45c7-b533-7ec8d5586a1e]633;C===== APPEL API EXISTANT =====
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      // Vérification obligatoire auprès de Railway avant le téléchargement.
+      const apiUrl = import.meta.env.VITE_PLANNERBUILDER_API_URL
+
+      if (!apiUrl) {
+        throw new Error(
+          'URL du serveur Railway manquante. Vérifiez VITE_PLANNERBUILDER_API_URL.'
+        )
+      }
+
+      const token = await user.getIdToken()
+
+      const response = await fetch(
+        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        }
+      )
+
+      let result
+
+      try {
+        result = await response.json()
+      } catch {
+        throw new Error('Réponse invalide du serveur PlannerBuilder.')
+      }
+
+      if (!response.ok || result.authorized !== true) {
+        if (result.error === 'FREE_EXPORT_LIMIT_REACHED') {
+          setFreeExports(3)
+          setNotice(
+            'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+          )
+          return
+        }
+
+        setNotice(
+          result.message ||
+          result.error ||
+          'Impossible de vérifier votre droit d’export sur Railway.'
+        )
+        return
+      }
+
+      if (result.role === 'free') {
+        setFreeExports(
+
+===== BOUTON ADMIN =====
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+
+        <span className="private-label"><span /> Espace de création</span>
+
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowMockups((value) => !value)}
+          >
+            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowAdminPanel((value) => !value)}
+          >
+            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+          </button>
+        )}
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>
+            <span className="count">{filtered.length}</span>
+          </div>
+
+          <label className="field-label" htmlFor="category">Catégorie</label>
+
+===== STYLES CSS =====
+                                                                                                                              padding: 9px;
+                                                                                                                                border: 1px solid #dfe6dc;
+                                                                                                                                  border-radius: 8px;
+                                                                                                                                    font: inherit;
+                                                                                                                                    }
+
+                                                                                                                                    .cover-upload-button input {
+                                                                                                                                      display: none;
+                                                                                                                                      }
+
+                                                                                                                                      .delete-cover-element {
+                                                                                                                                        background: #fff1ef !important;
+                                                                                                                                          color: #9b332b !important;
+                                                                                                                                            border-color: #f0d1cd !important;
+                                                                                                                                            }
+
+                                                                                                                                            @media (max-width: 700px) {
+                                                                                                                                              .cover-editor-layout {
+                                                                                                                                                  grid-template-columns: 1fr;
+                                                                                                                                                    }
+
+                                                                                                                                                      .cover-tools {
+                                                                                                                                                          width: 100%;
+                                                                                                                                                            }
+
+                                                                                                                                                              .cover-canvas-wrap {
+                                                                                                                                                                  max-width: 100%;
+                                                                                                                                                                    }
+
+/* ===== Modèles globaux de mise en page ===== */
+
+/* 1. Classique : sections verticales */
+.layout-classique {
+  grid-template-columns: 1fr;
+    gap: 12px;
+    }
+
+    .layout-classique .planner-section {
+      border-radius: 7px;
+        background: color-mix(in srgb, white 36%, transparent);
+        }
+
+        /* 2. Deux colonnes */
+        .layout-colonnes {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            }
+
+            /* 3. Grille : blocs compacts et réguliers */
+            .layout-grille {
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+                }
+
+                .layout-grille .planner-section {
+                  padding: 7px;
+                    border-radius: 4px;
+                    }
+
+                    .layout-grille .planner-section h3 {
+                      padding: 5px 4px;
+                        font-size: 8px;
+                        }
+
+                        .layout-grille .writing-lines {
+                          gap: 7px;
+                          }
+
+                          /* 4. Épuré : peu de cadres et davantage d'espace */
+                          .layout-epure {
+                            grid-template-columns: 1fr;
+                              gap: 15px;
+                              }
+
+                              .layout-epure .planner-section {
+                                padding: 8px 3px;
+                                  border: 0;
+                                    border-bottom: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+                                      border-radius: 0;
+                                        background: transparent;
+                                        }
+
+                                        .layout-epure .planner-section h3 {
+                                          padding: 5px 0;
+                                            background: transparent;
+                                              color: var(--primary);
+                                                font-size: 10px;
+                                                }
+
+                                                .layout-epure .writing-lines {
+                                                  gap: 13px;
+                                                  }
+
+
+
+
+                                                                                                                                                                    }
+                                                                                                                                                                    
+  
+                                                                                                                                                                    
+
+===== DEPENDANCE ROUTEUR =====
+app@0.0.0 /workspaces/PlannerBuilder/app
+└── react-router-dom@7.18.5
+

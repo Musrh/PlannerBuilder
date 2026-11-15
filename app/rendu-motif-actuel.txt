@@ -1,0 +1,18 @@
+      } else if (backgroundType === 'upload' && patternImage) {
+        if (patternRepeat === 'repeat') {
+          const size = Math.max(24, Math.min(320, patternSize * 2))
+          const tile = document.createElement('canvas')
+          tile.width = size
+          tile.height = Math.max(1, Math.round(size * patternImage.height / patternImage.width))
+          const t = tile.getContext('2d')
+          if (!t) throw new Error('Impossible de préparer l’image du motif.')
+          t.drawImage(patternImage, 0, 0, tile.width, tile.height)
+          const pattern = ctx.createPattern(tile, 'repeat')
+          if (pattern) {
+            ctx.fillStyle = pattern
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+          }
+        } else {
+          ctx.drawImage(patternImage, 0, 0, canvas.width, canvas.height)
+        }
+      }

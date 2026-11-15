@@ -1,0 +1,10 @@
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+      {isAdmin && showAdminPanel && <Admi

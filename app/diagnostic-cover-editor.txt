@@ -1,0 +1,142 @@
+===== DATE =====
+Sun Nov  1 19:31:52 UTC 2026
+
+===== COVEREDITOR JSX =====
+
+===== COVEREDITOR JS =====
+import './CoverEditor.css'
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
+} from 'react'
+
+const INITIAL = [
+  {
+    id: 1,
+    type: 'text',
+    text: 'Mon Planner',
+    x: 12,
+    y: 22,
+    w: 76,
+    h: 12,
+    fontSize: 34,
+    color: '#263B2B',
+    fontFamily: 'Georgia',
+    bold: true,
+    rotation: 0
+  },
+  {
+    id: 2,
+    type: 'text',
+    text: 'Organisez vos journées',
+    x: 15,
+    y: 36,
+    w: 70,
+    h: 8,
+    fontSize: 15,
+    color: '#667466',
+    fontFamily: 'Arial',
+    bold: false,
+    rotation: 0
+  }
+]
+
+const CoverEditor = forwardRef(function CoverEditor(
+  { onChange },
+  ref
+) {
+  const pageRef = useRef(null)
+  const fileRef = useRef(null)
+  const dragRef = useRef(null)
+
+  const [elements, setElements] = useState(INITIAL)
+  const [selected, setSelected] = useState(1)
+  const [background, setBackground] = useState('#F7F5EF')
+  const [history, setHistory] = useState([])
+  const [future, setFuture] = useState([])
+
+  const active = elements.find(item => item.id === selected)
+
+  function saveHistory(next) {
+    setHistory(previous => [...previous, elements].slice(-30))
+    setFuture([])
+    setElements(next)
+  }
+
+  function updateElement(id, changes) {
+    const next = elements.map(item =>
+      item.id === id ? { ...item, ...changes } : item
+    )
+    saveHistory(next)
+  }
+
+  function addText() {
+    const id = Date.now()
+    const next = [
+      ...elements,
+      {
+        id,
+        type: 'text',
+        text: 'Nouveau texte',
+        x: 15,
+        y: 50,
+        w: 70,
+
+===== IMPORTS APP JSX =====
+import { useRef, useState } from 'react'
+import CoverEditor from './CoverEditor.jsx'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import AdminLocalPanel from './AdminLocalPanel.jsx'
+import AuthGate from './AuthGate.jsx'
+import { usePlannerBuilderAuth } from './AuthGate.jsx'
+import './App.css'
+
+const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+]
+
+const pageContent = {
+  daily: {
+    title: 'Ma journée',
+    subtitle: 'Organiser chaque instant avec intention.',
+    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+    rows: ['Priorité 1', 'Priorité 2', 'Priorité 3'],
+
+===== CONFIGURATION ESLINT =====
+--- eslint.config.js ---
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+  },
+])

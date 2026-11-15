@@ -1,0 +1,56 @@
+src/App.jsxwac:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/App.jsxwac:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/App.jsxwac:1230:                href={WHOP_MONTHLY_URL}
+src/App.jsxwac:1264:                href={WHOP_ANNUAL_URL}
+src/App.jsxwac:1283:            Le paiement est traité sur Whop. L’activation et la prolongation
+src/App.jsx.backup:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/App.jsx.backup:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/App.jsx.backup-download-test:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/App.jsx.backup-download-test:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/App.jsx.backup-download-test:1266:                href={WHOP_MONTHLY_URL}
+src/App.jsx.backup-download-test:1300:                href={WHOP_ANNUAL_URL}
+src/App.jsx.backup-download-test:1319:            Le paiement est traité sur Whop. L’activation et la prolongation
+src/App.jsx.backup-test-clic:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/App.jsx.backup-test-clic:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/App.jsx.backup-test-clic:1264:                href={WHOP_MONTHLY_URL}
+src/App.jsx.backup-test-clic:1298:                href={WHOP_ANNUAL_URL}
+src/App.jsx.backup-test-clic:1317:            Le paiement est traité sur Whop. L’activation et la prolongation
+src/App.jsx.avant-restauration:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/App.jsx.avant-restauration:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/App.jsx:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/App.jsx:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/App.jsx:1273:                href={WHOP_MONTHLY_URL}
+src/App.jsx:1307:                href={WHOP_ANNUAL_URL}
+src/App.jsx:1326:            Le paiement est traité sur Whop. L’activation et la prolongation
+src/AuthGate.jsx.backup-collections:108:            subscriptionType: 'free',
+src/AuthGate.jsx.backup-collections:109:            paymentStatus: 'unpaid',
+src/AuthGate.jsx.backup-collections:110:            billingPeriodStart: 0,
+src/AuthGate.jsx.backup-collections:111:            billingPeriodEnd: 0,
+src/AuthGate.jsx.backup-collections:113:            paymentProvider: null,
+src/AuthGate.jsx.backup-collections:184:        subscriptionType: 'free',
+src/AuthGate.jsx.backup-collections:185:        paymentStatus: 'unpaid',
+src/AuthGate.jsx.backup-collections:186:        billingPeriodStart: 0,
+src/AuthGate.jsx.backup-collections:187:        billingPeriodEnd: 0,
+src/AuthGate.jsx.backup-collections:189:        paymentProvider: null,
+src/AdminLocalPanel.jsx:19:                        const [method, setMethod] = useState('Whop')
+src/AdminLocalPanel.jsx:157:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <option>Whop</option>
+src/AuthGate.jsx:108:            subscriptionType: 'free',
+src/AuthGate.jsx:109:            paymentStatus: 'unpaid',
+src/AuthGate.jsx:110:            billingPeriodStart: 0,
+src/AuthGate.jsx:111:            billingPeriodEnd: 0,
+src/AuthGate.jsx:113:            paymentProvider: null,
+src/AuthGate.jsx:184:        subscriptionType: 'free',
+src/AuthGate.jsx:185:        paymentStatus: 'unpaid',
+src/AuthGate.jsx:186:        billingPeriodStart: 0,
+src/AuthGate.jsx:187:        billingPeriodEnd: 0,
+src/AuthGate.jsx:189:        paymentProvider: null,
+src/App.jsx.backup-compact:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/App.jsx.backup-compact:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/App.jsx.backup-compact:1265:                href={WHOP_MONTHLY_URL}
+src/App.jsx.backup-compact:1299:                href={WHOP_ANNUAL_URL}
+src/App.jsx.backup-compact:1318:            Le paiement est traité sur Whop. L’activation et la prolongation
+src/XApp.jsx:10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+src/XApp.jsx:11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+src/XApp.jsx:782:                href={WHOP_MONTHLY_URL}
+src/XApp.jsx:795:                href={WHOP_ANNUAL_URL}
+src/XApp.jsx:805:            Le paiement est traité sur Whop. L’activation et la prolongation de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.

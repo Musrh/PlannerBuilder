@@ -1,0 +1,4 @@
+ATTENTION : les deux fichiers présentent des différences.
+Première différence à la ligne : 1
+App.jsx : "import { useRef, useState } from 'react'"
+App.jsxwac : "import { useEffect, useRef, useState } from 'react'"

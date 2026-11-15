@@ -1,0 +1,41 @@
+]633;E;echo "===== RECHERCHE DES COULEURS BLANCHES DANS L'EXPORT PDF =====";16ac2d09-7108-4244-952e-c35f69eceeb0]633;C===== RECHERCHE DES COULEURS BLANCHES DANS L'EXPORT PDF =====
+180-          doc.roundedRect(margin, y, usableWidth, 9, 2, 2, 'F')
+181-          doc.rect(margin, y + 5, usableWidth, 4, 'F')
+182-
+183-          doc.setFont('helvetica', 'bold')
+184-          doc.setFontSize(9)
+185:          doc.setTextColor(255, 255, 255)
+186-          doc.text(section, margin + 4, y + 6)
+187-
+188-          let rowY = y + 16
+189-          const rowCount = compact ? 3 : 3
+190-
+
+===== AUTRES COULEURS DU TEXTE DANS L'EXPORT PDF =====
+38:        doc.setFillColor(...backgroundRgb)
+41:        doc.setDrawColor(...primaryRgb)
+47:        doc.setTextColor(...primaryRgb)
+48:        doc.text('MON PLANNER', margin, 10)
+49:        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+55:        doc.setTextColor(...primaryRgb)
+56:        doc.text(selected.category.toUpperCase(), margin, 26)
+60:        doc.setTextColor(45, 55, 45)
+62:        doc.text(titleLines, margin, 37)
+67:        doc.setTextColor(90, 95, 85)
+69:        doc.text(subtitleLines, margin, y)
+74:        doc.setTextColor(...primaryRgb)
+75:        doc.text('DATE', margin, y)
+76:        doc.setDrawColor(190, 195, 180)
+85:          doc.setFillColor(255, 255, 255)
+86:          doc.setDrawColor(...primaryRgb)
+90:          doc.setFillColor(...primaryRgb)
+96:          doc.setTextColor(255, 255, 255)
+97:          doc.text(section, margin + 4, y + 6)
+110:              doc.setDrawColor(...primaryRgb)
+117:              doc.setTextColor(65, 70, 62)
+118:              doc.text(rowText, margin + 10, rowY)
+121:            doc.setDrawColor(215, 218, 207)
+134:        doc.setDrawColor(...primaryRgb)
+140:        doc.setTextColor(...primaryRgb)
+141:        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+142:        doc.text(

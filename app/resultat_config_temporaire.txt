@@ -1,0 +1,2 @@
+]633;E;echo "===== VERIFICATION CONFIGURATION TEMPORAIRE =====";27f61465-d0b4-49ce-9268-9ace19bd1e39]633;C===== VERIFICATION CONFIGURATION TEMPORAIRE =====
+OK : configuration temporaire créée.

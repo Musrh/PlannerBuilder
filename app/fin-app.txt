@@ -1,0 +1,30 @@
+          >
+            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowAdminPanel((value) => !value)}
+          >
+            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+          </button>
+        )}
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+      {isAdmin && showAdminPanel && <Admi

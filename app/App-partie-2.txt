@@ -1,0 +1,300 @@
+      // Les pages intérieures commencent toujours en page 2.
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+        doc.addPage()
+
+        doc.setFillColor(...backgroundRgb)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.8)
+        doc.line(margin, 13, pageWidth - margin, 13)
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('MON PLANNER', margin, 10)
+        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+          align: 'right',
+        })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(...primaryRgb)
+        doc.text(selected.category.toUpperCase(), margin, 26)
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(23)
+        doc.setTextColor(0, 0, 0)
+        const titleLines = doc.splitTextToSize(content.title, usableWidth)
+        doc.text(titleLines, margin, 37)
+
+        let y = 37 + titleLines.length * 9
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(90, 95, 85)
+
+        const subtitleLines = doc.splitTextToSize(content.subtitle, usableWidth)
+        doc.text(subtitleLines, margin, y)
+        y += subtitleLines.length * 5 + 8
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('DATE', margin, y)
+
+        doc.setDrawColor(190, 195, 180)
+        doc.setLineWidth(0.3)
+        doc.line(margin + 15, y + 1, pageWidth - margin, y + 1)
+        y += 10
+
+        // Les quatre modèles de mise en page concernent les pages intérieures.
+        const twoColumns = layoutModel === 'colonnes' || layoutModel === 'grille'
+        const cardGap = layoutModel === 'grille' ? 5 : 8
+        const cardWidth = twoColumns ? (usableWidth - cardGap) / 2 : usableWidth
+        const cardHeight = layoutModel === 'grille'
+          ? 76
+          : layoutModel === 'colonnes'
+            ? 82
+            : layoutModel === 'epure'
+              ? 42
+              : 46
+
+        const sectionGapForLayout = layoutModel === 'epure'
+          ? 11
+          : layoutModel === 'grille'
+            ? 6
+            : 8
+
+        const cardsPerRow = twoColumns ? 2 : 1
+        const cardRows = Math.ceil(content.sections.length / cardsPerRow)
+        const bottomLimit = pageHeight - 19
+        const availableHeight = Math.max(30, bottomLimit - y)
+        const requiredHeight = cardRows * cardHeight
+          + Math.max(0, cardRows - 1) * sectionGapForLayout
+
+        const scale = Math.min(1, availableHeight / requiredHeight)
+        const actualCardHeight = cardHeight * scale
+        const actualGap = sectionGapForLayout * scale
+        const actualCardWidth = cardWidth
+
+        content.sections.forEach((section, sectionIndex) => {
+          const rowIndex = Math.floor(sectionIndex / cardsPerRow)
+          const columnIndex = sectionIndex % cardsPerRow
+          const x = margin + columnIndex * (actualCardWidth + cardGap)
+          const cardY = y + rowIndex * (actualCardHeight + actualGap)
+
+          if (cardY + actualCardHeight > bottomLimit + 0.1) return
+
+          doc.setFillColor(255, 255, 255)
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(layoutModel === 'epure' ? 0.18 : 0.25)
+
+          if (layoutModel === 'epure') {
+            doc.line(x, cardY, x + actualCardWidth, cardY)
+          } else {
+            const radius = layoutModel === 'grille' ? 1.5 : 3
+            doc.roundedRect(
+              x,
+              cardY,
+              actualCardWidth,
+              actualCardHeight,
+              radius,
+              radius,
+              'FD'
+            )
+          }
+
+          const headerHeight = layoutModel === 'epure' ? 7 : 9
+          doc.setFillColor(...titleBackgroundRgb)
+
+          if (layoutModel !== 'epure') {
+            doc.roundedRect(x, cardY, actualCardWidth, headerHeight, 2, 2, 'F')
+            doc.rect(x, cardY + 5, actualCardWidth, 4, 'F')
+          }
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(layoutModel === 'grille' ? 8 : 10)
+          doc.setTextColor(...(layoutModel === 'epure' ? primaryRgb : titleTextRgb))
+
+          const sectionTitle = doc.splitTextToSize(section, actualCardWidth - 8)
+          doc.text(sectionTitle.slice(0, 2), x + 4, cardY + (layoutModel === 'epure' ? 5 : 6))
+
+          const checkboxMode = ['food', 'student', 'habits'].includes(selectedId)
+          const rowCount = 3
+          const rowStart = cardY + (layoutModel === 'epure' ? 12 : 17)
+          const rowEnd = cardY + actualCardHeight - 5
+          const rowStep = Math.max(5, (rowEnd - rowStart) / rowCount)
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            const rowY = rowStart + rowIndex * rowStep
+
+            if (rowY + 2 > rowEnd) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+              : ''
+
+            if (checkboxMode) {
+              doc.setDrawColor(...primaryRgb)
+              doc.roundedRect(x + 4, rowY - 2.5, 2.8, 2.8, 0.4, 0.4, 'S')
+            }
+
+            if (rowText) {
+              doc.setFont(pdfFont, 'bold')
+              doc.setFontSize(layoutModel === 'grille' ? 7 : 9)
+              doc.setTextColor(0, 0, 0)
+
+              doc.text(
+                doc.splitTextToSize(
+                  rowText,
+                  actualCardWidth - (checkboxMode ? 14 : 9)
+                ).slice(0, 1),
+                x + (checkboxMode ? 10 : 5),
+                rowY
+              )
+            }
+
+            doc.setDrawColor(215, 218, 207)
+            doc.line(
+              x + (checkboxMode ? 10 : 5),
+              rowY + 2,
+              x + actualCardWidth - 4,
+              rowY + 2
+            )
+          }
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      // Téléchargement direct du PDF sur l'appareil.
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+
+      if (isUnlimited) {
+        setNotice(`PDF créé : ${pages + 1} page(s), couverture comprise.`)
+      } else {
+        const nextExports = freeExports + 1
+
+        try {
+          localStorage.setItem(exportStorageKey, String(nextExports))
+        } catch (storageError) {
+          console.error('Compteur d’exports non sauvegardé :', storageError)
+        }
+
+        setFreeExports(nextExports)
+
+        setNotice(
+          `PDF créé : ${pages + 1} page(s), couverture comprise. ${3 - nextExports} export(s) gratuit(s) restant(s).`
+        )
+      }
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+
+        <span className="private-label"><span /> Espace de création</span>
+
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowMockups((value) => !value)}
+          >
+            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowAdminPanel((value) => !value)}
+          >
+            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+          </button>
+        )}
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>
+            <span className="count">{filtered.length}</span>
+          </div>
+
+          <label className="field-label" htmlFor="category">Catégorie</label>
+
+          <select
+            id="category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            {categories.map((item) => <option key={item}>{item}</option>)}
+          </select>
+
+          <div className="template-list">
+            {filtered.map((template) => (
+              <button
+                className={`template-option ${selectedId === template.id ? 'selected' : ''}`}
+                key={template.id}
+                onClick={() => chooseTemplate(template)}
+                type="button"
+              >
+                <span className="template-icon">{template.icon}</span>

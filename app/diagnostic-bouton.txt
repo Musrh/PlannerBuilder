@@ -1,0 +1,17 @@
+1191-            </div>
+1192-          </div>
+1193-
+1194-          {/* EXPORT PDF : AUTORISATION RAILWAY AVANT TÉLÉCHARGEMENT */}
+1195-          <div className="export-area">
+1196-            <button
+1197-              className="export-button"
+1198-              type="button"
+1199:              onClick={exportPDF}
+1200-            >
+1201-              <span>↓</span> Télécharger le PDF
+1202-            </button>
+1203-
+1204-            <p>
+1205-              Le fichier PDF sera téléchargé directement sur votre appareil.
+1206-            </p>
+1207-          </div>

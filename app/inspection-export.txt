@@ -1,0 +1,6 @@
+3:import { jsPDF } from 'jspdf'
+100:  function exportPDF() {
+107:      const doc = new jsPDF({
+346:      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+662:            <button className="export-button" type="button" onClick={exportPDF}>
+663:              <span>↓</span> Exporter en PDF

@@ -1,0 +1,47 @@
+
+===== CANVAS ligne 39 =====
+31: 
+32:       await new Promise((resolve, reject) => {
+33:         image.onload = resolve
+34:         image.onerror = () => reject(
+35:           new Error('Impossible de lire cette image.')
+36:         )
+37:       })
+38: 
+39:       const canvas = document.createElement('canvas')
+40:       canvas.width = 1200
+41:       canvas.height = 900
+42: 
+43:       const ctx = canvas.getContext('2d')
+
+===== CANVAS ligne 133 =====
+125:       pageCanvas.height = Math.ceil(viewport.height)
+126: 
+127:       await page.render({
+128:         canvas: pageCanvas,
+129:         canvasContext: pageContext,
+130:         viewport,
+131:       }).promise
+132: 
+133:       const canvas = document.createElement('canvas')
+134:       canvas.width = 1200
+135:       canvas.height = 900
+136:       const ctx = canvas.getContext('2d')
+137: 
+
+===== CANVAS ligne 247 =====
+239: 
+240:     if (downloadFormat === 'png') {
+241:       finishDownload(preview)
+242:       return
+243:     }
+244: 
+245:     const image = new Image()
+246:     image.onload = () => {
+247:       const canvas = document.createElement('canvas')
+248:       canvas.width = image.naturalWidth
+249:       canvas.height = image.naturalHeight
+250: 
+251:       const ctx = canvas.getContext('2d')
+
+===== FIN DU DIAGNOSTIC =====

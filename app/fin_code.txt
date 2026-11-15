@@ -1,0 +1,81 @@
+                        ))}
+                      </div>
+                    ) : index === 1 && selectedId === 'monthly' ? (
+                      <div className="month-grid">
+                        {Array.from({ length: 21 }, (_, i) => <span key={i}>{i + 1}</span>)}
+                      </div>
+                    ) : (
+                      <div className="writing-lines">
+                        {(index === 0 ? content.rows : ['', '', '']).map((row, i) => (
+                          <div className="writing-row" key={i}>
+                            {selectedId === 'habits' || selectedId === 'student' || selectedId === 'food'
+                              ? <span className="empty-check" />
+                              : null}
+                            <span>{row}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                ))}
+              </div>
+              <footer className="page-footer">
+                <span>UNE PAGE À LA FOIS</span>
+                <span>01</span>
+              </footer>
+            </article>
+          </div>
+          <p className="preview-caption">Aperçu indicatif · Le document final pourra contenir plusieurs pages.</p>
+        </section>
+
+        <aside className="settings panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 2</p>
+              <h2>Personnaliser</h2>
+            </div>
+            <span className="settings-icon">⚙</span>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="pages">Nombre de pages</label>
+            <div className="number-control">
+              <button type="button" onClick={() => setPages((value) => Math.max(1, value - 1))} aria-label="Diminuer le nombre de pages">−</button>
+              <input id="pages" type="number" min="1" max="365" value={pages} onChange={(event) => setPages(Math.max(1, Math.min(365, Number(event.target.value) || 1)))} />
+              <button type="button" onClick={() => setPages((value) => Math.min(365, value + 1))} aria-label="Augmenter le nombre de pages">+</button>
+            </div>
+            <small className="helper">De 1 à 365 pages dans cette version de démonstration.</small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur principale</span>
+            <div className="color-control">
+              <label className="color-swatch" style={{ background: primary }} htmlFor="primary-color" />
+              <input id="primary-color" type="color" value={primary} onChange={(event) => setPrimary(event.target.value)} />
+              <code>{primary.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Fond des pages</span>
+            <div className="color-control">
+              <label className="color-swatch paper-swatch" style={{ background: background }} htmlFor="background-color" />
+              <input id="background-color" type="color" value={background} onChange={(event) => setBackground(event.target.value)} />
+              <code>{background.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">Typographie</label>
+            <select id="font" value={font} onChange={(event) => setFont(event.target.value)}>
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button key={value} type="button" className={density === value ? 'active' : ''} onClick={() => setDensity(value)}>

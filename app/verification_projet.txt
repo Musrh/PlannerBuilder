@@ -1,0 +1,54 @@
+]633;E;echo "===== STRUCTURE DU PROJET =====";2416d920-c7a3-4516-9b13-f0a22453afbf]633;C===== STRUCTURE DU PROJET =====
+total 136
+drwxrwxrwx+   5 codespace codespace  4096 Oct 28 00:35 .
+drwxrwxrwx+   4 codespace root       4096 Oct 27 23:54 ..
+-rw-r--r--    1 codespace codespace   253 Oct 27 23:54 .gitignore
+-rw-r--r--    1 codespace codespace  1027 Oct 27 23:54 README.md
+-rw-rw-rw-    1 codespace codespace   568 Oct 27 23:54 eslint.config.js
+-rw-rw-rw-    1 codespace codespace   355 Oct 27 23:54 index.html
+drwxrwxrwx+ 111 codespace codespace  4096 Oct 27 23:54 node_modules
+-rw-rw-rw-    1 codespace codespace 84643 Oct 27 23:54 package-lock.json
+-rw-rw-rw-    1 codespace codespace   600 Oct 27 23:54 package.json
+drwxrwxrwx+   2 codespace codespace  4096 Oct 27 23:54 public
+-rw-rw-rw-    1 codespace codespace    97 Oct 28 00:32 resultat_dependances.txt
+drwxrwxrwx+   3 codespace codespace  4096 Oct 27 23:54 src
+-rw-rw-rw-    1 codespace codespace   124 Oct 28 00:35 verification_projet.txt
+-rw-r--r--    1 codespace codespace   161 Oct 27 23:54 vite.config.js
+
+===== PACKAGE.JSON =====
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "vite": "^8.3.5"
+  }
+}
+
+===== FICHIERS SOURCE =====
+src/index.css
+src/assets/vite.svg
+src/assets/react.svg
+src/assets/hero.png
+src/App.jsx
+src/App.css
+src/main.jsx

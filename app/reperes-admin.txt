@@ -1,0 +1,9 @@
+4:import AdminMockups from './AdminMockups.jsx'
+72:function App() {
+76:  const [showMockups, setShowMockups] = useState(false)
+389:  return (
+404:        <span className="private-label"><span /> Espace de création</span>
+411:            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+427:      {import.meta.env.DEV && showMockups && <AdminMockups />}
+717:function AppWithAuth() {
+718:  return (

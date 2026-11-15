@@ -1,0 +1,53 @@
+===== LINT =====
+
+> app@0.0.0 lint
+> eslint .
+
+
+/workspaces/PlannerBuilder/app/SAUVEGARDE_PLANNERBUILDER/AuthGate_AVANT_INSCRIPTION_20261031_023618.jsx
+  17:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file                      react-refresh/only-export-components
+  19:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/workspaces/PlannerBuilder/app/SAUVEGARDE_PLANNERBUILDER/AuthGate_AVANT_INSCRIPTION_20261031_023742.jsx
+  17:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file                      react-refresh/only-export-components
+  19:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/workspaces/PlannerBuilder/app/backups/AuthGate-before-admin.jsx
+  21:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file                      react-refresh/only-export-components
+  23:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/workspaces/PlannerBuilder/app/src/AuthGate.jsx
+  21:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file                      react-refresh/only-export-components
+  23:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+✖ 8 problems (8 errors, 0 warnings)
+
+
+===== BUILD =====
+
+> app@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 250 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              0.45 kB │ gzip:   0.29 kB
+dist/assets/pdf.worker.min-CjEcRF4W.mjs  1,264.34 kB
+dist/assets/index-AfxkYoWL.css              22.62 kB │ gzip:   5.34 kB
+dist/assets/purify.es-Dqk5qvad.js           29.02 kB │ gzip:  11.45 kB
+dist/assets/index.es-Cem1NNfZ.js           151.37 kB │ gzip:  48.88 kB
+dist/assets/html2canvas-nFZNA3Yc.js        199.39 kB │ gzip:  46.73 kB
+dist/assets/index-tuSwO0tj.js            1,672.45 kB │ gzip: 514.65 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.10s
+
+===== RESUME =====
+Lint : 1
+Build : 0

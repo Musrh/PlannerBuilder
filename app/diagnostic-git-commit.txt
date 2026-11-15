@@ -1,0 +1,34 @@
+]633;E;echo "===== FICHIERS PRETS POUR COMMIT =====";ebcab0a9-c1b1-4808-91c1-b4cd4941d840]633;C===== FICHIERS PRETS POUR COMMIT =====
+?? ../abonnements.txt
+?? ./
+?? ../authgate-verification.txt
+?? ../backup-avant-modifications.tar.gz
+?? ../backup-couverture-20261028-131937/
+?? ../backup-plannerbuilder-20261028-130012/
+?? ../backup-styles-20261028-131313/
+?? ../build-result.txt
+?? ../config-admin.txt
+?? ../controle-export.txt
+?? ../controle-limite.txt
+?? ../diagnostic-App-complet.txt
+?? ../diagnostic-backend.txt
+?? ../diagnostic-creation-admin.txt
+?? ../diagnostic-dossiers.txt
+?? ../diagnostic-route-admin.txt
+?? ../diagnostic-verification-app.txt
+?? ../diagnostic-verification.txt
+?? ../fichiers-projet.txt
+?? ../firebase-verification.txt
+?? ../inspection_auth_plannerbuilder.txt
+?? ../resultat-apres-cover-editor.txt
+?? ../resultat-tests.txt
+?? ../resultat.txt
+?? ../resultat_tests.txt
+?? ../sauvegardes/
+?? ../suivi.txt
+?? ../verification-App.txt
+?? ../verification-sauvegarde.txt
+?? ../verification.txt
+?? ../versions.txt
+
+===== VERIFICATION DU DIFF =====

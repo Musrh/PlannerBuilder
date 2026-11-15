@@ -1,0 +1,88 @@
+  const openPatternDatabase = () => new Promise((resolve, reject) => {
+    if (!window.indexedDB) {
+      reject(new Error('IndexedDB indisponible dans ce navigateur.'))
+      return
+    }
+
+    const request = window.indexedDB.open('plannerbuilder-mockup-library', 1)
+
+    request.onupgradeneeded = () => {
+      const db = request.result
+      if (!db.objectStoreNames.contains('patterns')) {
+        db.createObjectStore('patterns', { keyPath: 'id' })
+      }
+    }
+
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+
+  const readPatternLibrary = async () => {
+    const db = await openPatternDatabase()
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('patterns', 'readonly')
+      const request = transaction.objectStore('patterns').getAll()
+
+      request.onsuccess = () => {
+        resolve(request.result.sort((a, b) => b.updatedAt - a.updatedAt))
+      }
+      request.onerror = () => reject(request.error)
+      transaction.oncomplete = () => db.close()
+      transaction.onerror = () => {
+        db.close()
+        reject(transaction.error)
+      }
+    })
+  }
+
+  const writePatternLibrary = async (pattern) => {
+    const db = await openPatternDatabase()
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('patterns', 'readwrite')
+      transaction.objectStore('patterns').put(pattern)
+      transaction.oncomplete = () => {
+        db.close()
+        resolve()
+      }
+      transaction.onerror = () => {
+        db.close()
+        reject(transaction.error)
+      }
+      transaction.onabort = () => {
+        db.close()
+        reject(transaction.error || new Error('Enregistrement annulé.'))
+      }
+    })
+  }
+
+  const removePatternFromLibrary = async (id) => {
+    const db = await openPatternDatabase()
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('patterns', 'readwrite')
+      transaction.objectStore('patterns').delete(id)
+      transaction.oncomplete = () => {
+        db.close()
+        resolve()
+      }
+      transaction.onerror = () => {
+        db.close()
+        reject(transaction.error)
+      }
+      transaction.onabort = () => {
+        db.close()
+        reject(transaction.error || new Error('Suppression annulée.'))
+      }
+    })
+  }
+
+  useEffect(() => {
+    let active = true
+
+    readPatternLibrary()
+      .then((patterns) => {
+        if (active) setSavedPatterns(patterns)
+      })
+      .catch(() => {
+        if (active) {
+          setMessage('Impossible de lire la bibliothèque locale de motifs.')
+        }

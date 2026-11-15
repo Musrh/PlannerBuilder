@@ -1,0 +1,178 @@
+]633;E;echo "===== CONFIGURATION FIREBASE =====";b535d9b1-5403-4ccf-877e-2e0576c0f2a1]633;C===== CONFIGURATION FIREBASE =====
+
+import { initializeApp, getApp, getApps } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
+import { getAnalytics, isSupported } from 'firebase/analytics'
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyBuiap7vkHi1nsK78hAMZSC4ebm0a3r3_Y',
+    authDomain: 'recettes-2c62a.firebaseapp.com',
+      databaseURL: 'https://recettes-2c62a-default-rtdb.firebaseio.com',
+        projectId: 'recettes-2c62a',
+          storageBucket: 'recettes-2c62a.firebasestorage.app',
+            messagingSenderId: '384412687224',
+              appId: '1:384412687224:web:64485e5af41d8e0c49868d',
+                measurementId: 'G-77JB0FD358',
+                }
+
+                const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
+
+                export const auth = getAuth(app)
+                export const db = getFirestore(app)
+
+                // Analytics est facultatif et peut ne pas être pris en charge
+                // dans certains navigateurs ou environnements.
+                export let analytics = null
+
+                if (typeof window !== 'undefined') {
+                  isSupported()
+                      .then((supported) => {
+                            if (supported) {
+                                    analytics = getAnalytics(app)
+                                          }
+                                              })
+                                                  .catch(() => {
+                                                        analytics = null
+                                                            })
+                                                            }
+
+                                                            export default app
+                                                            
+===== IMPORTS DE ADMINMOCKUPS =====
+import { useEffect, useState } from 'react'
+import * as pdfjsLib from 'pdfjs-dist'
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import './AdminMockups.css'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+
+function AdminMockups() {
+  const [file, setFile] = useState(null)
+  const [style, setStyle] = useState('nature')
+  const [preview, setPreview] = useState('')
+  const [message, setMessage] = useState('')
+
+===== BLOC DE LA BIBLIOTHEQUE =====
+              <option value="repeat">Répéter le motif</option>
+              <option value="stretch">Étendre sur tout le fond</option>
+            </select>
+          </>
+        )}
+
+        <button
+          className="mockup-primary-button"
+          type="button"
+          onClick={createCustomMockup}
+          disabled={!customImage || loading}
+        >
+          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+        </button>
+
+        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+        <select
+          id="mockup-export-format"
+          value={downloadFormat}
+          onChange={(event) => setDownloadFormat(event.target.value)}
+        >
+          <option value="png">PNG — qualité sans perte</option>
+          <option value="jpg">JPG — fichier compressé</option>
+        </select>
+
+        
+        <div className="mockup-pattern-library">
+          <h3>Ma bibliothèque de motifs</h3>
+          <p className="mockup-library-help">
+            Enregistre tes motifs importés pour les réutiliser plus tard dans ce navigateur.
+          </p>
+
+          {customPatternImage && (
+            <div className="mockup-library-save">
+              <label htmlFor="mockup-pattern-name">Nom du motif à enregistrer</label>
+              <input
+                id="mockup-pattern-name"
+                type="text"
+                value={patternName}
+                onChange={(event) => setPatternName(event.target.value)}
+                placeholder="Ex. Motif floral beige"
+                maxLength={80}
+              />
+              <button
+                type="button"
+                className="mockup-secondary-button"
+                onClick={saveCurrentPattern}
+              >
+                Enregistrer dans ma bibliothèque
+              </button>
+            </div>
+          )}
+
+          {libraryLoading ? (
+            <p>Chargement de la bibliothèque…</p>
+          ) : savedPatterns.length === 0 ? (
+            <p className="mockup-library-empty">
+              Aucun motif enregistré pour le moment.
+            </p>
+          ) : (
+            <div className="mockup-library-grid">
+              {savedPatterns.map((pattern) => (
+                <article className="mockup-library-card" key={pattern.id}>
+                  <img src={pattern.dataUrl} alt={`Aperçu : ${pattern.name}`} />
+                  <strong title={pattern.name}>{pattern.name}</strong>
+                  <button
+                    type="button"
+                    className="mockup-secondary-button"
+                    onClick={() => applySavedPattern(pattern)}
+                  >
+                    Utiliser ce motif
+                  </button>
+                  <div className="mockup-library-actions">
+                    <button
+                      type="button"
+                      onClick={() => renameSavedPattern(pattern)}
+                    >
+                      Renommer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => deleteSavedPattern(pattern)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+
+{message && <p className="mockup-message" role="status">{message}</p>}
+      </div>
+
+      {preview && (
+
+===== FIN DU BLOC ET BOUTONS SUIVANTS =====
+      {preview && (
+        <div className="mockup-result">
+          <h3>Aperçu publicitaire</h3>
+          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+          <button
+            className="mockup-primary-button"
+            type="button"
+            onClick={downloadMockup}
+          >
+            Télécharger le mockup {downloadFormat.toUpperCase()}
+          </button>
+        </div>
+      )}
+
+      <p className="mockup-local-note">
+        Prototype local : le PDF est traité dans le navigateur et n’est pas
+        envoyé à un serveur par ce composant. Cette page n’est pas encore
+        protégée par une authentification administrateur.
+      </p>
+    </section>
+  )
+}
+
+export default AdminMockups

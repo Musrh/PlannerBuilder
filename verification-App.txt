@@ -1,0 +1,18 @@
+]633;E;echo "===== INITIALISATION DU COMPTEUR =====";4f09c694-8656-446e-b139-76e49f10e696]633;C===== INITIALISATION DU COMPTEUR =====
+sed: can't read src/App.jsx: No such file or directory
+
+===== VARIABLES PDF =====
+sed: can't read src/App.jsx: No such file or directory
+
+===== TOUTES LES UTILISATIONS DU COMPTEUR =====
+grep: src/App.jsx: No such file or directory
+
+===== TEST ESLINT =====
+npm error code ENOENT
+npm error syscall open
+npm error path /workspaces/PlannerBuilder/package.json
+npm error errno -2
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/workspaces/PlannerBuilder/package.json'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /home/codespace/.npm/_logs/2026-11-13T18_15_01_354Z-debug-0.log

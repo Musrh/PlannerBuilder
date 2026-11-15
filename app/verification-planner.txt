@@ -1,0 +1,48 @@
+]633;E;echo "===== 1. VERIFICATION DU CODE DES TITRES PDF =====";26795336-bdcd-42ec-8ffa-eaa000ef9db1]633;C===== 1. VERIFICATION DU CODE DES TITRES PDF =====
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(0.25)
+          doc.roundedRect(margin, y, usableWidth, compact ? 39 : 44, 3, 3, 'FD')
+
+          doc.setFillColor(...primaryRgb)
+          doc.roundedRect(margin, y, usableWidth, 9, 2, 2, 'F')
+          doc.rect(margin, y + 5, usableWidth, 4, 'F')
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(9)
+          doc.setTextColor(255, 255, 255)
+          doc.text(section, margin + 4, y + 6)
+
+          let rowY = y + 16
+          const rowCount = compact ? 3 : 3
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            if (rowY > y + (compact ? 35 : 40)) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+
+===== 2. COMPILATION DU PROJET =====
+
+> app@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 218 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                        0.45 kB │ gzip:   0.29 kB
+dist/assets/index-CXoezZa5.css        13.20 kB │ gzip:   3.47 kB
+dist/assets/purify.es-Dqk5qvad.js     29.02 kB │ gzip:  11.45 kB
+dist/assets/index.es-CNU4eZWR.js     151.37 kB │ gzip:  48.88 kB
+dist/assets/html2canvas-Cjl6ELhY.js  199.39 kB │ gzip:  46.73 kB
+dist/assets/index-B8MdbQdE.js        633.86 kB │ gzip: 203.18 kB
+
+✓ built in 909ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+===== 3. STATUT DE LA MODIFICATION =====

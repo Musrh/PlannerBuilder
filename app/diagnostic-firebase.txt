@@ -1,0 +1,244 @@
+]633;E;echo "===== DOSSIER ACTUEL =====";fde7bbf7-02d8-4a1f-b9b6-ad0062cd0f52]633;C===== DOSSIER ACTUEL =====
+/workspaces/PlannerBuilder/app
+
+===== PACKAGE.JSON =====
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^13.1.0",
+    "jspdf": "^4.2.1",
+    "pdfjs-dist": "^6.4.299",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "vite": "^8.3.5"
+  }
+}
+
+===== FICHIERS DU PROJET =====
+total 1372
+drwxrwxrwx+  10 codespace codespace  12288 Nov 13 14:27 .
+drwxrwxrwx+   8 codespace root        4096 Nov 13 01:49 ..
+-rw-r--r--    1 codespace codespace    253 Oct 27 23:54 .gitignore
+-rw-rw-rw-    1 codespace codespace  28545 Oct 31 04:45 App-current.txt
+-rw-r--r--    1 codespace codespace   1027 Oct 27 23:54 README.md
+drwxrwxrwx+   2 codespace codespace   4096 Nov  1 20:49 SAUVEGARDE_PLANNERBUILDER
+-rw-rw-rw-    1 codespace codespace  36526 Oct 28 12:51 analyse-modeles.txt
+-rw-rw-rw-    1 codespace codespace   2890 Oct 28 13:06 analyse-structure.txt
+-rw-rw-rw-    1 codespace codespace      0 Oct 28 13:20 app@0.0.0
+-rw-rw-rw-    1 codespace codespace    251 Oct 31 04:07 backup-admin.txt
+drwxrwxrwx+   2 codespace codespace   4096 Nov  1 20:49 backups
+-rw-rw-rw-    1 codespace codespace   3585 Oct 29 22:28 bloc-fond-mockup.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 29 22:07 build-final.txt
+-rw-rw-rw-    1 codespace codespace   1980 Nov 13 01:45 build-result.txt
+-rw-rw-rw-    1 codespace codespace  12186 Oct 28 01:57 code_export_complet.txt
+-rw-rw-rw-    1 codespace codespace   3646 Oct 28 00:44 composant_actuel.txt
+-rw-rw-rw-    1 codespace codespace   1839 Oct 30 20:35 compteur-export.txt
+-rw-rw-rw-    1 codespace codespace    355 Oct 30 20:38 config-admin.txt
+-rw-rw-rw-    1 codespace codespace    404 Nov 12 21:13 console.html
+-rw-rw-rw-    1 codespace codespace   2532 Oct 30 23:26 controle-app-avant-quota.txt
+-rw-rw-rw-    1 codespace codespace   1432 Oct 30 23:37 controle-final-comptes.txt
+-rw-rw-rw-    1 codespace codespace   1718 Oct 30 20:27 controle-quota.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 29 22:38 controle.txt
+-rw-rw-rw-    1 codespace codespace   5783 Oct 31 21:45 css-diagnostic.txt
+-rw-rw-rw-    1 codespace codespace  17163 Oct 28 13:15 details-export-couverture.txt
+-rw-rw-rw-    1 codespace codespace   6955 Oct 28 16:46 details-generation-motifs.txt
+-rw-rw-rw-    1 codespace codespace  17526 Oct 28 13:09 details-modifications.txt
+-rw-rw-rw-    1 codespace codespace   3445 Oct 30 23:30 details-quota-app.txt
+-rw-rw-rw-    1 codespace codespace  14841 Oct 28 03:08 details_code.txt
+-rw-rw-rw-    1 codespace codespace  15827 Nov  1 20:50 diagnostic-authgate.txt
+-rw-rw-rw-    1 codespace codespace   1295 Oct 28 17:01 diagnostic-canvas.txt
+-rw-rw-rw-    1 codespace codespace    508 Oct 28 16:42 diagnostic-code-motifs.txt
+-rw-rw-rw-    1 codespace codespace    776 Oct 28 16:53 diagnostic-controles.txt
+-rw-rw-rw-    1 codespace codespace   6065 Oct 28 06:18 diagnostic-couleurs-final.txt
+-rw-rw-rw-    1 codespace codespace   1909 Oct 28 05:11 diagnostic-couleurs-pdf.txt
+-rw-rw-rw-    1 codespace codespace  27155 Oct 28 06:14 diagnostic-couleurs-suite.txt
+-rw-rw-rw-    1 codespace codespace   5847 Oct 28 06:10 diagnostic-couleurs.txt
+-rw-rw-rw-    1 codespace codespace  14561 Nov  1 19:37 diagnostic-cover-complet.txt
+-rw-rw-rw-    1 codespace codespace   3862 Nov  1 19:31 diagnostic-cover-editor.txt
+-rw-rw-rw-    1 codespace codespace   6939 Oct 28 05:08 diagnostic-export-pdf.txt
+-rw-rw-rw-    1 codespace codespace   1499 Oct 30 23:12 diagnostic-final-auth.txt
+-rw-rw-rw-    1 codespace codespace    883 Nov 13 14:27 diagnostic-firebase.txt
+-rw-rw-rw-    1 codespace codespace   1097 Oct 31 00:01 diagnostic-main.txt
+-rw-rw-rw-    1 codespace codespace  23512 Oct 28 14:12 diagnostic-mockups.txt
+-rw-rw-rw-    1 codespace codespace    999 Oct 29 22:03 diagnostic-motif.txt
+-rw-rw-rw-    1 codespace codespace   6431 Oct 29 21:02 diagnostic-motifs.txt
+-rw-rw-rw-    1 codespace codespace    813 Oct 30 23:46 diagnostic-page-blanche.txt
+-rw-rw-rw-    1 codespace codespace   5928 Oct 28 05:05 diagnostic-repas.txt
+-rw-rw-rw-    1 codespace codespace   6435 Oct 28 05:48 diagnostic-textes-modeles.txt
+-rw-rw-rw-    1 codespace codespace    236 Oct 30 23:50 diagnostic-vite.txt
+-rw-rw-rw-    1 codespace codespace   6905 Oct 28 16:55 diagnostic-zones-motifs.txt
+-rw-rw-rw-    1 codespace codespace    211 Oct 31 02:51 diagnostic.txt
+-rw-rw-rw-    1 codespace codespace   2911 Oct 29 18:17 diagnostic_bouton_motif.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 29 18:34 diagnostic_build.txt
+-rw-rw-rw-    1 codespace codespace  14263 Oct 29 18:02 diagnostic_complet.txt
+-rw-rw-rw-    1 codespace codespace   1083 Oct 29 20:46 diagnostic_erreur.txt
+-rw-rw-rw-    1 codespace codespace   1211 Oct 29 00:52 diagnostic_firebase_etape1.txt
+-rw-rw-rw-    1 codespace codespace   6671 Oct 29 18:27 diagnostic_firebase_motifs.txt
+-rw-rw-rw-    1 codespace codespace    580 Oct 29 18:25 diagnostic_firebase_ordre.txt
+-rw-rw-rw-    1 codespace codespace   2969 Oct 29 18:38 diagnostic_firestore.txt
+-rw-rw-rw-    1 codespace codespace   2790 Oct 29 18:10 diagnostic_fonction.txt
+-rw-rw-rw-    1 codespace codespace   5267 Oct 29 18:12 diagnostic_import.txt
+-rw-rw-rw-    1 codespace codespace   2630 Oct 29 18:20 diagnostic_indexeddb.txt
+-rw-rw-rw-    1 codespace codespace   1241 Oct 29 17:58 diagnostic_motifs.txt
+-rw-rw-rw-    1 codespace codespace    135 Oct 29 18:34 diagnostic_ordre_final.txt
+-rw-rw-rw-    1 codespace codespace    575 Oct 29 18:36 diagnostic_suivant.txt
+-rw-rw-rw-    1 codespace codespace   1937 Oct 29 22:25 dimensions-mockup.txt
+drwxrwxrwx+   3 codespace codespace   4096 Nov 13 02:07 dist
+-rw-rw-rw-    1 codespace codespace    353 Nov 13 00:48 erreur-code.txt
+-rw-rw-rw-    1 codespace codespace    568 Oct 27 23:54 eslint.config.js
+-rw-rw-rw-    1 codespace codespace    227 Oct 29 23:11 etat-projet.txt
+-rw-rw-rw-    1 codespace codespace   5291 Oct 28 04:33 export_pdf_actuel.txt
+-rw-rw-rw-    1 codespace codespace   2491 Oct 31 04:32 extrait-admin.txt
+-rw-rw-rw-    1 codespace codespace    277 Nov 13 01:22 extrait-code.txt
+-rw-rw-rw-    1 codespace codespace   4117 Oct 28 16:44 extraits-code-motifs.txt
+-rw-rw-rw-    1 codespace codespace   3772 Nov 13 00:54 fin-app-numerote.txt
+-rw-rw-rw-    1 codespace codespace    958 Nov 13 00:53 fin-app.txt
+-rw-rw-rw-    1 codespace codespace   4102 Oct 28 03:12 fin_code.txt
+-rw-rw-rw-    1 codespace codespace   4290 Oct 28 03:15 fin_complete.txt
+-rw-rw-rw-    1 codespace codespace      0 Nov 13 00:58 historique-app.txt
+-rw-rw-rw-    1 codespace codespace    355 Oct 27 23:54 index.html
+-rw-rw-rw-    1 codespace codespace   4711 Oct 30 21:02 inspection-app.txt
+-rw-rw-rw-    1 codespace codespace  32329 Oct 30 00:20 inspection-auth-complet.txt
+-rw-rw-rw-    1 codespace codespace   1692 Oct 30 00:26 inspection-auth-css.txt
+-rw-rw-rw-    1 codespace codespace   2775 Oct 30 00:29 inspection-auth-gate.txt
+-rw-rw-rw-    1 codespace codespace   4300 Oct 30 00:55 inspection-debut-app.txt
+-rw-rw-rw-    1 codespace codespace    680 Oct 30 00:47 inspection-dependances.txt
+-rw-rw-rw-    1 codespace codespace    297 Oct 30 00:40 inspection-export.txt
+-rw-rw-rw-    1 codespace codespace    293 Oct 30 00:18 inspection-fichiers-auth.txt
+-rw-rw-rw-    1 codespace codespace   2485 Oct 30 21:07 inspection-fin-app.txt
+-rw-rw-rw-    1 codespace codespace   9904 Oct 30 00:42 inspection-fonction-export.txt
+-rw-rw-rw-    1 codespace codespace   7187 Oct 29 03:58 inspection_app_auth.txt
+-rw-rw-rw-    1 codespace codespace   3824 Oct 29 03:35 inspection_auth_plannerbuilder.txt
+-rw-rw-rw-    1 codespace codespace    358 Oct 28 17:44 installation_bibliotheque.txt
+-rw-rw-rw-    1 codespace codespace  12187 Oct 28 17:44 installer_bibliotheque_motifs.py
+-rw-rw-rw-    1 codespace codespace   2150 Oct 30 23:33 modifier-quota.py
+-rw-------    1 codespace codespace    247 Oct 29 01:30 nano.26928.save
+drwxrwxrwx+ 164 codespace codespace   4096 Oct 29 00:57 node_modules
+-rw-rw-rw-    1 codespace codespace 143884 Oct 29 00:57 package-lock.json
+-rw-rw-rw-    1 codespace codespace    680 Oct 29 00:57 package.json
+-rw-rw-rw-    1 codespace codespace    414 Oct 28 17:39 preparation_bibliotheque.txt
+-rw-rw-rw-    1 codespace codespace   1391 Oct 28 17:39 preparer_bibliotheque.py
+drwxrwxrwx+   2 codespace codespace   4096 Oct 27 23:54 public
+-rwxrwxrwx    1 codespace codespace    760 Nov  1 19:23 redemarrage-propre.sh
+-rw-rw-rw-    1 codespace codespace    231 Oct 29 01:56 regles_firestore_actuelles.txt
+-rw-rw-rw-    1 codespace codespace   1524 Oct 29 02:02 regles_plannerbuilder_proposees.txt
+-rw-rw-rw-    1 codespace codespace    846 Oct 29 22:32 rendu-motif-actuel.txt
+-rw-rw-rw-    1 codespace codespace    410 Oct 31 04:30 reperes-admin.txt
+-rw-rw-rw-    1 codespace codespace    136 Oct 31 21:23 res.txt
+-rw-rw-rw-    1 codespace codespace    136 Oct 31 21:28 resu.txt
+-rw-rw-rw-    1 codespace codespace    321 Oct 28 17:06 resultat-ajout-motifs.txt
+-rw-rw-rw-    1 codespace codespace   8091 Nov  1 20:33 resultat-apres-cover-editor.txt
+-rw-rw-rw-    1 codespace codespace   2968 Nov  1 20:46 resultat-apres-suppression.txt
+-rw-rw-rw-    1 codespace codespace   2775 Oct 30 23:15 resultat-authgate.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 28 17:08 resultat-build-motifs.txt
+-rw-rw-rw-    1 codespace codespace   1050 Nov  1 20:56 resultat-build.txt
+-rw-rw-rw-    1 codespace codespace   1329 Oct 30 23:21 resultat-controle-authgate.txt
+-rw-rw-rw-    1 codespace codespace    993 Oct 28 13:19 resultat-couverture.txt
+-rw-rw-rw-    1 codespace codespace   1454 Oct 28 14:17 resultat-creation-module-mockups.txt
+-rw-rw-rw-    1 codespace codespace    346 Oct 30 23:51 resultat-diagnostic.txt
+-rw-rw-rw-    1 codespace codespace   1158 Oct 28 15:06 resultat-etape-3-mockup-personnalise.txt
+-rw-rw-rw-    1 codespace codespace   1472 Oct 28 15:13 resultat-etape-4-build-mockup.txt
+-rw-rw-rw-    1 codespace codespace   1615 Oct 28 15:15 resultat-etape-5-style-mockup.txt
+-rw-rw-rw-    1 codespace codespace   1910 Oct 28 14:09 resultat-etape-pdfjs.txt
+-rw-rw-rw-    1 codespace codespace    908 Oct 28 13:57 resultat-etape1.txt
+-rw-rw-rw-    1 codespace codespace  17234 Oct 28 14:00 resultat-etape2.txt
+-rw-rw-rw-    1 codespace codespace   1196 Oct 30 23:24 resultat-final-authgate.txt
+-rw-rw-rw-    1 codespace codespace    210 Oct 31 04:17 resultat-grep.txt
+-rw-rw-rw-    1 codespace codespace    719 Oct 28 04:41 resultat-impression.txt
+-rw-rw-rw-    1 codespace codespace  12164 Oct 28 16:21 resultat-inspection-arriere-plan.txt
+-rw-rw-rw-    1 codespace codespace  12067 Oct 28 15:00 resultat-inspection-mockups-personnalises.txt
+-rw-rw-rw-    1 codespace codespace   1788 Oct 28 14:11 resultat-install-pdfjs.txt
+-rw-rw-rw-    1 codespace codespace   1790 Oct 28 14:27 resultat-integration-mockups.txt
+-rw-rw-rw-    1 codespace codespace     30 Nov  1 20:56 resultat-lint.txt
+-rw-rw-rw-    1 codespace codespace   1561 Oct 31 00:04 resultat-main.txt
+-rw-rw-rw-    1 codespace codespace   1955 Oct 28 14:05 resultat-mockups-admin.txt
+-rw-rw-rw-    1 codespace codespace   1708 Oct 30 23:34 resultat-quota.txt
+-rw-rw-rw-    1 codespace codespace      0 Oct 30 20:54 resultat-regles.txt
+-rw-rw-rw-    1 codespace codespace    627 Oct 28 15:03 resultat-sauvegarde-mockup-personnalise.txt
+-rw-rw-rw-    1 codespace codespace    990 Oct 28 16:31 resultat-sauvegarde-motifs.txt
+-rw-rw-rw-    1 codespace codespace    993 Oct 28 13:13 resultat-styles.txt
+-rw-rw-rw-    1 codespace codespace    565 Oct 28 15:15 resultat-test-local-mockups.txt
+-rw-rw-rw-    1 codespace codespace   1199 Nov  1 21:00 resultat-tests.txt
+-rw-rw-rw-    1 codespace codespace  38053 Nov  2 11:10 resultat.txt
+-rw-rw-rw-    1 codespace codespace   5797 Oct 29 17:26 resultat_bibliotheque.txt
+-rw-rw-rw-    1 codespace codespace    602 Oct 28 17:45 resultat_bibliotheque_complet.txt
+-rw-rw-rw-    1 codespace codespace   7746 Oct 28 17:36 resultat_bibliotheque_motifs.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 29 04:13 resultat_build_auth.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 29 17:32 resultat_build_bibliotheque.txt
+-rw-rw-rw-    1 codespace codespace   1069 Oct 29 02:28 resultat_build_config_temporaire.txt
+-rw-rw-rw-    1 codespace codespace   1069 Oct 29 01:20 resultat_build_firebase.txt
+-rw-rw-rw-    1 codespace codespace   1035 Oct 28 03:02 resultat_code.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 31 03:17 resultat_compilation.txt
+-rw-rw-rw-    1 codespace codespace    199 Oct 29 02:26 resultat_config_temporaire.txt
+-rw-rw-rw-    1 codespace codespace     97 Oct 28 00:32 resultat_dependances.txt
+-rw-rw-rw-    1 codespace codespace    431 Oct 28 01:53 resultat_export.txt
+-rw-rw-rw-    1 codespace codespace      0 Oct 29 00:42 resultat_fichiers_firebase.txt
+-rw-rw-rw-    1 codespace codespace   4956 Oct 29 02:40 resultat_inspection_app_admin.txt
+-rw-rw-rw-    1 codespace codespace    751 Oct 29 00:57 resultat_installation_firebase.txt
+-rw-rw-rw-    1 codespace codespace    260 Oct 29 02:20 resultat_recherche_backend.txt
+-rw-rw-rw-    1 codespace codespace      0 Oct 29 00:45 resultat_recherche_firebase.txt
+-rw-rw-rw-    1 codespace codespace    231 Oct 29 01:56 resultat_regles_firestore.txt
+-rw-rw-rw-    1 codespace codespace   1715 Oct 29 02:02 resultat_regles_plannerbuilder.txt
+-rw-rw-rw-    1 codespace codespace    406 Oct 31 02:37 resultat_sauvegarde.txt
+-rw-rw-rw-    1 codespace codespace    220 Oct 29 17:23 resultat_sections.txt
+-rw-rw-rw-    1 codespace codespace   2855 Oct 29 00:47 resultat_structure_projet.txt
+-rw-rw-rw-    1 codespace codespace    132 Oct 29 02:16 resultat_uid_admin.txt
+-rw-rw-rw-    1 codespace codespace   2594 Oct 29 03:41 resultat_verification.txt
+-rw-rw-rw-    1 codespace codespace   1206 Oct 28 17:50 resultat_verification_bibliotheque.txt
+-rw-rw-rw-    1 codespace codespace   3133 Oct 28 04:29 resultats_polices_couleurs.txt
+-rw-rw-rw-    1 codespace codespace  11591 Oct 28 04:20 resultats_reglages.txt
+drwxrwxrwx+   2 codespace codespace   4096 Oct 30 21:11 sauvegarde-avant-plans
+drwxrwxrwx+   2 codespace codespace   4096 Oct 28 00:49 sauvegarde-initiale
+drwxrwxrwx+   3 codespace codespace   4096 Nov 13 02:05 src
+-rw-rw-rw-    1 codespace codespace  16559 Oct 28 04:35 styles_impression.txt
+-rw-rw-rw-    1 codespace codespace   2574 Oct 30 20:31 suite-export.txt
+-rw-rw-rw-    1 codespace codespace   1471 Oct 28 05:37 test-titres-rouges.txt
+-rw-rw-rw-    1 codespace codespace      0 Nov  2 11:08 test.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 29 20:18 test_build.txt
+-rw-rw-rw-    1 codespace codespace     29 Oct 29 02:16 uid_admin_plannerbuilder.txt
+-rw-rw-rw-    1 codespace codespace    328 Oct 29 22:06 verification-500kb.txt
+-rw-rw-rw-    1 codespace codespace    197 Oct 30 23:00 verification-authgate-modifie.txt
+-rw-rw-rw-    1 codespace codespace   1726 Oct 30 23:19 verification-authgate.txt
+-rw-rw-rw-    1 codespace codespace    228 Oct 31 04:26 verification-backups.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 30 23:24 verification-build-authgate.txt
+-rw-rw-rw-    1 codespace codespace   1644 Oct 28 06:29 verification-couleurs.txt
+-rw-rw-rw-    1 codespace codespace   1774 Oct 28 06:31 verification-finale.txt
+-rw-rw-rw-    1 codespace codespace   1781 Oct 30 20:56 verification-firebase.txt
+-rw-rw-rw-    1 codespace codespace   6498 Oct 28 14:15 verification-module-mockups.txt
+-rw-rw-rw-    1 codespace codespace   1976 Oct 28 05:27 verification-planner.txt
+-rw-rw-rw-    1 codespace codespace    342 Oct 30 22:52 verification-sauvegarde-planner.txt
+-rw-rw-rw-    1 codespace codespace   2650 Oct 28 05:53 verification-texte-noir.txt
+-rw-rw-rw-    1 codespace codespace   1459 Oct 28 05:30 verification-titres-noirs.txt
+-rw-rw-rw-    1 codespace codespace   2284 Nov 13 00:42 verification.txt
+-rw-rw-rw-    1 codespace codespace    171 Oct 29 19:56 verification_auth.txt
+-rw-rw-rw-    1 codespace codespace   1050 Oct 28 17:50 verification_build_bibliotheque.txt
+-rw-rw-rw-    1 codespace codespace   2571 Oct 29 19:58 verification_code_detail.txt
+-rw-rw-rw-    1 codespace codespace    682 Oct 29 03:44 verification_firebase.txt
+-rw-rw-rw-    1 codespace codespace   5791 Oct 29 20:01 verification_fonctions.txt
+-rw-rw-rw-    1 codespace codespace   5367 Oct 28 17:37 verification_galerie_motifs.txt
+-rw-rw-rw-    1 codespace codespace    820 Oct 29 20:09 verification_migration.txt
+-rw-rw-rw-    1 codespace codespace   1022 Oct 28 03:32 verification_modeles.txt
+-rw-rw-rw-    1 codespace codespace   1146 Oct 28 02:04 verification_pdf.txt
+-rw-rw-rw-    1 codespace codespace   1844 Oct 28 00:35 verification_projet.txt
+-rw-rw-rw-    1 codespace codespace    566 Oct 28 01:34 verification_resultat.txt
+-rw-rw-rw-    1 codespace codespace      0 Oct 28 13:20 vite
+-rw-r--r--    1 codespace codespace    161 Oct 27 23:54 vite.config.js

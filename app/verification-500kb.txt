@@ -1,0 +1,8 @@
+678-                  return
+679-                }
+680:                if (f.size > 500 * 1024) {
+681-                  event.target.value = ''
+682-                  setCustomPatternImage('')
+683-                  setMessage('L’image de motif dépasse la limite de 500 Ko.')
+684-                  return
+685-                }

@@ -1,0 +1,6 @@
+Vérification état couleur : 1 occurrence(s)
+Vérification chargement image dans createCustomMockup : 1 occurrence(s)
+Vérification dessin du fond : 1 occurrence(s)
+Vérification bouton de génération : 1 occurrence(s)
+Sauvegarde créée : ../sauvegardes/avant-application-motifs-20261028-170648
+MODIFICATION APPLIQUEE

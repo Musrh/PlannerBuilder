@@ -1,0 +1,47 @@
+]633;E;echo "===== DATE =====";901377c7-5a55-4911-974b-9cea672f1e3a]633;C===== DATE =====
+Wed Oct 28 14:10:59 UTC 2026
+
+===== INSTALLATION PDF.JS =====
+
+added 3 packages, and audited 170 packages in 3s
+
+35 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn install-scripts   core-js@3.51.0 (postinstall: node -e "try{require('./postinstall')}catch(e){}")
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+CODE INSTALLATION : 0
+
+===== VERIFICATION PDF.JS =====
+app@0.0.0 /workspaces/PlannerBuilder/app
+└── pdfjs-dist@6.4.299
+
+CODE VERIFICATION : 0
+
+===== TEST DE COMPILATION =====
+
+> app@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 218 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                        0.45 kB │ gzip:   0.29 kB
+dist/assets/index-wwhO8C4M.css        14.72 kB │ gzip:   3.72 kB
+dist/assets/purify.es-Dqk5qvad.js     29.02 kB │ gzip:  11.45 kB
+dist/assets/index.es-CMOBMdjA.js     151.37 kB │ gzip:  48.88 kB
+dist/assets/html2canvas-Ckmi_llT.js  199.39 kB │ gzip:  46.73 kB
+dist/assets/index-OzlsasxG.js        639.34 kB │ gzip: 204.57 kB
+
+✓ built in 601ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+CODE BUILD : 0

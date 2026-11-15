@@ -1,0 +1,66 @@
+        setChecking(false)
+        return
+      }
+
+      if (!currentUser.emailVerified) {
+        setVerificationEmail(currentUser.email || '')
+        setPlan('free')
+        setChecking(false)
+        return
+      }
+
+      setVerificationEmail('')
+
+      try {
+        const profileRef = doc(db, 'users_planner', currentUser.uid)
+        const profileSnapshot = await getDoc(profileRef)
+
+        let profileData
+
+        if (profileSnapshot.exists()) {
+          // Profil existant : lecture sans modification Firestore.
+          const savedProfile = profileSnapshot.data()
+
+          // Compatibilité avec les anciens profils.
+          // Les champs absents sont complétés uniquement en mémoire.
+          profileData = {
+            ...savedProfile,
+            email: savedProfile.email || currentUser.email || '',
+            plan: savedProfile.plan || 'free',
+            paye: savedProfile.paye ?? false,
+            active: savedProfile.active ?? false,
+            expiry: savedProfile.expiry ?? 0,
+          }
+        } else {
+          // Création d'un profil si le document n'existe pas.
+          profileData = {
+            email: currentUser.email || '',
+            plan: 'free',
+            paye: false,
+            active: true,
+            expiry: 0,
+            createdAt: serverTimestamp(),
+
+            subscriptionType: 'free',
+            paymentStatus: 'unpaid',
+            billingPeriodStart: 0,
+            billingPeriodEnd: 0,
+            lastPaymentAt: 0,
+            paymentProvider: null,
+          }
+
+          await setDoc(profileRef, profileData)
+        }
+
+        if (!active) return
+
+        setPlan(hasValidProAccess(profileData) ? 'pro' : 'free')
+        setUser(currentUser)
+      } catch (err) {
+        console.error('Erreur profil PlannerBuilder :', err)
+        console.error('Code erreur Firebase :', err.code)
+
+        if (!active) return
+
+        setProfileError(
+          'Impossible de charger votre profil. Vérifiez votre connexion et les règles Firestore.'

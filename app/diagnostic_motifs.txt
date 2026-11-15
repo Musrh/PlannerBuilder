@@ -1,0 +1,21 @@
+24:  const [savedPatterns, setSavedPatterns] = useState([])
+29:    if (!window.indexedDB) {
+30:      reject(new Error('IndexedDB indisponible dans ce navigateur.'))
+34:    const request = window.indexedDB.open('plannerbuilder-mockup-library', 1)
+110:        if (active) setSavedPatterns(patterns)
+126:  const saveCurrentPattern = async () => {
+149:      setSavedPatterns(await readPatternLibrary())
+158:  const applySavedPattern = (pattern) => {
+165:  const renameSavedPattern = async (pattern) => {
+177:      setSavedPatterns(await readPatternLibrary())
+185:  const deleteSavedPattern = async (pattern) => {
+192:      setSavedPatterns(await readPatternLibrary())
+762:          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+765:        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+777:          <h3>Ma bibliothèque de motifs</h3>
+796:                onClick={saveCurrentPattern}
+805:          ) : savedPatterns.length === 0 ? (
+811:              {savedPatterns.map((pattern) => (
+818:                    onClick={() => applySavedPattern(pattern)}
+825:                      onClick={() => renameSavedPattern(pattern)}
+831:                      onClick={() => deleteSavedPattern(pattern)}

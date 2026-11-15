@@ -1,0 +1,10 @@
+
+        <span className="private-label"><span /> Espace de création</span>
+
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowMockups((value) => !value)}
+          >
+     

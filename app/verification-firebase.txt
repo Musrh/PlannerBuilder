@@ -1,0 +1,26 @@
+]633;E;echo "=== Fichiers Firebase ===";7ed2dbcc-ab96-49e0-ab03-7ce30042715a]633;C=== Fichiers Firebase ===
+
+=== Configuration à la racine ===
+total 328
+drwxrwxrwx+  8 codespace root        4096 Oct 30 02:41 .
+drwxr-xrwx+  5 codespace root        4096 Oct 27 22:49 ..
+drwxrwxrwx+  8 codespace root        4096 Oct 30 02:00 .git
+-rw-rw-rw-   1 codespace root          51 Oct 27 22:49 README.md
+-rw-rw-rw-   1 codespace codespace   6760 Oct 30 02:24 abonnements.txt
+drwxrwxrwx+  7 codespace codespace  12288 Oct 30 20:56 app
+-rw-rw-rw-   1 codespace codespace   2775 Oct 30 02:20 authgate-verification.txt
+-rw-rw-rw-   1 codespace codespace 241343 Oct 29 23:17 backup-avant-modifications.tar.gz
+drwxrwxrwx+  2 codespace codespace   4096 Oct 28 13:19 backup-couverture-20261028-131937
+drwxrwxrwx+  2 codespace codespace   4096 Oct 28 13:00 backup-plannerbuilder-20261028-130012
+drwxrwxrwx+  2 codespace codespace   4096 Oct 28 13:13 backup-styles-20261028-131313
+-rw-rw-rw-   1 codespace codespace    355 Oct 30 02:26 config-admin.txt
+-rw-rw-rw-   1 codespace codespace   1436 Oct 30 02:14 controle-export.txt
+-rw-rw-rw-   1 codespace codespace   1237 Oct 30 02:16 controle-limite.txt
+-rw-rw-rw-   1 codespace codespace   1814 Oct 30 02:41 firebase-verification.txt
+-rw-rw-rw-   1 codespace codespace    428 Oct 29 03:22 inspection_auth_plannerbuilder.txt
+-rw-rw-rw-   1 codespace codespace    129 Oct 30 02:05 resultat.txt
+drwxrwxrwx+ 16 codespace codespace   4096 Oct 28 17:44 sauvegardes
+-rw-rw-rw-   1 codespace codespace      0 Oct 29 23:14 suivi.txt
+-rw-rw-rw-   1 codespace codespace     85 Oct 29 23:19 verification-sauvegarde.txt
+-rw-rw-rw-   1 codespace codespace    129 Oct 30 02:11 verification.txt
+-rw-rw-rw-   1 codespace codespace    134 Oct 27 23:42 versions.txt

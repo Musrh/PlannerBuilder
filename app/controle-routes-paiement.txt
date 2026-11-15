@@ -1,0 +1,8 @@
+]633;E;echo "===== ROUTES DE PAIEMENT =====";3c114866-3a27-4e17-8980-50ad34974d8f]633;C===== ROUTES DE PAIEMENT =====
+grep: server.js: No such file or directory
+
+===== CONFIGURATION DES VARIABLES =====
+grep: server.js: No such file or directory
+
+===== FIN DU SERVEUR =====
+tail: cannot open 'server.js' for reading: No such file or directory

@@ -1,0 +1,32 @@
+src/App.jsxwac:6:import AuthGate from './AuthGate.jsx'
+src/App.jsxwac:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/App.jsxwac:1305:    <AuthGate>
+src/App.jsxwac:1307:    </AuthGate>
+src/App.jsx.backup:6:import AuthGate from './AuthGate.jsx'
+src/App.jsx.backup:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/App.jsx.backup-download-test:6:import AuthGate from './AuthGate.jsx'
+src/App.jsx.backup-download-test:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/App.jsx.backup-download-test:1341:    <AuthGate>
+src/App.jsx.backup-download-test:1343:    </AuthGate>
+src/App.jsx.backup-test-clic:6:import AuthGate from './AuthGate.jsx'
+src/App.jsx.backup-test-clic:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/App.jsx.backup-test-clic:1339:    <AuthGate>
+src/App.jsx.backup-test-clic:1341:    </AuthGate>
+src/App.jsx.avant-restauration:6:import AuthGate from './AuthGate.jsx'
+src/App.jsx.avant-restauration:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/App.jsx:6:import AuthGate from './AuthGate.jsx'
+src/App.jsx:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/App.jsx:1348:    <AuthGate>
+src/App.jsx:1350:    </AuthGate>
+src/AuthGate.jsx.backup-collections:19:import './AuthGate.css'
+src/AuthGate.jsx.backup-collections:37:export default function AuthGate({ children }) {
+src/AuthGate.jsx.backup-abonnements:19:import './AuthGate.css'
+src/AuthGate.jsx.backup-abonnements:37:export default function AuthGate({ children }) {
+src/App.jsx.backup-compact:6:import AuthGate from './AuthGate.jsx'
+src/App.jsx.backup-compact:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/App.jsx.backup-compact:1340:    <AuthGate>
+src/App.jsx.backup-compact:1342:    </AuthGate>
+src/XApp.jsx:6:import AuthGate from './AuthGate.jsx'
+src/XApp.jsx:7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+src/XApp.jsx:824:    <AuthGate>
+src/XApp.jsx:826:    </AuthGate>

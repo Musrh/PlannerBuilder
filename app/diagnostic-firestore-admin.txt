@@ -1,0 +1,8 @@
+]633;E;echo "===== COLLECTIONS FIRESTORE =====";0621b8bb-3752-45c7-b533-7ec8d5586a1e]633;C===== COLLECTIONS FIRESTORE =====
+grep: server.js: No such file or directory
+
+===== ROUTES EXISTANTES =====
+grep: server.js: No such file or directory
+
+===== CONFIGURATION PAIEMENTS =====
+sed: can't read server.js: No such file or directory

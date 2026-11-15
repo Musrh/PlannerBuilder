@@ -1,0 +1,51 @@
+            )
+            rowY += lineGap
+          }
+
+          y += (compact ? 39 : 44) + sectionGap
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+
+      const nextExports = freeExports + 1
+      localStorage.setItem(
+        'plannerbuilder_free_exports',
+        String(nextExports)
+      )
+      setFreeExports(nextExports)
+
+      setNotice(
+        `PDF créé : ${pages + 1} page(s), couverture comprise. ${3 - nextExports} export(s) gratuit(s) restant(s).`
+      )
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}

@@ -1,0 +1,369 @@
+===== FIN AUTHGATE =====
+      setLoading(false)
+    }
+  }
+
+  async function handlePasswordReset(event) {
+    event.preventDefault()
+    setError('')
+    setNotice('')
+
+    if (!email.trim()) {
+      setError('Saisissez votre adresse e-mail.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      await sendPasswordResetEmail(auth, email.trim())
+
+      setNotice(
+        'Si cette adresse possède un compte, un e-mail de réinitialisation a été envoyé.'
+      )
+    } catch (err) {
+      console.error('Erreur réinitialisation :', err)
+
+      if (err.code === 'auth/invalid-email') {
+        setError('Adresse e-mail invalide.')
+      } else if (err.code === 'auth/too-many-requests') {
+        setError('Trop de tentatives. Réessayez plus tard.')
+      } else {
+        setError("Impossible d'envoyer l'e-mail. Réessayez.")
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      await signOut(auth)
+      setMode('login')
+      setError('')
+      setNotice('')
+      setPassword('')
+    } catch (err) {
+      console.error('Erreur déconnexion :', err)
+      setError('La déconnexion a échoué. Réessayez.')
+    }
+  }
+
+  if (checking) {
+    return (
+      <div className="auth-message">
+        Vérification de la session…
+      </div>
+    )
+  }
+
+  if (profileError) {
+    return (
+      <main className="auth-page">
+        <section className="auth-card">
+          <h1>Profil indisponible</h1>
+
+          <p className="auth-error" role="alert">
+            {profileError}
+          </p>
+
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+          >
+            Réessayer
+          </button>
+
+          <button type="button" onClick={handleLogout}>
+            Se déconnecter
+          </button>
+        </section>
+      </main>
+    )
+  }
+
+  if (verificationEmail) {
+    return (
+      <main className="auth-page">
+        <section className="auth-card">
+          <div className="auth-brand">P</div>
+          <p className="auth-eyebrow">VÉRIFICATION DU COMPTE</p>
+
+          <h1>Vérifiez votre adresse e-mail</h1>
+
+          <p>Un lien de vérification a été envoyé à :</p>
+          <strong>{verificationEmail}</strong>
+
+          <p>
+            Consultez votre boîte e-mail, cliquez sur le lien
+            de vérification, puis revenez ici.
+          </p>
+
+          {error && (
+            <p className="auth-error" role="alert">
+              {error}
+            </p>
+          )}
+
+          {notice && <p role="status">{notice}</p>}
+
+          <button
+            type="button"
+            onClick={handleCheckVerification}
+            disabled={loading}
+          >
+            {loading ? 'Vérification…' : "J'ai vérifié mon adresse"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleResendVerification}
+            disabled={loading}
+          >
+            Renvoyer l'e-mail
+          </button>
+
+          <button type="button" onClick={handleLogout}>
+            Se déconnecter
+          </button>
+        </section>
+      </main>
+    )
+  }
+
+  if (!user) {
+    return (
+      <main className="auth-page">
+        <section className="auth-card">
+          <div className="auth-brand">P</div>
+          <p className="auth-eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Bienvenue sur PlannerBuilder</h1>
+
+          {mode === 'login' && (
+            <>
+              <p>
+                Connectez-vous pour accéder à votre espace de création.
+              </p>
+
+              <form onSubmit={handleLogin}>
+                <label htmlFor="auth-email">Adresse e-mail</label>
+                <input
+                  id="auth-email"
+                  type="email"
+                  autoComplete="username"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
+
+                <label htmlFor="auth-password">Mot de passe</label>
+                <input
+                  id="auth-password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Connexion…' : 'Se connecter'}
+                </button>
+              </form>
+
+              <button
+                type="button"
+                onClick={() => changeMode('register')}
+              >
+                Créer un compte
+              </button>
+
+              <button
+                type="button"
+                onClick={() => changeMode('reset')}
+              >
+                Mot de passe oublié ?
+              </button>
+            </>
+          )}
+
+          {mode === 'register' && (
+            <>
+              <p>Créez votre compte PlannerBuilder.</p>
+
+              <form onSubmit={handleRegister}>
+                <label htmlFor="register-email">Adresse e-mail</label>
+                <input
+                  id="register-email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
+
+                <label htmlFor="register-password">Mot de passe</label>
+                <input
+                  id="register-password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  minLength={6}
+                  required
+                />
+
+                <label htmlFor="register-confirm">
+                  Confirmer le mot de passe
+                </label>
+                <input
+                  id="register-confirm"
+                  type="password"
+                  autoComplete="new-password"
+
+===== FIN ADMIN LOCAL PANEL =====
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Désactiver la simulation Pro
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        )}
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  {user.plan === 'free' && (
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <button
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            type="button"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          onClick={() => activate(user.email)}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Simuler l'activation Pro
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          )}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </article>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ))}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </section>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+===== UTILISATION ADMIN DANS APP =====
+1-import { useRef, useState } from 'react'
+2-import CoverEditor from './CoverEditor.jsx'
+3-import { jsPDF } from 'jspdf'
+4-import AdminMockups from './AdminMockups.jsx'
+5:import AdminLocalPanel from './AdminLocalPanel.jsx'
+6:import AuthGate from './AuthGate.jsx'
+7:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+8-import './App.css'
+9-
+10-const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+11-const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+12-
+--
+78-    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+79-  },
+80-}
+81-
+82-function App() {
+83:  const { user, plan, isAdmin } = usePlannerBuilderAuth()
+84:  const isUnlimited = plan === 'pro' || isAdmin
+85-
+86-  const [showMockups, setShowMockups] = useState(false)
+87:  const [showAdminPanel, setShowAdminPanel] = useState(false)
+88-  const [selectedId, setSelectedId] = useState('food')
+89-  const [visualStyle, setVisualStyle] = useState('minimaliste')
+90-  const [layoutModel, setLayoutModel] = useState('classique')
+91-  const [coverId, setCoverId] = useState('')
+92-  const [coverImage, setCoverImage] = useState('')
+--
+579-          >
+580-            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+581-          </button>
+582-        )}
+583-
+584:        {isAdmin && (
+585-          <button
+586-            type="button"
+587-            className="mockup-dev-toggle"
+588-            onClick={() => setShowAdminPanel((value) => !value)}
+589-          >
+590:            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+591-          </button>
+592-        )}
+593-      </header>
+594-
+595-      <section className="welcome" id="top">
+--
+603-
+604-        <div className="welcome-decoration" aria-hidden="true">❋</div>
+605-      </section>
+606-
+607-      {import.meta.env.DEV && showMockups && <AdminMockups />}
+608:      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+609-
+610-      <div className="workspace">
+611-        <aside className="sidebar panel">
+612-          <div className="panel-heading">
+613-            <div>
+--
+1215-            </p>
+1216-          </div>
+1217-        </aside>
+1218-      </div>
+1219-
+1220:      {!isAdmin && (
+1221-        <section
+1222-          className="pro-upgrade"
+1223-          aria-labelledby="pro-upgrade-title"
+1224-          style={{
+1225-            maxWidth: 1100,
+--
+1343-  )
+1344-}
+1345-
+1346-function AppWithAuth() {
+1347-  return (
+1348:    <AuthGate>
+1349-      <App />
+1350:    </AuthGate>
+1351-  )
+1352-}
+1353-
+1354-export default AppWithAuth
+
+===== FICHIERS DU PROJET =====
+src/AdminLocalPanel.jsx
+src/AdminMockups.css
+src/AdminMockups.jsx
+src/AdminMockups.jsx.backup
+src/AdminMockups.jsx.backup-collections
+src/AdminMockups.jsx.backup-local
+src/AdminMockups.jsx.before-500kb
+src/AdminMockups.jsx.before-error-detail
+src/AdminMockups.jsx.before-pattern-render
+src/App-avec-apercu-couverture.zip
+src/App.css
+src/App.css.backup
+src/App.css.backup-20261028-062034
+src/App.css.backup-avant-correction
+src/App.css.backup-impression
+src/App.jsx
+src/App.jsx.avant-restauration
+src/App.jsx.backup
+src/App.jsx.backup-20261028-062034
+src/App.jsx.backup-auth
+src/App.jsx.backup-compact
+src/App.jsx.backup-download-test
+src/App.jsx.backup-pdf
+src/App.jsx.backup-polices-couleurs
+src/App.jsx.backup-test-clic
+src/App.jsxwac
+src/AuthGate.css
+src/AuthGate.jsx
+src/AuthGate.jsx.backup-abonnements
+src/AuthGate.jsx.backup-collections
+src/CoverEditor.css
+src/CoverEditor.jsx
+src/XApp.jsx
+src/assets/hero.png
+src/assets/react.svg
+src/assets/vite.svg
+src/firebase.js
+src/index.css
+src/main.jsx
+src/plannerBuilderConfig.js

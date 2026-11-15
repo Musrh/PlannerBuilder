@@ -1,0 +1,22 @@
+]633;E;echo "===== DIAGNOSTIC VITE =====";f99227ec-f43f-4c92-8fc6-564c812e18c9]633;C===== DIAGNOSTIC VITE =====
+cat: diagnostic-vite.txt: No such file or directory
+
+===== VERIFICATION IMPORTS =====
+5:import AuthGate from './AuthGate.jsx'
+6:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+72:function App() {
+73:  const { plan, isAdmin } = usePlannerBuilderAuth()
+717:function AppWithAuth() {
+719:      <AuthGate>
+721:                </AuthGate>
+
+===== VERIFICATION AUTHGATE =====
+27:  const [profileError, setProfileError] = useState('')
+89:    return () => {
+121:  if (profileError) {
+122:    return (
+126:          <p className="auth-error" role="alert">{profileError}</p>
+142:    return (
+182:  return (
+183:    <AuthContext.Provider value={{ user, plan, isAdmin }}>
+193:    </AuthContext.Provider>

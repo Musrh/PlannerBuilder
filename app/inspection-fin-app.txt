@@ -1,0 +1,73 @@
+]633;E;echo "=== Fin de App.jsx ===";7ed2dbcc-ab96-49e0-ab03-7ce30042715a]633;C=== Fin de App.jsx ===
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">Typographie</label>
+            <select id="font" value={font} onChange={(event) => setFont(event.target.value)}>
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button key={value} type="button" className={density === value ? 'active' : ''} onClick={() => setDensity(value)}>
+                  {value === 'compacte' ? 'Compacte' : 'Aérée'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button className="reset-button" type="button" onClick={() => {
+            setPrimary('#718B70')
+            setBackground('#F7F5EF')
+            setTitleBackground('#718B70')
+            setTitleTextColor('#FFFFFF')
+            setFont('moderne')
+            setDensity('confortable')
+            setVisualStyle('minimaliste')
+            setNotice('')
+          }}>
+            ↺ Réinitialiser le style
+          </button>
+
+          <div className="export-area">
+            <button className="export-button" type="button" onClick={exportPDF}>
+              <span>↓</span> Exporter en PDF
+            </button>
+            <p>Votre aperçu sera envoyé à la fenêtre d’impression du navigateur.</p>
+          </div>
+        </aside>
+      </div>
+
+      {notice && <div className="notice" role="status">{notice}</div>}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+
+
+function AppWithAuth() {
+  return (
+      <AuthGate>
+            <App />
+                </AuthGate>
+                  )
+                  }
+
+                  export default AppWithAuth
+                  
+=== Vérification AuthGate et export ===
+5:import AuthGate from './AuthGate.jsx'
+71:function App() {
+706:function AppWithAuth() {
+708:      <AuthGate>
+710:                </AuthGate>
+714:                  export default AppWithAuth

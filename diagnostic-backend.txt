@@ -1,0 +1,5 @@
+./app/diagnostic-export.txt:2:471:        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+./app/src/App.jsx.avant-restauration:472:        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+./app/src/App.jsx:473:        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+./app/fonction-export-complete.txt:372:        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+grep: ./diagnostic-backend.txt: input file is also the output

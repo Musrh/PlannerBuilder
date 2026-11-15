@@ -1,0 +1,256 @@
+.admin-mockups {
+  width: min(1100px, calc(100% - 32px));
+  margin: 32px auto;
+  padding: 28px;
+  border: 1px solid #e4e6dc;
+  border-radius: 18px;
+  background: #fff;
+  color: #454b43;
+  box-shadow: 0 8px 28px rgb(57 65 49 / 5%);
+}
+
+.admin-mockups-heading {
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+.admin-mockups-eyebrow {
+  margin: 0 0 8px;
+  color: #718b70;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.admin-mockups-heading h2 {
+  margin: 0 0 10px;
+  font-size: clamp(22px, 4vw, 30px);
+}
+
+.admin-mockups-heading > p:last-child,
+.mockup-local-note {
+  color: #74796f;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.mockup-controls {
+  display: grid;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.mockup-controls h3 {
+  margin: 22px 0 4px;
+  padding-top: 16px;
+  border-top: 1px solid #e4e6dc;
+  font-size: 17px;
+}
+
+.mockup-controls input[type='text'] {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #e4e6dc;
+  border-radius: 9px;
+  background: #fff;
+  color: #454b43;
+  font: inherit;
+}
+
+.mockup-controls input[type='color'] {
+  width: 100%;
+  height: 48px;
+  padding: 4px;
+  border: 1px solid #e4e6dc;
+  border-radius: 9px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.mockup-controls input:focus-visible,
+.mockup-controls select:focus-visible,
+.mockup-primary-button:focus-visible {
+  outline: 3px solid rgb(113 139 112 / 35%);
+  outline-offset: 2px;
+}
+
+.mockup-controls input[type='text'],
+.mockup-controls input[type='color'] {
+  box-sizing: border-box;
+}
+
+.mockup-controls label {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mockup-controls input[type='file'],
+.mockup-controls select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid #e4e6dc;
+  border-radius: 9px;
+  background: #fff;
+  color: #454b43;
+}
+
+.mockup-primary-button {
+  min-height: 44px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #718b70;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mockup-primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.mockup-message {
+  margin: 4px 0;
+  color: #4c5149;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mockup-result {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.mockup-result h3 {
+  margin: 0;
+}
+
+.mockup-result img {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  border: 1px solid #e4e6dc;
+  border-radius: 12px;
+}
+
+.mockup-local-note {
+  margin: 24px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #e4e6dc;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .admin-mockups {
+    width: calc(100% - 20px);
+    padding: 18px;
+  }
+}
+
+ 
+/* Réglage de la taille des motifs d’arrière-plan */
+.mockup-controls input[type='range'] {
+  width: 100%;
+  accent-color: #718b70;
+  cursor: pointer;
+}
+
+
+/* Bibliothèque locale de motifs pour les mockups */
+.mockup-pattern-library {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #d8ded5;
+  border-radius: 12px;
+  background: #fafbf9;
+}
+
+.mockup-pattern-library h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.mockup-library-help,
+.mockup-library-empty {
+  color: #626b62;
+  font-size: 0.9rem;
+}
+
+.mockup-library-save {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.mockup-library-save input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #cbd2c8;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.mockup-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.mockup-library-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #e0e4dd;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mockup-library-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #f1f3ef;
+}
+
+.mockup-library-card strong {
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+}
+
+.mockup-library-card button {
+  cursor: pointer;
+  padding: 7px 9px;
+  border: 1px solid #cbd2c8;
+  border-radius: 7px;
+  background: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.mockup-library-card .mockup-secondary-button,
+.mockup-library-save .mockup-secondary-button {
+  background: #e8eee4;
+}
+
+.mockup-library-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mockup-library-actions button {
+  flex: 1;
+}

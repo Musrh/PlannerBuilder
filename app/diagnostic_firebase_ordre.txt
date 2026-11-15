@@ -1,0 +1,13 @@
+]633;E;echo "===== FICHIERS FIREBASE =====";b535d9b1-5403-4ccf-877e-2e0576c0f2a1]633;C===== FICHIERS FIREBASE =====
+src/firebase.js
+
+===== DEPENDANCES FIREBASE =====
+13:    "firebase": "^13.1.0",
+
+===== ORDRE DES BLOCS DANS L'INTERFACE =====
+583:          className="mockup-primary-button"
+757:          className="mockup-primary-button"
+762:          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+776:        <div className="mockup-pattern-library">
+777:          <h3>Ma bibliothèque de motifs</h3>
+850:            className="mockup-primary-button"

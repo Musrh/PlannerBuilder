@@ -1,0 +1,55 @@
+]633;E;echo "===== LIGNES 115 À 140 =====";415945bb-a1c5-4978-841c-12f1df51235e]633;C===== LIGNES 115 À 140 =====
+
+      return Number.isFinite(saved) && saved >= 0
+        ? Math.floor(saved)
+        : 0
+    } catch {
+      return 0
+    }
+  }
+
+  const [freeExports, setFreeExports] = useState(() =>
+    readFreeExports(exportStorageKey)
+  )
+
+  // Recharge le compteur si un autre compte se connecte sur le même navigateur
+  useEffect(() => {
+    setFreeExports(readFreeExports(exportStorageKey))
+  }, [exportStorageKey])
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+
+===== LIGNES 185 À 210 =====
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const titleBackgroundRgb = toRgb(titleBackground)
+      const titleTextRgb = toRgb(titleTextColor)
+
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+
+      const pdfFont = fontMap[font] || 'helvetica'
+      const compact = density === 'compacte'
+      const sectionGap = compact ? 5 : 8
+      const lineGap = compact ? 6 : 8
+
+      // PAGE 1 : couverture indépendante du style intérieur.
+      const coverThemes = {
+        minimaliste: { bg: [250, 249, 246], accent: [55, 55, 55], shape: 'minimal' },
+        nature: { bg: [237, 242, 231], accent: [74, 112, 76], shape: 'nature' },
+        professionnelle: { bg: [238, 242, 248], accent: [39, 63, 95], shape: 'professional' },
+        coloree: { bg: [255, 239, 220], accent: [190, 75, 67], shape: 'color' },
+        elegante: { bg: [247, 241, 235], accent: [128, 91, 72], shape: 'elegant' },
+        florale: { bg: [250, 237, 242], accent: [160, 83, 119], shape: 'floral' },
+        geometrique: { bg: [237, 239, 247], accent: [70, 75, 150], shape: 'geometric' },
+        sombre: { bg: [35, 38, 43], accent: [225, 192, 125], shape: 'dark' },

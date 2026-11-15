@@ -1,0 +1,215 @@
+]633;E;echo "===== EXPORT PDF =====";16ac2d09-7108-4244-952e-c35f69eceeb0]633;C===== EXPORT PDF =====
+  function exportPDF() {
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+          parseInt(value.substring(4, 6), 16),
+        ]
+      }
+
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+      const pdfFont = fontMap[font] || 'helvetica'
+      const compact = density === 'compacte'
+      const sectionGap = compact ? 5 : 8
+      const lineGap = compact ? 6 : 8
+
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+        if (pageIndex > 0) doc.addPage()
+
+        doc.setFillColor(...backgroundRgb)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.8)
+        doc.line(margin, 13, pageWidth - margin, 13)
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('MON PLANNER', margin, 10)
+        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+          align: 'right',
+        })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(...primaryRgb)
+        doc.text(selected.category.toUpperCase(), margin, 26)
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(23)
+        doc.setTextColor(45, 55, 45)
+        const titleLines = doc.splitTextToSize(content.title, usableWidth)
+        doc.text(titleLines, margin, 37)
+
+        let y = 37 + titleLines.length * 9
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(90, 95, 85)
+        const subtitleLines = doc.splitTextToSize(content.subtitle, usableWidth)
+        doc.text(subtitleLines, margin, y)
+        y += subtitleLines.length * 5 + 8
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('DATE', margin, y)
+        doc.setDrawColor(190, 195, 180)
+        doc.setLineWidth(0.3)
+        doc.line(margin + 15, y + 1, pageWidth - margin, y + 1)
+        y += 10
+
+        content.sections.forEach((section, sectionIndex) => {
+          const bottomLimit = pageHeight - 19
+          if (y + 25 > bottomLimit) return
+
+          doc.setFillColor(255, 255, 255)
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(0.25)
+          doc.roundedRect(margin, y, usableWidth, compact ? 39 : 44, 3, 3, 'FD')
+
+          doc.setFillColor(...primaryRgb)
+          doc.roundedRect(margin, y, usableWidth, 9, 2, 2, 'F')
+          doc.rect(margin, y + 5, usableWidth, 4, 'F')
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(9)
+          doc.setTextColor(255, 255, 255)
+          doc.text(section, margin + 4, y + 6)
+
+          let rowY = y + 16
+          const rowCount = compact ? 3 : 3
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            if (rowY > y + (compact ? 35 : 40)) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+              : ''
+
+            if (['food', 'student', 'habits'].includes(selectedId)) {
+              doc.setDrawColor(...primaryRgb)
+              doc.roundedRect(margin + 4, rowY - 3, 3, 3, 0.5, 0.5, 'S')
+            }
+
+            if (rowText) {
+              doc.setFont(pdfFont, 'normal')
+              doc.setFontSize(8)
+              doc.setTextColor(65, 70, 62)
+              doc.text(rowText, margin + 10, rowY)
+            }
+
+            doc.setDrawColor(215, 218, 207)
+            doc.line(
+              margin + (['food', 'student', 'habits'].includes(selectedId) ? 34 : 5),
+              rowY + 2,
+              pageWidth - margin - 5,
+              rowY + 2
+            )
+            rowY += lineGap
+          }
+
+          y += (compact ? 39 : 44) + sectionGap
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+      setNotice(`PDF créé : ${pages} page(s). Le téléchargement devrait commencer.`)
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+===== BOUTON EXPORT =====
+1-import { useState } from 'react'
+2:import { jsPDF } from 'jspdf'
+3-import './App.css'
+4-
+5-const templates = [
+6-  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+7-  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+--
+85-    setSelectedId(template.id)
+86-    setPages(template.pages)
+87-    setNotice('')
+88-  }
+89-
+90:  function exportPDF() {
+91-    try {
+92:      const doc = new jsPDF({
+93-        orientation: 'portrait',
+94-        unit: 'mm',
+95-        format: 'a4',
+96-      })
+97-
+--
+242-        .toLowerCase()
+243-        .replace(/[^a-z0-9]+/g, '-')
+244-        .replace(/^-|-$/g, '')
+245-
+246-      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+247:      setNotice(`PDF créé : ${pages} page(s). Le téléchargement devrait commencer.`)
+248-    } catch (error) {
+249:      console.error('Erreur export PDF :', error)
+250:      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+251-    }
+252-  }
+253-
+254-  return (
+255-    <main
+--
+443-          }}>
+444-            ↺ Réinitialiser le style
+445-          </button>
+446-
+447-          <div className="export-area">
+448:            <button className="export-button" type="button" onClick={exportPDF}>
+449:              <span>↓</span> Exporter en PDF
+450-            </button>
+451-            <p>Votre aperçu sera envoyé à la fenêtre d’impression du navigateur.</p>
+452-          </div>
+453-        </aside>
+454-      </div>

@@ -1,0 +1,198 @@
+===== FICHIERS FIREBASE =====
+./diagnostic_firebase_ordre.txt
+./verification-authgate.txt
+./verification-authgate-modifie.txt
+./resultat-authgate-admin.txt
+./inspection-auth-css.txt
+./src/App.jsx.backup-auth
+./src/AuthGate.jsx.backup-collections
+./src/AuthGate.jsx
+./src/firebase.js
+./src/AuthGate.css
+./src/AuthGate.jsx.backup-abonnements
+./diagnostic-authgate.txt
+./resultat-controle-authgate.txt
+./resultat_recherche_firebase.txt
+./diagnostic-authgate-paiement.txt
+./inspection_app_auth.txt
+./diagnostic-firebase.txt
+./diagnostic-auth-route-admin.txt
+./sauvegarde-avant-plans/AuthGate.jsx
+./node_modules/@firebase
+./node_modules/@firebase/auth-compat
+./node_modules/@firebase/auth
+./node_modules/@firebase/auth-interop-types
+./node_modules/@firebase/auth-types
+./node_modules/firebase
+./node_modules/firebase/firebase-database-compat.js.map
+./node_modules/firebase/firebase-performance.js
+./node_modules/firebase/firebase-data-connect.js
+./node_modules/firebase/firebase-auth-compat.js
+./node_modules/firebase/firebase-auth-compat.js.map
+./node_modules/firebase/firebase-messaging.js.map
+./node_modules/firebase/firebase-performance-compat.js
+./node_modules/firebase/firebase-performance-standalone-compat.js
+./node_modules/firebase/firebase-app-check-compat.js
+./node_modules/firebase/firebase-firestore-lite.js.map
+./node_modules/firebase/firebase-remote-config.js.map
+./node_modules/firebase/firebase-storage.js.map
+./node_modules/firebase/firebase-remote-config.js
+./node_modules/firebase/firebase-performance-compat.js.map
+./node_modules/firebase/firebase-compat.js
+./node_modules/firebase/firebase-firestore-pipelines.js
+./node_modules/firebase/firebase-messaging-sw.js
+./node_modules/firebase/firebase-analytics.js
+./node_modules/firebase/firebase-app-check-compat.js.map
+./node_modules/firebase/firebase-app-compat.js.map
+./node_modules/firebase/firebase-performance-standalone-compat.js.map
+./node_modules/firebase/firebase-analytics-compat.js.map
+./node_modules/firebase/firebase-database.js
+./node_modules/firebase/firebase-installations.js
+./node_modules/firebase/auth
+./node_modules/firebase/firebase-firestore-lite-pipelines.js.map
+./node_modules/firebase/firebase-functions-compat.js
+./node_modules/firebase/firebase-auth-web-extension.js.map
+./node_modules/firebase/firebase-analytics.js.map
+./node_modules/firebase/firebase-analytics-compat.js
+./node_modules/firebase/firebase-storage.js
+./node_modules/firebase/firebase-database.js.map
+./node_modules/firebase/firebase-functions.js.map
+./node_modules/firebase/firebase-messaging-compat.js
+./node_modules/firebase/firebase-auth-cordova.js
+./node_modules/firebase/firebase-auth-cordova.js.map
+./node_modules/firebase/firebase-messaging.js
+./node_modules/firebase/firebase-firestore-compat.js
+./node_modules/firebase/firebase-remote-config-compat.js.map
+./node_modules/firebase/firebase-auth.js.map
+./node_modules/firebase/firebase-functions-compat.js.map
+./node_modules/firebase/firebase-firestore.js.map
+./node_modules/firebase/firebase-firestore-compat.js.map
+./node_modules/firebase/firebase-installations.js.map
+./node_modules/firebase/firebase-storage-compat.js.map
+./node_modules/firebase/firebase-app.js.map
+./node_modules/firebase/firebase-firestore-lite-pipelines.js
+./node_modules/firebase/firebase-installations-compat.js
+./node_modules/firebase/firebase-data-connect.js.map
+./node_modules/firebase/firebase-messaging-sw.js.map
+./node_modules/firebase/firebase-database-compat.js
+./node_modules/firebase/firebase-app.js
+./node_modules/firebase/firebase-compat.js.map
+./node_modules/firebase/firebase-firestore-pipelines.js.map
+./node_modules/firebase/firebase-auth.js
+./node_modules/firebase/firebase-remote-config-compat.js
+./node_modules/firebase/firebase-storage-compat.js
+./node_modules/firebase/firebase-functions.js
+./node_modules/firebase/firebase-performance.js.map
+./node_modules/firebase/firebase-auth-web-extension.js
+./node_modules/firebase/firebase-ai.js
+./node_modules/firebase/firebase-installations-compat.js.map
+./node_modules/firebase/firebase-app-compat.js
+./node_modules/firebase/firebase-app-check.js
+./node_modules/firebase/firebase-firestore-lite.js
+./node_modules/firebase/firebase-messaging-compat.js.map
+./node_modules/firebase/firebase-app-check.js.map
+./node_modules/firebase/firebase-firestore.js
+./node_modules/firebase/firebase-ai.js.map
+./diagnostic_firebase_etape1.txt
+./inspection-auth-complet.txt
+./resultat_build_auth.txt
+./verification_auth.txt
+./diagnostic-final-auth.txt
+./verification-firebase.txt
+./resultat-final-authgate.txt
+./diagnostic-auth.txt
+./inspection-auth-gate.txt
+./verification-build-authgate.txt
+./resultat_build_firebase.txt
+./inspection-fichiers-auth.txt
+./resultat_installation_firebase.txt
+./diagnostic-railway-firebase.txt
+./verification-auth.txt
+./verification_firebase.txt
+./resultat_fichiers_firebase.txt
+./diagnostic_firebase_motifs.txt
+./SAUVEGARDE_PLANNERBUILDER/AuthGate_AVANT_MODIFICATION.jsx
+./resultat-authgate.txt
+./inspection_auth_plannerbuilder.txt
+===== CREATION DU PROFIL =====
+src/AdminMockups.jsx.before-500kb:5:  addDoc,
+src/AdminMockups.jsx.before-500kb:68:        console.error('Lecture Firestore impossible :', error)
+src/AdminMockups.jsx.before-500kb:70:          setMessage('Impossible de charger la bibliothèque. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.before-500kb:103:      await addDoc(ref, {
+src/AdminMockups.jsx.before-500kb:113:      console.error('Enregistrement Firestore impossible :', error)
+src/AdminMockups.jsx.before-500kb:116:      setMessage(`Échec Firestore (${code}) : ${detail}`)
+src/AdminMockups.jsx.before-500kb:151:      console.error('Renommage Firestore impossible :', error)
+src/AdminMockups.jsx.before-500kb:152:      setMessage('Impossible de renommer ce motif. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.before-500kb:174:      console.error('Suppression Firestore impossible :', error)
+src/AdminMockups.jsx.before-500kb:175:      setMessage('Impossible de supprimer ce motif. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx:5:  addDoc,
+src/AdminMockups.jsx:42:    const ref = collection(db, 'users_planner', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx:68:        console.error('Lecture Firestore impossible :', error)
+src/AdminMockups.jsx:70:          setMessage('Impossible de charger la bibliothèque. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx:102:      const ref = collection(db, 'users_planner', user.uid, 'mockupPatterns')
+src/AdminMockups.jsx:103:      await addDoc(ref, {
+src/AdminMockups.jsx:113:      console.error('Enregistrement Firestore impossible :', error)
+src/AdminMockups.jsx:116:      setMessage(`Échec Firestore (${code}) : ${detail}`)
+src/AdminMockups.jsx:145:        doc(db, 'users_planner', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx:151:      console.error('Renommage Firestore impossible :', error)
+src/AdminMockups.jsx:152:      setMessage('Impossible de renommer ce motif. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx:169:        doc(db, 'users_planner', user.uid, 'mockupPatterns', pattern.id),
+src/AdminMockups.jsx:174:      console.error('Suppression Firestore impossible :', error)
+src/AdminMockups.jsx:175:      setMessage('Impossible de supprimer ce motif. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.before-pattern-render:5:  addDoc,
+src/AdminMockups.jsx.before-pattern-render:68:        console.error('Lecture Firestore impossible :', error)
+src/AdminMockups.jsx.before-pattern-render:70:          setMessage('Impossible de charger la bibliothèque. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.before-pattern-render:103:      await addDoc(ref, {
+src/AdminMockups.jsx.before-pattern-render:113:      console.error('Enregistrement Firestore impossible :', error)
+src/AdminMockups.jsx.before-pattern-render:116:      setMessage(`Échec Firestore (${code}) : ${detail}`)
+src/AdminMockups.jsx.before-pattern-render:151:      console.error('Renommage Firestore impossible :', error)
+src/AdminMockups.jsx.before-pattern-render:152:      setMessage('Impossible de renommer ce motif. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.before-pattern-render:174:      console.error('Suppression Firestore impossible :', error)
+src/AdminMockups.jsx.before-pattern-render:175:      setMessage('Impossible de supprimer ce motif. Vérifiez les règles Firestore.')
+src/AuthGate.jsx.backup-collections:4:  createUserWithEmailAndPassword,
+src/AuthGate.jsx.backup-collections:15:  setDoc,
+src/AuthGate.jsx.backup-collections:85:          // Profil existant : lecture sans modification Firestore.
+src/AuthGate.jsx.backup-collections:116:          await setDoc(profileRef, profileData)
+src/AuthGate.jsx.backup-collections:130:          'Impossible de charger votre profil. Vérifiez votre connexion et les règles Firestore.'
+src/AuthGate.jsx.backup-collections:170:      const credential = await createUserWithEmailAndPassword(
+src/AuthGate.jsx.backup-collections:176:      await setDoc(doc(db, 'users', credential.user.uid), {
+src/AuthGate.jsx.backup-collections:210:          "Le compte a été créé, mais Firestore a refusé la création du profil. Vérifiez les règles Firestore."
+src/AuthGate.jsx:4:  createUserWithEmailAndPassword,
+src/AuthGate.jsx:15:  setDoc,
+src/AuthGate.jsx:79:        const profileRef = doc(db, 'users_planner', currentUser.uid)
+src/AuthGate.jsx:85:          // Profil existant : lecture sans modification Firestore.
+src/AuthGate.jsx:116:          await setDoc(profileRef, profileData)
+src/AuthGate.jsx:130:          'Impossible de charger votre profil. Vérifiez votre connexion et les règles Firestore.'
+src/AuthGate.jsx:170:      const credential = await createUserWithEmailAndPassword(
+src/AuthGate.jsx:176:      await setDoc(doc(db, 'users_planner', credential.user.uid), {
+src/AuthGate.jsx:210:          "Le compte a été créé, mais Firestore a refusé la création du profil. Vérifiez les règles Firestore."
+src/AdminMockups.jsx.before-error-detail:5:  addDoc,
+src/AdminMockups.jsx.before-error-detail:68:        console.error('Lecture Firestore impossible :', error)
+src/AdminMockups.jsx.before-error-detail:70:          setMessage('Impossible de charger la bibliothèque. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.before-error-detail:103:      await addDoc(ref, {
+src/AdminMockups.jsx.before-error-detail:113:      console.error('Enregistrement Firestore impossible :', error)
+src/AdminMockups.jsx.before-error-detail:114:      setMessage('Échec de l’enregistrement. Vérifiez les règles Firestore et la taille de l’image.')
+src/AdminMockups.jsx.before-error-detail:149:      console.error('Renommage Firestore impossible :', error)
+src/AdminMockups.jsx.before-error-detail:150:      setMessage('Impossible de renommer ce motif. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.before-error-detail:172:      console.error('Suppression Firestore impossible :', error)
+src/AdminMockups.jsx.before-error-detail:173:      setMessage('Impossible de supprimer ce motif. Vérifiez les règles Firestore.')
+src/firebase.js:4:import { getFirestore } from 'firebase/firestore'
+src/firebase.js:21:                export const db = getFirestore(app)
+src/AdminMockups.jsx.backup-collections:5:  addDoc,
+src/AdminMockups.jsx.backup-collections:68:        console.error('Lecture Firestore impossible :', error)
+src/AdminMockups.jsx.backup-collections:70:          setMessage('Impossible de charger la bibliothèque. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.backup-collections:103:      await addDoc(ref, {
+src/AdminMockups.jsx.backup-collections:113:      console.error('Enregistrement Firestore impossible :', error)
+src/AdminMockups.jsx.backup-collections:116:      setMessage(`Échec Firestore (${code}) : ${detail}`)
+src/AdminMockups.jsx.backup-collections:151:      console.error('Renommage Firestore impossible :', error)
+src/AdminMockups.jsx.backup-collections:152:      setMessage('Impossible de renommer ce motif. Vérifiez les règles Firestore.')
+src/AdminMockups.jsx.backup-collections:174:      console.error('Suppression Firestore impossible :', error)
+src/AdminMockups.jsx.backup-collections:175:      setMessage('Impossible de supprimer ce motif. Vérifiez les règles Firestore.')
+src/AuthGate.jsx.backup-abonnements:4:  createUserWithEmailAndPassword,
+src/AuthGate.jsx.backup-abonnements:15:  setDoc,
+src/AuthGate.jsx.backup-abonnements:85:          // Profil existant : lecture sans modification Firestore.
+src/AuthGate.jsx.backup-abonnements:109:          await setDoc(profileRef, profileData)
+src/AuthGate.jsx.backup-abonnements:123:          'Impossible de charger votre profil. Vérifiez votre connexion et les règles Firestore.'
+src/AuthGate.jsx.backup-abonnements:163:      const credential = await createUserWithEmailAndPassword(
+src/AuthGate.jsx.backup-abonnements:169:      await setDoc(doc(db, 'users', credential.user.uid), {
+src/AuthGate.jsx.backup-abonnements:196:          "Le compte a été créé, mais Firestore a refusé la création du profil. Vérifiez les règles Firestore."

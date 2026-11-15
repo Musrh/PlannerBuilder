@@ -1,0 +1,22 @@
+===== ÉTAT COULEUR =====
+16:   const [customBackground, setCustomBackground] = useState('#e5eadc')
+48:       ctx.fillStyle = customBackground
+379:           value={customBackground}
+
+===== DESSIN DU FOND =====
+48:       ctx.fillStyle = customBackground
+49:       ctx.fillRect(0, 0, canvas.width, canvas.height)
+151:       ctx.fillRect(0, 0, canvas.width, canvas.height)
+258:       ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+===== CONTRÔLE COULEUR =====
+375:         <label htmlFor="mockup-custom-background">Couleur de fond</label>
+
+===== IMPORT IMAGE EXISTANT =====
+358:             reader.readAsDataURL(nextFile)
+
+===== CONTRÔLES CSS COULEUR =====
+61: .mockup-controls input[type='color'] {
+79: .mockup-controls input[type='color'] {
+
+===== FIN DU DIAGNOSTIC =====

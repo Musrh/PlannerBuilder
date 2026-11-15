@@ -1,0 +1,30 @@
+3:import { jsPDF } from 'jspdf'
+86:  // Compteur d'exports gratuits propre à chaque compte Firebase
+87:  const exportStorageKey = user?.uid
+88:    ? `plannerbuilder_free_exports_${user.uid}`
+124:  const [freeExports, setFreeExports] = useState(() =>
+125:    readFreeExports(exportStorageKey)
+130:    setFreeExports(readFreeExports(exportStorageKey))
+131:  }, [exportStorageKey])
+146:  async function exportPDF() {
+148:      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+152:    if (!isUnlimited && !exportStorageKey) {
+153:      setNotice('Connectez-vous pour exporter votre PDF.')
+157:    if (!isUnlimited && freeExports >= 3) {
+159:        'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+165:      const doc = new jsPDF({
+220:        const customImage = await coverEditorRef.current.exportImage()
+493:      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+498:        const nextExports = freeExports + 1
+501:          localStorage.setItem(exportStorageKey, String(nextExports))
+503:          console.error('Compteur d’exports non sauvegardé :', storageError)
+509:          `PDF créé : ${pages + 1} page(s), couverture comprise. ${3 - nextExports} export(s) gratuit(s) restant(s).`
+513:      console.error('Erreur export PDF :', error)
+1128:            <span className="field-label">Compteur d'exports PDF</span>
+1145:                  : `${Math.max(0, 3 - freeExports)} export(s) gratuit(s) restant(s)`}
+1155:                {isUnlimited ? 'PRO' : `${Math.min(freeExports, 3)} / 3`}
+1161:          <div className="export-area">
+1163:              className="export-button"
+1165:              onClick={exportPDF}
+1203:              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+1311:export default AppWithAuth

@@ -1,0 +1,5 @@
+6:import { usePlannerBuilderAuth } from './AuthGate.jsx'
+72:function App() {
+73:  const { plan, isAdmin } = usePlannerBuilderAuth()
+717:function AppWithAuth() {
+725:                  export default AppWithAuth

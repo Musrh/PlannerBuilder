@@ -1,0 +1,163 @@
+]633;E;echo "===== FIN AUTHGATE : CONTEXTE ET EXPORTS =====";0621b8bb-3752-45c7-b533-7ec8d5586a1e]633;C===== FIN AUTHGATE : CONTEXTE ET EXPORTS =====
+375-          <button type="button" onClick={handleLogout}>
+376-            Se déconnecter
+377-          </button>
+378-        </section>
+379-      </main>
+380-    )
+381-  }
+382-
+383-  if (verificationEmail) {
+384:    return (
+385-      <main className="auth-page">
+386-        <section className="auth-card">
+387-          <div className="auth-brand">P</div>
+388-          <p className="auth-eyebrow">VÉRIFICATION DU COMPTE</p>
+389-
+390-          <h1>Vérifiez votre adresse e-mail</h1>
+391-
+392-          <p>Un lien de vérification a été envoyé à :</p>
+393-          <strong>{verificationEmail}</strong>
+394-
+395-          <p>
+396-            Consultez votre boîte e-mail, cliquez sur le lien
+397-            de vérification, puis revenez ici.
+398-          </p>
+399-
+400-          {error && (
+401-            <p className="auth-error" role="alert">
+402-              {error}
+403-            </p>
+404-          )}
+405-
+406-          {notice && <p role="status">{notice}</p>}
+407-
+408-          <button
+409-            type="button"
+410-            onClick={handleCheckVerification}
+411-            disabled={loading}
+412-          >
+413-            {loading ? 'Vérification…' : "J'ai vérifié mon adresse"}
+414-          </button>
+415-
+416-          <button
+417-            type="button"
+418-            onClick={handleResendVerification}
+419-            disabled={loading}
+420-          >
+421-            Renvoyer l'e-mail
+422-          </button>
+423-
+424-          <button type="button" onClick={handleLogout}>
+425-            Se déconnecter
+426-          </button>
+427-        </section>
+428-      </main>
+429-    )
+430-  }
+431-
+432-  if (!user) {
+433:    return (
+434-      <main className="auth-page">
+435-        <section className="auth-card">
+436-          <div className="auth-brand">P</div>
+437-          <p className="auth-eyebrow">VOTRE ATELIER CRÉATIF</p>
+438-          <h1>Bienvenue sur PlannerBuilder</h1>
+439-
+440-          {mode === 'login' && (
+441-            <>
+442-              <p>
+443-                Connectez-vous pour accéder à votre espace de création.
+444-              </p>
+445-
+446-              <form onSubmit={handleLogin}>
+447-                <label htmlFor="auth-email">Adresse e-mail</label>
+448-                <input
+449-                  id="auth-email"
+450-                  type="email"
+451-                  autoComplete="username"
+452-                  value={email}
+453-                  onChange={(event) => setEmail(event.target.value)}
+454-                  required
+455-                />
+456-
+457-                <label htmlFor="auth-password">Mot de passe</label>
+458-                <input
+459-                  id="auth-password"
+460-                  type="password"
+461-                  autoComplete="current-password"
+462-                  value={password}
+463-                  onChange={(event) => setPassword(event.target.value)}
+464-                  required
+465-                />
+466-
+467-                <button type="submit" disabled={loading}>
+468-                  {loading ? 'Connexion…' : 'Se connecter'}
+--
+569-            </>
+570-          )}
+571-
+572-          {error && (
+573-            <p className="auth-error" role="alert">
+574-              {error}
+575-            </p>
+576-          )}
+577-
+578-          {notice && <p role="status">{notice}</p>}
+579-        </section>
+580-      </main>
+581-    )
+582-  }
+583-
+584:  const isAdmin = isPlannerBuilderAdmin(user)
+585-
+586:  return (
+587:    <AuthContext.Provider value={{ user, plan, isAdmin }}>
+588-      <div className="authenticated-app">
+589-        <div className="auth-session-bar">
+590-          <span>Connecté : {user.email}</span>
+591-
+592-          <button type="button" onClick={handleLogout}>
+593-            Se déconnecter
+594-          </button>
+595-        </div>
+596-
+597-        {children}
+598-      </div>
+599:    </AuthContext.Provider>
+600-  )
+601-}
+602-
+603-
+
+===== ROUTEUR MAIN JSX =====
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import './index.css'
+import App from './App.jsx'
+
+const rootElement = document.getElementById('root')
+
+if (!rootElement) {
+  throw new Error("Élément HTML #root introuvable.")
+}
+
+createRoot(rootElement).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+)
+
+===== CONFIGURATION ADMIN =====
+// Configuration temporaire de développement PlannerBuilder.
+// Ce fichier sert uniquement à l'affichage de l'interface.
+// Il ne constitue PAS une protection de sécurité.
+
+export const PLANNERBUILDER_ADMIN_UID =
+  's4R51uEux5Rmo48OgALEwW55F0k1'
+
+export const isPlannerBuilderAdmin = (user) =>
+  Boolean(user && user.uid === PLANNERBUILDER_ADMIN_UID)

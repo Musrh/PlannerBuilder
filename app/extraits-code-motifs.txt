@@ -1,0 +1,131 @@
+===== ETATS REACT ET GENERATEUR =====
+1:import { useState } from 'react'
+9:  const [file, setFile] = useState(null)
+10:  const [style, setStyle] = useState('nature')
+11:  const [preview, setPreview] = useState('')
+12:  const [message, setMessage] = useState('')
+13:  const [loading, setLoading] = useState(false)
+14:  const [customImage, setCustomImage] = useState('')
+15:  const [customTitle, setCustomTitle] = useState('YOUR NEXT CHAPTER')
+16:  const [customBackground, setCustomBackground] = useState('#e5eadc')
+17:  const [downloadFormat, setDownloadFormat] = useState('png')
+19:  async function createCustomMockup() {
+48:      ctx.fillStyle = customBackground
+51:      const margin = 70
+
+===== CONTROLES DE PERSONNALISATION =====
+365-          type="text"
+366-          maxLength={100}
+367-          value={customTitle}
+368-          onChange={(event) => {
+369-            setCustomTitle(event.target.value)
+370-            setPreview('')
+371-          }}
+372-          placeholder="Ex. : YOUR NEXT CHAPTER"
+373-        />
+374-
+375:        <label htmlFor="mockup-custom-background">Couleur de fond</label>
+376-        <input
+377-          id="mockup-custom-background"
+378-          type="color"
+379-          value={customBackground}
+380-          onChange={(event) => {
+381-            setCustomBackground(event.target.value)
+382-            setPreview('')
+383-          }}
+384-        />
+385-
+386-        <button
+387-          className="mockup-primary-button"
+388-          type="button"
+389-          onClick={createCustomMockup}
+390-          disabled={!customImage || loading}
+391-        >
+392-          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+393-        </button>
+394-
+395-        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+396-        <select
+397-          id="mockup-export-format"
+398-          value={downloadFormat}
+399-          onChange={(event) => setDownloadFormat(event.target.value)}
+400-        >
+401-          <option value="png">PNG — qualité sans perte</option>
+402-          <option value="jpg">JPG — fichier compressé</option>
+403-        </select>
+404-
+405-        {message && <p className="mockup-message" role="status">{message}</p>}
+406-      </div>
+407-
+408-      {preview && (
+409-        <div className="mockup-result">
+410-          <h3>Aperçu publicitaire</h3>
+411-          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+412-          <button
+413-            className="mockup-primary-button"
+414-            type="button"
+415-            onClick={downloadMockup}
+416-          >
+417-            Télécharger le mockup {downloadFormat.toUpperCase()}
+418-          </button>
+419-        </div>
+420-      )}
+421-
+422-      <p className="mockup-local-note">
+423-        Prototype local : le PDF est traité dans le navigateur et n’est pas
+424-        envoyé à un serveur par ce composant. Cette page n’est pas encore
+425-        protégée par une authentification administrateur.
+426-      </p>
+427-    </section>
+428-  )
+429-}
+430-
+431-export default AdminMockups
+
+===== STYLES DES CONTROLES =====
+56-  background: #fff;
+57-  color: #454b43;
+58-  font: inherit;
+59-}
+60-
+61:.mockup-controls input[type='color'] {
+62-  width: 100%;
+63-  height: 48px;
+64-  padding: 4px;
+65-  border: 1px solid #e4e6dc;
+66-  border-radius: 9px;
+67-  background: #fff;
+68-  cursor: pointer;
+69-}
+70-
+71-.mockup-controls input:focus-visible,
+72-.mockup-controls select:focus-visible,
+73-.mockup-primary-button:focus-visible {
+74-  outline: 3px solid rgb(113 139 112 / 35%);
+75-  outline-offset: 2px;
+76-}
+77-
+78-.mockup-controls input[type='text'],
+79:.mockup-controls input[type='color'] {
+80-  box-sizing: border-box;
+81-}
+82-
+83-.mockup-controls label {
+84-  margin-top: 8px;
+85-  font-size: 13px;
+86-  font-weight: 700;
+87-}
+88-
+89-.mockup-controls input[type='file'],
+90-.mockup-controls select {
+91-  width: 100%;
+92-  min-height: 44px;
+93-  padding: 10px;
+94-  border: 1px solid #e4e6dc;
+95-  border-radius: 9px;
+96-  background: #fff;
+97-  color: #454b43;
+98-}
+99-
+
+===== FIN DES EXTRAITS =====

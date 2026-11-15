@@ -1,0 +1,9 @@
+]633;E;echo "===== ORDRE DE LA BIBLIOTHEQUE =====";b535d9b1-5403-4ccf-877e-2e0576c0f2a1]633;C===== ORDRE DE LA BIBLIOTHEQUE =====
+757:          <h3>Ma bibliothèque de motifs</h3>
+828:          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+
+===== AUTHENTIFICATION FIREBASE =====
+src/AuthGate.jsx:4:  onAuthStateChanged,
+src/AuthGate.jsx:5:  signInWithEmailAndPassword,
+src/AuthGate.jsx:20:    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+src/AuthGate.jsx:34:      await signInWithEmailAndPassword(auth, email.trim(), password)

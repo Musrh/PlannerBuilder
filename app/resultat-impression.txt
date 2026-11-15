@@ -1,0 +1,51 @@
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  body,
+  #root,
+  .app-shell {
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: white !important;
+  }
+
+  .topbar,
+  .welcome,
+  .sidebar,
+  .preview-toolbar,
+  .preview-caption,
+  .settings,
+  .notice,
+  .app-footer {
+    display: none !important;
+  }
+
+  .workspace {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  .paper-stage {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: white !important;
+  }
+
+  .planner-page {
+    width: 100%;
+    max-width: none;
+    min-height: 260mm;
+    padding: 10mm;
+    box-shadow: none;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

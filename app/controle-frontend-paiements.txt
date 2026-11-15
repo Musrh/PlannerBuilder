@@ -1,0 +1,358 @@
+]633;E;echo "===== ADMIN JSX =====";ebcab0a9-c1b1-4808-91c1-b4cd4941d840]633;C===== ADMIN JSX =====
+import { useEffect, useState } from 'react'
+import { usePlannerBuilderAuth } from './AuthGate.jsx'
+import './Admin.css'
+
+const API_URL = import.meta.env.VITE_PLANNERBUILDER_API_URL
+
+export default function Admin() {
+  const { user } = usePlannerBuilderAuth()
+  const [stats, setStats] = useState(null)
+  const [users, setUsers] = useState([])
+  const [pagination, setPagination] = useState(null)
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadAdminData() {
+      setLoading(true)
+      setError('')
+
+      try {
+        if (!API_URL) {
+          throw new Error('URL du serveur Railway manquante.')
+        }
+
+        const token = await user.getIdToken()
+
+        async function getData(path) {
+          const response = await fetch(
+            `${API_URL.replace(/\/+$/, '')}${path}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+
+          const result = await response.json()
+
+          if (!response.ok || result.success !== true) {
+            throw new Error(result.error || 'Erreur du serveur.')
+          }
+
+          return result
+        }
+
+        const [dashboard, userList] = await Promise.all([
+          getData('/api/admin/dashboard'),
+          getData(`/api/admin/users?page=${page}&pageSize=25`),
+        ])
+
+        if (cancelled) return
+
+        setStats(dashboard.stats)
+        setUsers(userList.users || [])
+        setPagination(userList.pagination || null)
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Impossible de charger les données.')
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    if (user) loadAdminData()
+
+    return () => {
+      cancelled = true
+    }
+  }, [user, page])
+
+  function formatDate(timestamp) {
+    if (!timestamp) return '—'
+
+    const date = new Date(timestamp)
+
+    return Number.isNaN(date.getTime())
+      ? '—'
+      : date.toLocaleDateString('fr-FR')
+  }
+
+  return (
+    <main className="admin-page">
+      <header className="admin-header">
+        <div>
+          <p className="admin-eyebrow">PLANNERBUILDER</p>
+          <h1>Administration</h1>
+          <p>Gestion des utilisateurs et des abonnements.</p>
+        </div>
+
+        <a href="/" className="admin-back">
+          Retour au générateur
+        </a>
+      </header>
+
+      {error && (
+        <div className="admin-error" role="alert">
+          {error}
+        </div>
+      )}
+
+      {loading ? (
+        <p className="admin-loading">Chargement des données…</p>
+      ) : (
+        <>
+          <section className="admin-stats">
+            <article className="admin-card">
+              <span>Utilisateurs</span>
+              <strong>{stats?.totalUsers ?? 0}</strong>
+            </article>
+
+            <article className="admin-card">
+              <span>Abonnements Pro actifs</span>
+              <strong>{stats?.activePro ?? 0}</strong>
+            </article>
+
+            <article className="admin-card">
+              <span>Comptes gratuits</span>
+              <strong>{stats?.freeUsers ?? 0}</strong>
+            </article>
+
+            <article className="admin-card">
+              <span>Abonnements Pro expirés</span>
+              <strong>{stats?.expiredPro ?? 0}</strong>
+            </article>
+          </section>
+
+          <section className="admin-users">
+            <div className="admin-section-heading">
+              <div>
+                <h2>Utilisateurs</h2>
+                <p>Comptes enregistrés dans PlannerBuilder.</p>
+              </div>
+
+              <span>{pagination?.total ?? users.length} comptes</span>
+            </div>
+
+            <div className="admin-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>E-mail</th>
+                    <th>Plan</th>
+                    <th>Statut</th>
+                    <th>Paiement</th>
+                    <th>Expiration</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {users.map((item) => (
+                    <tr key={item.uid}>
+                      <td>{item.email || item.uid}</td>
+                      <td>{item.plan || 'free'}</td>
+                      <td>
+                        {item.plan === 'pro' && item.active && item.paye
+                          ? 'Actif'
+                          : 'Gratuit / inactif'}
+                      </td>
+                      <td>{item.paymentProvider || '—'}</td>
+                      <td>{formatDate(item.expiry)}</td>
+                    </tr>
+                  ))}
+
+                  {users.length === 0 && (
+                    <tr>
+                      <td colSpan="5">Aucun utilisateur trouvé.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="admin-pagination">
+              <button
+                type="button"
+                disabled={page <= 1}
+                onClick={() => setPage((value) => value - 1)}
+              >
+                Précédent
+              </button>
+
+              <span>
+                Page {pagination?.page ?? page} / {pagination?.totalPages ?? 1}
+              </span>
+
+              <button
+                type="button"
+                disabled={!pagination || page >= pagination.totalPages}
+                onClick={() => setPage((value) => value + 1)}
+              >
+                Suivant
+              </button>
+            </div>
+          </section>
+        </>
+      )}
+    </main>
+  )
+}
+
+===== APP JSX : PAIEMENTS =====
+1-import { useRef, useState } from 'react'
+2-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+3-import CoverEditor from './CoverEditor.jsx'
+4-import { jsPDF } from 'jspdf'
+5-import AdminMockups from './AdminMockups.jsx'
+6-import Admin from './Admin.jsx'
+7-import AuthGate from './AuthGate.jsx'
+8-import { usePlannerBuilderAuth } from './AuthGate.jsx'
+9-import './App.css'
+10-
+11:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+12:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+13-
+14-const layoutModels = [
+15-  { id: 'classique', name: 'Classique', description: 'Sections verticales' },
+16-  { id: 'colonnes', name: 'Deux colonnes', description: 'Deux zones par ligne' },
+17-  { id: 'grille', name: 'Grille', description: 'Blocs compacts' },
+18-  { id: 'epure', name: 'Épuré', description: 'Présentation aérée' },
+19-]
+20-
+21-const templates = [
+22-  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+23-  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+24-  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+25-  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+26-  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+27-  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+28-  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+29-  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+30-]
+31-
+32-const pageContent = {
+33-  daily: {
+34-    title: 'Ma journée',
+35-    subtitle: 'Organiser chaque instant avec intention.',
+36-    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+37-    rows: ['Priorité 1', 'Priorité 2', 'Priorité 3'],
+38-  },
+39-  weekly: {
+40-    title: 'Ma semaine',
+41-    subtitle: 'Une semaine organisée à mon rythme.',
+42-    sections: ['Mes objectifs', 'Lundi – Dimanche', 'Rendez-vous', 'Notes'],
+43-    rows: ['Objectif principal', 'Tâches importantes', 'Moment pour moi'],
+44-  },
+45-  monthly: {
+46-    title: 'Mon mois',
+47-    subtitle: 'Prendre du recul et préparer la suite.',
+--
+1253-                padding: 20,
+1254-                borderRadius: 14,
+1255-                border: '1px solid #dfe6dc',
+1256-                background: '#fff',
+1257-              }}
+1258-            >
+1259-              <h3 style={{ margin: '0 0 8px' }}>Pro mensuel</h3>
+1260-              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+1261-                2 $
+1262-              </p>
+1263-              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+1264-                30 jours d’accès Pro
+1265-              </p>
+1266-
+1267-              <a
+1268:                href={WHOP_MONTHLY_URL}
+1269-                target="_blank"
+1270-                rel="noopener noreferrer"
+1271-                style={{
+1272-                  display: 'inline-block',
+1273-                  padding: '11px 18px',
+1274-                  borderRadius: 9,
+1275-                  background: '#718B70',
+1276-                  color: '#fff',
+1277-                  textDecoration: 'none',
+1278-                  fontWeight: 700,
+1279-                }}
+1280-              >
+1281-                {plan === 'pro' ? 'Renouveler 30 jours' : 'Choisir mensuel'}
+1282-              </a>
+1283-            </article>
+1284-
+1285-            <article
+1286-              style={{
+1287-                padding: 20,
+1288-                borderRadius: 14,
+1289-                border: '1px solid #dfe6dc',
+1290-                background: '#fff',
+1291-              }}
+1292-            >
+1293-              <h3 style={{ margin: '0 0 8px' }}>Pro annuel</h3>
+1294-              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+1295-                20 $
+1296-              </p>
+1297-              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+1298-                365 jours d’accès Pro
+1299-              </p>
+1300-
+1301-              <a
+1302:                href={WHOP_ANNUAL_URL}
+1303-                target="_blank"
+1304-                rel="noopener noreferrer"
+1305-                style={{
+1306-                  display: 'inline-block',
+1307-                  padding: '11px 18px',
+1308-                  borderRadius: 9,
+1309-                  background: '#263b2b',
+1310-                  color: '#fff',
+1311-                  textDecoration: 'none',
+1312-                  fontWeight: 700,
+1313-                }}
+1314-              >
+1315-                {plan === 'pro' ? 'Renouveler 365 jours' : 'Choisir annuel'}
+1316-              </a>
+1317-            </article>
+1318-          </div>
+1319-
+1320-          <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+1321:            Le paiement est traité sur Whop. L’activation et la prolongation
+1322-            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+1323-          </small>
+1324-        </section>
+1325-      )}
+1326-
+1327-      {notice && (
+1328-        <div className="notice" role="status">
+1329-          {notice}
+1330-        </div>
+1331-      )}
+1332-
+1333-      <footer className="app-footer">
+1334-        <span>PlannerBuilder</span>
+1335-        <span>Créez avec intention. Organisez avec simplicité.</span>
+1336-      </footer>
+1337-    </main>
+1338-  )
+1339-}
+1340-
+1341-function AdminRoute() {
+1342-  const { isAdmin } = usePlannerBuilderAuth()
+1343-  return isAdmin ? <Admin /> : <Navigate to="/" replace />
+1344-}
+1345-
+1346-function AppWithAuth() {
+1347-  return (
+1348-    <AuthGate>
+1349-      <Routes>
+1350-        <Route path="/" element={<App />} />
+1351-        <Route path="/admin" element={<AdminRoute />} />
+1352-        <Route path="*" element={<Navigate to="/" replace />} />
+1353-      </Routes>
+1354-    </AuthGate>
+1355-  )
+1356-}

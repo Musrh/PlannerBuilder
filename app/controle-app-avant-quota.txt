@@ -1,0 +1,68 @@
+]633;E;echo "===== IMPORTS APP.jsx =====";94b5b532-8403-4e9c-ae34-b7f91fbf27fa]633;C===== IMPORTS APP.jsx =====
+
+import { useState } from 'react'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import AuthGate from './AuthGate.jsx'
+import './App.css'
+
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+]
+
+const pageContent = {
+  daily: {
+    title: 'Ma journée',
+    subtitle: 'Organiser chaque instant avec intention.',
+    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+    rows: ['Priorité 1', 'Priorité 2', 'Priorité 3'],
+  },
+  weekly: {
+    title: 'Ma semaine',
+    subtitle: 'Une semaine organisée à mon rythme.',
+    sections: ['Mes objectifs', 'Lundi – Dimanche', 'Rendez-vous', 'Notes'],
+
+===== QUOTA ET EXPORT PDF =====
+86:  const [freeExports, setFreeExports] = useState(() => {
+87:    const saved = Number(localStorage.getItem('plannerbuilder_free_exports') || 0)
+107:  function exportPDF() {
+113:    if (freeExports >= 3) {
+360:      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+362:      const nextExports = freeExports + 1
+364:        'plannerbuilder_free_exports',
+686:            <button className="export-button" type="button" onClick={exportPDF}>
+
+===== FIN DU FICHIER =====
+        </aside>
+      </div>
+
+      {notice && <div className="notice" role="status">{notice}</div>}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+
+
+function AppWithAuth() {
+  return (
+      <AuthGate>
+            <App />
+                </AuthGate>
+                  )
+                  }
+
+                  export default AppWithAuth
+                  

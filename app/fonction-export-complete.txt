@@ -1,0 +1,431 @@
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+
+  // Le compteur affiché est alimenté par la réponse de Railway.
+  // null signifie que le serveur n'a pas encore communiqué le compteur.
+  const [freeExports, setFreeExports] = useState(null)
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  async function exportPDF() {
+    if (coverMode === 'preset' && !coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+    }
+
+    if (!user) {
+      setNotice('Connectez-vous pour exporter votre PDF.')
+      return
+    }
+
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+          parseInt(value.substring(4, 6), 16),
+        ]
+      }
+
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const titleBackgroundRgb = toRgb(titleBackground)
+      const titleTextRgb = toRgb(titleTextColor)
+
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+
+      const pdfFont = fontMap[font] || 'helvetica'
+
+      // PAGE 1 : couverture indépendante du style intérieur.
+      const coverThemes = {
+        minimaliste: { bg: [250, 249, 246], accent: [55, 55, 55], shape: 'minimal' },
+        nature: { bg: [237, 242, 231], accent: [74, 112, 76], shape: 'nature' },
+        professionnelle: { bg: [238, 242, 248], accent: [39, 63, 95], shape: 'professional' },
+        coloree: { bg: [255, 239, 220], accent: [190, 75, 67], shape: 'color' },
+        elegante: { bg: [247, 241, 235], accent: [128, 91, 72], shape: 'elegant' },
+        florale: { bg: [250, 237, 242], accent: [160, 83, 119], shape: 'floral' },
+        geometrique: { bg: [237, 239, 247], accent: [70, 75, 150], shape: 'geometric' },
+        sombre: { bg: [35, 38, 43], accent: [225, 192, 125], shape: 'dark' },
+      }
+
+      const cover = coverThemes[coverId]
+
+      if (coverMode === 'custom') {
+        if (!coverEditorRef.current) {
+          throw new Error('Éditeur de couverture indisponible.')
+        }
+
+        const customImage = await coverEditorRef.current.exportImage()
+        doc.addImage(customImage, 'PNG', 0, 0, pageWidth, pageHeight)
+      } else if (coverImage) {
+        const format = coverImage.startsWith('data:image/png')
+          ? 'PNG'
+          : coverImage.startsWith('data:image/webp')
+            ? 'WEBP'
+            : 'JPEG'
+
+        doc.addImage(coverImage, format, 0, 0, pageWidth, pageHeight)
+        doc.setFillColor(255, 255, 255)
+        doc.roundedRect(18, 95, pageWidth - 36, 90, 4, 4, 'F')
+        doc.setTextColor(30, 30, 30)
+      } else {
+        if (!cover) {
+          throw new Error('Veuillez choisir une couverture prédéfinie.')
+        }
+
+        doc.setFillColor(...cover.bg)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+        doc.setFillColor(...cover.accent)
+
+        if (cover.shape === 'nature') {
+          doc.circle(175, 45, 30, 'F')
+          doc.circle(25, 245, 35, 'F')
+        } else if (cover.shape === 'professional') {
+          doc.rect(0, 0, 12, pageHeight, 'F')
+          doc.rect(25, 35, 160, 1.5, 'F')
+        } else if (cover.shape === 'color') {
+          doc.circle(170, 50, 38, 'F')
+          doc.circle(35, 260, 27, 'F')
+        } else if (cover.shape === 'elegant') {
+          doc.setDrawColor(...cover.accent)
+          doc.setLineWidth(0.8)
+          doc.rect(12, 12, pageWidth - 24, pageHeight - 24, 'S')
+          doc.rect(17, 17, pageWidth - 34, pageHeight - 34, 'S')
+        } else if (cover.shape === 'floral') {
+          doc.circle(35, 40, 18, 'F')
+          doc.circle(175, 255, 25, 'F')
+          doc.circle(35, 58, 8, 'F')
+        } else if (cover.shape === 'geometric') {
+          doc.triangle(150, 20, 205, 80, 155, 105, 'F')
+          doc.rect(0, 230, pageWidth, 67, 'F')
+        } else if (cover.shape === 'dark') {
+          doc.setDrawColor(...cover.accent)
+          doc.setLineWidth(1.2)
+          doc.rect(12, 12, pageWidth - 24, pageHeight - 24, 'S')
+        } else {
+          doc.rect(20, 35, 42, 1, 'F')
+          doc.rect(20, 40, 24, 1, 'F')
+        }
+
+        doc.setTextColor(...cover.accent)
+      }
+
+      if (coverMode === 'preset' && !coverImage) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(11)
+        doc.text('PLANNERBUILDER', pageWidth / 2, 88, { align: 'center' })
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(27)
+        const coverTitle = doc.splitTextToSize(content.title, pageWidth - 42)
+        doc.text(coverTitle, pageWidth / 2, 125, { align: 'center' })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(12)
+        doc.text(
+          doc.splitTextToSize(content.subtitle, pageWidth - 48),
+          pageWidth / 2,
+          145,
+          { align: 'center' }
+        )
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(10)
+        doc.text(selected.category.toUpperCase(), pageWidth / 2, 175, { align: 'center' })
+        doc.setFontSize(8)
+        doc.text('COUVERTURE', pageWidth / 2, pageHeight - 18, { align: 'center' })
+      }
+
+      // Les pages intérieures commencent toujours en page 2.
+      
+            for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+        doc.addPage()
+
+        doc.setFillColor(...backgroundRgb)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.8)
+        doc.line(margin, 13, pageWidth - margin, 13)
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('MON PLANNER', margin, 10)
+        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+          align: 'right',
+        })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(...primaryRgb)
+        doc.text(selected.category.toUpperCase(), margin, 26)
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(23)
+        doc.setTextColor(0, 0, 0)
+        const titleLines = doc.splitTextToSize(content.title, usableWidth)
+        doc.text(titleLines, margin, 37)
+
+        let y = 37 + titleLines.length * 9
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(90, 95, 85)
+
+        const subtitleLines = doc.splitTextToSize(content.subtitle, usableWidth)
+        doc.text(subtitleLines, margin, y)
+        y += subtitleLines.length * 5 + 8
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('DATE', margin, y)
+
+        doc.setDrawColor(190, 195, 180)
+        doc.setLineWidth(0.3)
+        doc.line(margin + 15, y + 1, pageWidth - margin, y + 1)
+        y += 10
+
+        // Les quatre modèles de mise en page concernent les pages intérieures.
+        const twoColumns = layoutModel === 'colonnes' || layoutModel === 'grille'
+        const cardGap = layoutModel === 'grille' ? 5 : 8
+        const cardWidth = twoColumns ? (usableWidth - cardGap) / 2 : usableWidth
+        const cardHeight = layoutModel === 'grille'
+          ? 76
+          : layoutModel === 'colonnes'
+            ? 82
+            : layoutModel === 'epure'
+              ? 42
+              : 46
+
+        const sectionGapForLayout = layoutModel === 'epure'
+          ? 11
+          : layoutModel === 'grille'
+            ? 6
+            : 8
+
+        const cardsPerRow = twoColumns ? 2 : 1
+        const cardRows = Math.ceil(content.sections.length / cardsPerRow)
+        const bottomLimit = pageHeight - 19
+        const availableHeight = Math.max(30, bottomLimit - y)
+        const requiredHeight = cardRows * cardHeight
+          + Math.max(0, cardRows - 1) * sectionGapForLayout
+
+        const scale = Math.min(1, availableHeight / requiredHeight)
+        const actualCardHeight = cardHeight * scale
+        const actualGap = sectionGapForLayout * scale
+        const actualCardWidth = cardWidth
+
+        content.sections.forEach((section, sectionIndex) => {
+          const rowIndex = Math.floor(sectionIndex / cardsPerRow)
+          const columnIndex = sectionIndex % cardsPerRow
+          const x = margin + columnIndex * (actualCardWidth + cardGap)
+          const cardY = y + rowIndex * (actualCardHeight + actualGap)
+
+          if (cardY + actualCardHeight > bottomLimit + 0.1) return
+
+          doc.setFillColor(255, 255, 255)
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(layoutModel === 'epure' ? 0.18 : 0.25)
+
+          if (layoutModel === 'epure') {
+            doc.line(x, cardY, x + actualCardWidth, cardY)
+          } else {
+            const radius = layoutModel === 'grille' ? 1.5 : 3
+            doc.roundedRect(
+              x,
+              cardY,
+              actualCardWidth,
+              actualCardHeight,
+              radius,
+              radius,
+              'FD'
+            )
+          }
+
+          const headerHeight = layoutModel === 'epure' ? 7 : 9
+          doc.setFillColor(...titleBackgroundRgb)
+
+          if (layoutModel !== 'epure') {
+            doc.roundedRect(x, cardY, actualCardWidth, headerHeight, 2, 2, 'F')
+            doc.rect(x, cardY + 5, actualCardWidth, 4, 'F')
+          }
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(layoutModel === 'grille' ? 8 : 10)
+          doc.setTextColor(...(layoutModel === 'epure' ? primaryRgb : titleTextRgb))
+
+          const sectionTitle = doc.splitTextToSize(section, actualCardWidth - 8)
+          doc.text(sectionTitle.slice(0, 2), x + 4, cardY + (layoutModel === 'epure' ? 5 : 6))
+
+          const checkboxMode = ['food', 'student', 'habits'].includes(selectedId)
+          const rowCount = 3
+          const rowStart = cardY + (layoutModel === 'epure' ? 12 : 17)
+          const rowEnd = cardY + actualCardHeight - 5
+          const rowStep = Math.max(5, (rowEnd - rowStart) / rowCount)
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            const rowY = rowStart + rowIndex * rowStep
+
+            if (rowY + 2 > rowEnd) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+              : ''
+
+            if (checkboxMode) {
+              doc.setDrawColor(...primaryRgb)
+              doc.roundedRect(x + 4, rowY - 2.5, 2.8, 2.8, 0.4, 0.4, 'S')
+            }
+
+            if (rowText) {
+              doc.setFont(pdfFont, 'bold')
+              doc.setFontSize(layoutModel === 'grille' ? 7 : 9)
+              doc.setTextColor(0, 0, 0)
+
+              doc.text(
+                doc.splitTextToSize(
+                  rowText,
+                  actualCardWidth - (checkboxMode ? 14 : 9)
+                ).slice(0, 1),
+                x + (checkboxMode ? 10 : 5),
+                rowY
+              )
+            }
+
+            doc.setDrawColor(215, 218, 207)
+            doc.line(
+              x + (checkboxMode ? 10 : 5),
+              rowY + 2,
+              x + actualCardWidth - 4,
+              rowY + 2
+            )
+          }
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      // Vérification obligatoire auprès de Railway avant le téléchargement.
+      const apiUrl = import.meta.env.VITE_PLANNERBUILDER_API_URL
+
+      if (!apiUrl) {
+        throw new Error(
+          'URL du serveur Railway manquante. Vérifiez VITE_PLANNERBUILDER_API_URL.'
+        )
+      }
+
+      const token = await user.getIdToken()
+
+      const response = await fetch(
+        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        }
+      )
+
+      let result
+
+      try {
+        result = await response.json()
+      } catch {
+        throw new Error('Réponse invalide du serveur PlannerBuilder.')
+      }
+
+      if (!response.ok || result.authorized !== true) {
+        if (result.error === 'FREE_EXPORT_LIMIT_REACHED') {
+          setFreeExports(3)
+          setNotice(
+            'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+          )
+          return
+        }
+
+        setNotice(
+          result.message ||
+          result.error ||
+          'Impossible de vérifier votre droit d’export sur Railway.'
+        )
+        return
+      }
+
+      if (result.role === 'free') {
+        setFreeExports(
+          Number.isFinite(result.used) ? result.used : null
+        )
+      } else {
+        setFreeExports(null)
+      }
+
+      // Le PDF est téléchargé uniquement après autorisation du serveur.
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+
+      if (
+        result.unlimited ||
+        result.role === 'pro' ||
+        result.role === 'admin'
+      ) {
+        setNotice(
+          `PDF créé : ${pages + 1} page(s), couverture comprise. Exports illimités.`
+        )
+      } else {
+        const remaining = Number.isFinite(result.remaining)
+          ? result.remaining
+          : Math.max(
+            0,

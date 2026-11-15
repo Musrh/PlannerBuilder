@@ -1,0 +1,29 @@
+]633;E;echo "===== MAIN JSX =====";5547229f-c970-4bde-b440-c8609d904700]633;C===== MAIN JSX =====
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import './index.css'
+import App from './App.jsx'
+
+const rootElement = document.getElementById('root')
+
+if (!rootElement) {
+  throw new Error("Élément HTML #root introuvable.")
+}
+
+createRoot(rootElement).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+)
+
+===== ESLINT =====
+
+> app@0.0.0 lint
+> eslint .
+
+
+===== CODE DE RETOUR =====
+0

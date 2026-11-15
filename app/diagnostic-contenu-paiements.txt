@@ -1,0 +1,8 @@
+]633;E;echo "===== NOMBRE DE LIGNES =====";30c4d0a5-7e68-48ff-a506-4358c26dd001]633;C===== NOMBRE DE LIGNES =====
+wc: contenu-routes-paiements.js.txt: No such file or directory
+
+===== DEBUT DU FICHIER =====
+head: cannot open 'contenu-routes-paiements.js.txt' for reading: No such file or directory
+
+===== FIN DU FICHIER =====
+tail: cannot open 'contenu-routes-paiements.js.txt' for reading: No such file or directory

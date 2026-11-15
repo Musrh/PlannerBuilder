@@ -1,0 +1,161 @@
+                  return
+                }
+                if (f.size > 20 * 1024 * 1024) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+                  return
+                }
+                if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type)) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+                  return
+                }
+                const reader = new FileReader()
+                reader.onload = () => {
+                  setCustomPatternImage(String(reader.result || ''))
+                  setMessage('Image de motif importée.')
+                }
+                reader.onerror = () => setMessage('Impossible de lire cette image de motif.')
+                reader.readAsDataURL(f)
+              }}
+            />
+          </>
+        )}
+
+        {backgroundType !== 'solid' && (
+          <>
+            <label htmlFor="mockup-pattern-size">Taille du motif : {patternSize}</label>
+            <input
+              id="mockup-pattern-size"
+              type="range"
+              min="20"
+              max="100"
+              step="5"
+              value={patternSize}
+              onChange={(event) => {
+                setPatternSize(Number(event.target.value))
+                setPreview('')
+              }}
+            />
+            <label htmlFor="mockup-pattern-repeat">Disposition du motif</label>
+            <select
+              id="mockup-pattern-repeat"
+              value={patternRepeat}
+              onChange={(event) => {
+                setPatternRepeat(event.target.value)
+                setPreview('')
+              }}
+            >
+              <option value="repeat">Répéter le motif</option>
+              <option value="stretch">Étendre sur tout le fond</option>
+            </select>
+          </>
+        )}
+
+        <button
+          className="mockup-primary-button"
+          type="button"
+          onClick={createCustomMockup}
+          disabled={!customImage || loading}
+        >
+          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}
+        </button>
+
+        <label htmlFor="mockup-export-format">Format de téléchargement</label>
+        <select
+          id="mockup-export-format"
+          value={downloadFormat}
+          onChange={(event) => setDownloadFormat(event.target.value)}
+        >
+          <option value="png">PNG — qualité sans perte</option>
+          <option value="jpg">JPG — fichier compressé</option>
+        </select>
+
+        
+        <div className="mockup-pattern-library">
+          <h3>Ma bibliothèque de motifs</h3>
+          <p className="mockup-library-help">
+            Enregistre tes motifs importés pour les réutiliser plus tard dans ce navigateur.
+          </p>
+
+          {customPatternImage && (
+            <div className="mockup-library-save">
+              <label htmlFor="mockup-pattern-name">Nom du motif à enregistrer</label>
+              <input
+                id="mockup-pattern-name"
+                type="text"
+                value={patternName}
+                onChange={(event) => setPatternName(event.target.value)}
+                placeholder="Ex. Motif floral beige"
+                maxLength={80}
+              />
+              <button
+                type="button"
+                className="mockup-secondary-button"
+                onClick={saveCurrentPattern}
+              >
+                Enregistrer dans ma bibliothèque
+              </button>
+            </div>
+          )}
+
+          {libraryLoading ? (
+            <p>Chargement de la bibliothèque…</p>
+          ) : savedPatterns.length === 0 ? (
+            <p className="mockup-library-empty">
+              Aucun motif enregistré pour le moment.
+            </p>
+          ) : (
+            <div className="mockup-library-grid">
+              {savedPatterns.map((pattern) => (
+                <article className="mockup-library-card" key={pattern.id}>
+                  <img src={pattern.dataUrl} alt={`Aperçu : ${pattern.name}`} />
+                  <strong title={pattern.name}>{pattern.name}</strong>
+                  <button
+                    type="button"
+                    className="mockup-secondary-button"
+                    onClick={() => applySavedPattern(pattern)}
+                  >
+                    Utiliser ce motif
+                  </button>
+                  <div className="mockup-library-actions">
+                    <button
+                      type="button"
+                      onClick={() => renameSavedPattern(pattern)}
+                    >
+                      Renommer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => deleteSavedPattern(pattern)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+
+{message && <p className="mockup-message" role="status">{message}</p>}
+      </div>
+
+      {preview && (
+        <div className="mockup-result">
+          <h3>Aperçu publicitaire</h3>
+          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+          <button
+            className="mockup-primary-button"
+            type="button"
+            onClick={downloadMockup}
+          >
+            Télécharger le mockup {downloadFormat.toUpperCase()}
+          </button>
+        </div>
+      )}
+
+      <p className="mockup-local-note">
+        Prototype local : le PDF est traité dans le navigateur et n’est pas

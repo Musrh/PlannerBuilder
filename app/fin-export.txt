@@ -1,0 +1,71 @@
+      )
+
+      let result
+
+      try {
+        result = await response.json()
+      } catch {
+        throw new Error('Réponse invalide du serveur PlannerBuilder.')
+      }
+
+      if (!response.ok || result.authorized !== true) {
+        if (result.error === 'FREE_EXPORT_LIMIT_REACHED') {
+          setFreeExports(3)
+          setNotice(
+            'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+          )
+          return
+        }
+
+        setNotice(
+          result.message ||
+          result.error ||
+          'Impossible de vérifier votre droit d’export sur Railway.'
+        )
+        return
+      }
+
+      if (result.role === 'free') {
+        setFreeExports(
+          Number.isFinite(result.used) ? result.used : null
+        )
+      } else {
+        setFreeExports(null)
+      }
+
+      // Le PDF est téléchargé uniquement après autorisation du serveur.
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+
+      if (
+        result.unlimited ||
+        result.role === 'pro' ||
+        result.role === 'admin'
+      ) {
+        setNotice(
+          `PDF créé : ${pages + 1} page(s), couverture comprise. Exports illimités.`
+        )
+      } else {
+        const remaining = Number.isFinite(result.remaining)
+          ? result.remaining
+          : Math.max(
+            0,
+            3 - (Number.isFinite(result.used) ? result.used : 3)
+          )
+
+        setNotice(
+          `PDF créé : ${pages + 1} page(s), couverture comprise. ${remaining} export(s) gratuit(s) restant(s).`
+        )
+      }
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice(
+        error.message ||
+        'Impossible de générer le PDF. Vérifie le terminal et réessaie.'
+      )
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{

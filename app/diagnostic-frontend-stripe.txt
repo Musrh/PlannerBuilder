@@ -1,0 +1,182 @@
+]633;E;echo "===== BOUTONS ABONNEMENT =====";560057e5-cc76-4cdb-ade0-e3eccd9d4c11]633;C===== BOUTONS ABONNEMENT =====
+              </strong>
+
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: 13,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {isUnlimited
+                  ? 'PRO'
+                  : freeExports === null
+                    ? '— / 3'
+                    : `${Math.min(freeExports, 3)} / 3`}
+              </span>
+            </div>
+          </div>
+
+          {/* EXPORT PDF : AUTORISATION RAILWAY AVANT TÉLÉCHARGEMENT */}
+          <div className="export-area">
+            <button
+              className="export-button"
+              type="button"
+              onClick={exportPDF}
+            >
+              <span>↓</span> Télécharger le PDF
+            </button>
+
+            <p>
+              Le fichier PDF sera téléchargé directement sur votre appareil.
+            </p>
+          </div>
+        </aside>
+      </div>
+
+      {!isAdmin && (
+        <section
+          className="pro-upgrade"
+          aria-labelledby="pro-upgrade-title"
+          style={{
+            maxWidth: 1100,
+            margin: '32px auto',
+            padding: '28px',
+            border: '1px solid #dfe6dc',
+            borderRadius: 18,
+            background: '#fbfcf9',
+          }}
+        >
+          <p className="eyebrow">
+            {plan === 'pro' ? 'VOTRE ABONNEMENT PRO' : 'PASSEZ À LA VERSION PRO'}
+          </p>
+
+          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+            {plan === 'pro'
+              ? 'Renouvelez votre abonnement'
+              : 'Libérez tout votre potentiel'}
+          </h2>
+
+          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+            {plan === 'pro'
+              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+          </p>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 16,
+            }}
+          >
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro mensuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                2 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                30 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_MONTHLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#718B70',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 30 jours' : 'Choisir mensuel'}
+              </a>
+            </article>
+
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro annuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                20 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                365 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_ANNUAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#263b2b',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 365 jours' : 'Choisir annuel'}
+              </a>
+            </article>
+          </div>
+
+          <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+            Le paiement est traité sur Whop. L’activation et la prolongation
+            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+          </small>
+        </section>
+      )}
+
+      {notice && (
+        <div className="notice" role="status">
+          {notice}
+        </div>
+      )}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+function AdminRoute() {
+  const { isAdmin } = usePlannerBuilderAuth()
+  return isAdmin ? <Admin /> : <Navigate to="/" replace />
+}
+
+function AppWithAuth() {
+  return (
+    <AuthGate>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/admin" element={<AdminRoute />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthGate>
+  )
+}
+
+export default AppWithAuth
+===== CONFIGURATION API =====
+1:VITE_PLANNERBUILDER_API_URL=https://plannerbuilder-server-production.up.railway.app

@@ -1,0 +1,6 @@
+122:  async function exportPDF() {
+471:        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+490:      if (!response.ok || result.authorized !== true) {
+491:        if (result.error === 'FREE_EXPORT_LIMIT_REACHED') {
+516:      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+1199:              onClick={exportPDF}

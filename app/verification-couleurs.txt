@@ -1,0 +1,28 @@
+]633;E;echo "===== VÉRIFICATION DU CODE =====";d5e8200d-b56e-43be-9ab2-6ea8f50cd587]633;C===== VÉRIFICATION DU CODE =====
+src/App.jsx:72:  const [titleBackground, setTitleBackground] = useState('#718B70')
+src/App.jsx:73:  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+src/App.jsx:116:      const titleBackgroundRgb = toRgb(titleBackground)
+src/App.jsx:117:      const titleTextRgb = toRgb(titleTextColor)
+src/App.jsx:183:          doc.setFillColor(...titleBackgroundRgb)
+src/App.jsx:264:        '--title-background': titleBackground,
+src/App.jsx:265:        '--title-text': titleTextColor,
+src/App.jsx:431:                style={{ background: titleBackground }}
+src/App.jsx:432:                htmlFor="title-background-color"
+src/App.jsx:435:                id="title-background-color"
+src/App.jsx:437:                value={titleBackground}
+src/App.jsx:440:              <code>{titleBackground.toUpperCase()}</code>
+src/App.jsx:449:                style={{ background: titleTextColor }}
+src/App.jsx:450:                htmlFor="title-text-color"
+src/App.jsx:453:                id="title-text-color"
+src/App.jsx:455:                value={titleTextColor}
+src/App.jsx:458:              <code>{titleTextColor.toUpperCase()}</code>
+src/App.css:432:  background: var(--title-background, var(--primary));
+src/App.css:433:  color: var(--title-text, #ffffff);
+
+===== SOUS-TITRES DU PDF =====
+207:            if (rowText) {
+208-              doc.setFont(pdfFont, 'bold')
+209-              doc.setFontSize(11)
+210-              doc.setTextColor(0, 0, 0)
+211-              doc.text(rowText, margin + 10, rowY)
+212-            }

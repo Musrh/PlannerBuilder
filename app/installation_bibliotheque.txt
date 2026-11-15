@@ -1,0 +1,9 @@
+=== INSTALLATION BIBLIOTHEQUE DE MOTIFS ===
+Sauvegarde : ../sauvegardes/avant-bibliotheque-motifs-20261028-174417
+AdminMockups.jsx : modifié
+AdminMockups.css : styles ajoutés
+Import useEffect : ajouté
+Stockage IndexedDB : ajouté
+Actions : enregistrer, réutiliser, renommer, supprimer
+
+Aucune autre fonctionnalité n’a été volontairement supprimée.

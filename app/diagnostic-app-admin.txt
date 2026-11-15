@@ -1,0 +1,6 @@
+5:import AdminLocalPanel from './AdminLocalPanel.jsx'
+87:  const [showAdminPanel, setShowAdminPanel] = useState(false)
+590:            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+608:      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+1346:function AppWithAuth() {
+1354:export default AppWithAuth

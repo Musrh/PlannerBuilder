@@ -1,0 +1,100 @@
+   450	
+   451	        doc.setFont('helvetica', 'normal')
+   452	        doc.setFontSize(8)
+   453	        doc.setTextColor(...primaryRgb)
+   454	        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+   455	
+   456	        doc.text(
+   457	          `PAGE ${pageIndex + 1} / ${pages}`,
+   458	          pageWidth - margin,
+   459	          pageHeight - 8,
+   460	          { align: 'right' }
+   461	        )
+   462	      }
+   463	
+   464	      const safeName = selected.name
+   465	        .normalize('NFD')
+   466	        .replace(/[\u0300-\u036f]/g, '')
+   467	        .toLowerCase()
+   468	        .replace(/[^a-z0-9]+/g, '-')
+   469	        .replace(/^-|-$/g, '')
+   470	
+   471	      // Téléchargement direct du PDF sur l'appareil.
+   472	      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+   473	
+   474	      if (isUnlimited) {
+   475	        setNotice(`PDF créé : ${pages + 1} page(s), couverture comprise.`)
+   476	      } else {
+   477	        const nextExports = freeExports + 1
+   478	
+   479	        // Enregistrement dans la clé propre à cet utilisateur.
+   480	        localStorage.setItem(
+   481	          exportStorageKey,
+   482	          String(nextExports)
+   483	        )
+   484	
+   485	        setFreeExports(nextExports)
+   486	
+   487	        setNotice(
+   488	          `PDF créé : ${pages + 1} page(s), couverture comprise. ${3 - nextExports} export(s) gratuit(s) restant(s).`
+   489	        )
+   490	      }
+   491	    } catch (error) {
+   492	      console.error('Erreur export PDF :', error)
+   493	      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+   494	    }
+   495	  }
+   496	
+   497	  return (
+   498	    <main
+   499	      className={`app-shell density-${density} font-${font}`}
+   500	      style={{
+   501	        '--primary': primary,
+   502	        '--paper': background,
+   503	        '--title-background': titleBackground,
+   504	        '--title-text': titleTextColor,
+   505	      }}
+   506	    >
+   507	      <header className="topbar">
+   508	        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+   509	          <span className="brand-mark">P</span>
+   510	          <span>Planner<span className="brand-light">Builder</span></span>
+   511	        </a>
+   512	
+   513	        <span className="private-label"><span /> Espace de création</span>
+   514	
+   515	        {import.meta.env.DEV && (
+   516	          <button
+   517	            type="button"
+   518	            className="mockup-dev-toggle"
+   519	            onClick={() => setShowMockups((value) => !value)}
+   520	          >
+   521	            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+   522	          </button>
+   523	        )}
+   524	
+   525	        {isAdmin && (
+   526	          <button
+   527	            type="button"
+   528	            className="mockup-dev-toggle"
+   529	            onClick={() => setShowAdminPanel((value) => !value)}
+   530	          >
+   531	            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+   532	          </button>
+   533	        )}
+   534	      </header>
+   535	
+   536	      <section className="welcome" id="top">
+   537	        <div>
+   538	          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+   539	          <h1>Créez un planner <em>à votre image.</em></h1>
+   540	          <p className="welcome-text">
+   541	            Choisissez un modèle, personnalisez son style et préparez votre document.
+   542	          </p>
+   543	        </div>
+   544	
+   545	        <div className="welcome-decoration" aria-hidden="true">❋</div>
+   546	      </section>
+   547	
+   548	      {import.meta.env.DEV && showMockups && <AdminMockups />}
+   549	      {isAdmin && showAdminPanel && <Admi

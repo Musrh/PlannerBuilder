@@ -1,0 +1,267 @@
+]633;E;echo "========== ETAPE 1 : LISTE DES FICHIERS CSS ==========";1d99eb3a-afd0-43b1-93b7-69b158357a5f]633;C========== ETAPE 1 : LISTE DES FICHIERS CSS ==========
+src/index.css
+src/AdminMockups.css
+src/App.css
+src/AuthGate.css
+
+========== ETAPE 2 : 45 DERNIERES LIGNES DE CHAQUE CSS ==========
+
+========== src/index.css ==========
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #718b70;
+  outline-offset: 3px;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+::selection {
+  color: white;
+  background: #718b70;
+}
+
+========== src/AdminMockups.css ==========
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #e0e4dd;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mockup-library-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #f1f3ef;
+}
+
+.mockup-library-card strong {
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+}
+
+.mockup-library-card button {
+  cursor: pointer;
+  padding: 7px 9px;
+  border: 1px solid #cbd2c8;
+  border-radius: 7px;
+  background: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.mockup-library-card .mockup-secondary-button,
+.mockup-library-save .mockup-secondary-button {
+  background: #e8eee4;
+}
+
+.mockup-library-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mockup-library-actions button {
+  flex: 1;
+}
+
+========== src/App.css ==========
+  padding: 9px 13px;
+  border: 1px solid #718b70;
+  border-radius: 9px;
+  background: #edf1e9;
+  color: #354331;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .plan-indicator {
+      display: inline-flex;
+        align-items: center;
+          gap: 8px;
+            padding: 8px 13px;
+              border-radius: 30px;
+                font-size: 12px;
+                  font-weight: 700;
+                    white-space: nowrap;
+                    }
+
+                    .plan-free {
+                      background: #f1f1ed;
+                        color: #555b50;
+                        }
+
+                        .plan-pro {
+                          background: #e8f0e5;
+                            color: #426b42;
+                            }
+
+                            .plan-dot {
+                              width: 8px;
+                                height: 8px;
+                                  border-radius: 50%;
+                                    background: currentColor;
+                                    }
+  }
+}
+
+========== src/AuthGate.css ==========
+}
+
+.auth-card button,
+.auth-session-bar button {
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #718b70;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.auth-card button {
+  width: 100%;
+  margin-top: 22px;
+}
+
+.auth-card button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.auth-error {
+  color: #b42318;
+  font-size: 14px;
+}
+
+.auth-message {
+  padding: 32px;
+  text-align: center;
+}
+
+.auth-session-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 20px;
+  background: #eef1e9;
+  color: #26352b;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+========== ETAPE 3 : FIN DE App.css ==========
+  1030	  border-radius: 2px;
+  1031	  letter-spacing: 0.2px;
+  1032	}
+  1033	
+  1034	.planner-style-professionnel .page-topline {
+  1035	  border-bottom-width: 2px;
+  1036	}
+  1037	
+  1038	/* Nature : formes organiques et fonds doux */
+  1039	.planner-style-nature .planner-section {
+  1040	  border-radius: 14px 5px 14px 5px;
+  1041	  background: color-mix(in srgb, var(--primary) 6%, white);
+  1042	}
+  1043	
+  1044	.planner-style-nature .planner-section h3 {
+  1045	  border-radius: 9px 3px 9px 3px;
+  1046	}
+  1047	
+  1048	.planner-style-nature .planner-cover-mark {
+  1049	  font-size: 32px;
+  1050	}
+  1051	
+  1052	/* Bouton de prototype visible uniquement en mode développement */
+  1053	.mockup-dev-toggle {
+  1054	  min-height: 38px;
+  1055	  padding: 9px 13px;
+  1056	  border: 1px solid #718b70;
+  1057	  border-radius: 9px;
+  1058	  background: #edf1e9;
+  1059	  color: #354331;
+  1060	  font-size: 12px;
+  1061	  font-weight: 700;
+  1062	  cursor: pointer;
+  1063	}
+  1064	
+  1065	@media (max-width: 600px) {
+  1066	  .topbar {
+  1067	    flex-wrap: wrap;
+  1068	    gap: 12px;
+  1069	  }
+  1070	
+  1071	  .plan-indicator {
+  1072	      display: inline-flex;
+  1073	        align-items: center;
+  1074	          gap: 8px;
+  1075	            padding: 8px 13px;
+  1076	              border-radius: 30px;
+  1077	                font-size: 12px;
+  1078	                  font-weight: 700;
+  1079	                    white-space: nowrap;
+  1080	                    }
+  1081	
+  1082	                    .plan-free {
+  1083	                      background: #f1f1ed;
+  1084	                        color: #555b50;
+  1085	                        }
+  1086	
+  1087	                        .plan-pro {
+  1088	                          background: #e8f0e5;
+  1089	                            color: #426b42;
+  1090	                            }
+  1091	
+  1092	                            .plan-dot {
+  1093	                              width: 8px;
+  1094	                                height: 8px;
+  1095	                                  border-radius: 50%;
+  1096	                                    background: currentColor;
+  1097	                                    }
+  1098	  }
+  1099	}

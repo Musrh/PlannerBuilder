@@ -1,0 +1,110 @@
+]633;E;echo "===== DOSSIER =====";8627d5f1-591f-467c-8448-cd11e7ba0d99]633;C===== DOSSIER =====
+/workspaces/PlannerBuilder
+
+===== DEBUT APP.JSX =====
+import { useState } from 'react'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import './App.css'
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+
+===== BOUTON MOCKUPS =====
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+        <span className="private-label"><span /> Espace de création</span>
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowMockups((value) => !value)}
+          >
+            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+          </button>
+        )}
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>
+            <span className="count">{filtered.length}</span>
+          </div>
+
+
+===== FIN APP.JSX =====
+            setNotice('')
+          }}>
+            ↺ Réinitialiser le style
+          </button>
+
+          <div className="export-area">
+            <button className="export-button" type="button" onClick={exportPDF}>
+              <span>↓</span> Exporter en PDF
+            </button>
+            <p>Votre aperçu sera envoyé à la fenêtre d’impression du navigateur.</p>
+          </div>
+        </aside>
+      </div>
+
+      {notice && <div className="notice" role="status">{notice}</div>}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+export default App
+
+===== FIREBASE =====
+cat: /workspaces/PlannerBuilder/app/src/firebase.js: No such file or directory
+
+===== ADMIN =====
+// Configuration temporaire de développement PlannerBuilder.
+// Ce fichier sert uniquement à l'affichage de l'interface.
+// Il ne constitue PAS une protection de sécurité.
+
+export const PLANNERBUILDER_ADMIN_UID =
+  's4R51uEux5Rmo48OgALEwW55F0k1'
+
+export const isPlannerBuilderAdmin = (user) =>
+  Boolean(user && user.uid === PLANNERBUILDER_ADMIN_UID)

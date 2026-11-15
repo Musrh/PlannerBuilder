@@ -1,0 +1,223 @@
+]633;E;echo "===== LIGNES 75 À 140 =====";2bdb6acc-d266-4b58-919e-c182c409f087]633;C===== LIGNES 75 À 140 =====
+    title: 'Mon planner professionnel',
+    subtitle: 'Donner de la clarté à mes projets.',
+    sections: ['Objectifs professionnels', 'Tâches prioritaires', 'Réunions', 'Prochaines étapes'],
+    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+  },
+}
+
+function App() {
+  const { user, plan, isAdmin } = usePlannerBuilderAuth()
+  const isUnlimited = plan === 'pro' || isAdmin
+
+  // Compteur d'exports gratuits propre à chaque compte Firebase
+  const exportStorageKey = user?.uid
+    ? `plannerbuilder_free_exports_${user.uid}`
+    : null
+
+  const [showMockups, setShowMockups] = useState(false)
+  const [showAdminPanel, setShowAdminPanel] = useState(false)
+  const [selectedId, setSelectedId] = useState('food')
+  const [visualStyle, setVisualStyle] = useState('minimaliste')
+  const [layoutModel, setLayoutModel] = useState('classique')
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const coverEditorRef = useRef(null)
+  const [coverMode, setCoverMode] = useState('preset')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+
+  function readFreeExports(storageKey) {
+    if (!storageKey) return 0
+
+    try {
+      const saved = Number(localStorage.getItem(storageKey) || 0)
+
+      return Number.isFinite(saved) && saved >= 0
+        ? Math.floor(saved)
+        : 0
+    } catch {
+      return 0
+    }
+  }
+
+  const [freeExports, setFreeExports] = useState(() =>
+    readFreeExports(exportStorageKey)
+  )
+
+  // Recharge le compteur si un autre compte se connecte sur le même navigateur
+  useEffect(() => {
+    setFreeExports(readFreeExports(exportStorageKey))
+  }, [exportStorageKey])
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+===== LIGNES 140 À 180 =====
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  async function exportPDF() {
+    if (coverMode === 'preset' && !coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+    }
+
+    if (!isUnlimited && !exportStorageKey) {
+      setNotice('Connectez-vous pour exporter votre PDF.')
+      return
+    }
+
+    if (!isUnlimited && freeExports >= 3) {
+      setNotice(
+        'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+      )
+      return
+    }
+
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+===== LIGNES 465 À 525 =====
+          }
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      // Téléchargement direct du PDF sur l'appareil.
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+
+      if (isUnlimited) {
+        setNotice(`PDF créé : ${pages + 1} page(s), couverture comprise.`)
+      } else {
+        const nextExports = freeExports + 1
+
+        try {
+          localStorage.setItem(exportStorageKey, String(nextExports))
+        } catch (storageError) {
+          console.error('Compteur d’exports non sauvegardé :', storageError)
+        }
+
+        setFreeExports(nextExports)
+
+        setNotice(
+          `PDF créé : ${pages + 1} page(s), couverture comprise. ${3 - nextExports} export(s) gratuit(s) restant(s).`
+        )
+      }
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+===== LIGNES 1125 À 1175 =====
+
+          {/* COMPTEUR DES EXPORTS */}
+          <div className="setting-group">
+            <span className="field-label">Compteur d'exports PDF</span>
+
+            <div
+              style={{
+                padding: 14,
+                borderRadius: 10,
+                background: '#f1f4ee',
+                border: '1px solid #dfe6dc',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <strong style={{ fontSize: 13 }}>
+                {isUnlimited
+                  ? 'Exports illimités'
+                  : `${Math.max(0, 3 - freeExports)} export(s) gratuit(s) restant(s)`}
+              </strong>
+
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: 13,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {isUnlimited ? 'PRO' : `${Math.min(freeExports, 3)} / 3`}
+              </span>
+            </div>
+          </div>
+
+          {/* EXPORT PDF : TÉLÉCHARGEMENT DIRECT */}
+          <div className="export-area">
+            <button
+              className="export-button"
+              type="button"
+              onClick={exportPDF}
+            >
+              <span>↓</span> Télécharger le PDF
+            </button>
+
+            <p>
+              Le fichier PDF sera téléchargé directement sur votre appareil.
+            </p>
+          </div>
+        </aside>
+      </div>

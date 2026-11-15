@@ -1,0 +1,162 @@
+===== BOUTONS ET LIENS WHOP =====
+5-import AdminLocalPanel from './AdminLocalPanel.jsx'
+6-import AuthGate from './AuthGate.jsx'
+7-import { usePlannerBuilderAuth } from './AuthGate.jsx'
+8-import './App.css'
+9-
+10:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+11:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+12-
+13-const layoutModels = [
+14-  { id: 'classique', name: 'Classique', description: 'Sections verticales' },
+15-  { id: 'colonnes', name: 'Deux colonnes', description: 'Deux zones par ligne' },
+16-  { id: 'grille', name: 'Grille', description: 'Blocs compacts' },
+--
+1268-              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+1269-                30 jours d’accès Pro
+1270-              </p>
+1271-
+1272-              <a
+1273:                href={WHOP_MONTHLY_URL}
+1274-                target="_blank"
+1275-                rel="noopener noreferrer"
+1276-                style={{
+1277-                  display: 'inline-block',
+1278-                  padding: '11px 18px',
+--
+1302-              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+1303-                365 jours d’accès Pro
+1304-              </p>
+1305-
+1306-              <a
+1307:                href={WHOP_ANNUAL_URL}
+1308-                target="_blank"
+1309-                rel="noopener noreferrer"
+1310-                style={{
+1311-                  display: 'inline-block',
+1312-                  padding: '11px 18px',
+--
+1321-              </a>
+1322-            </article>
+1323-          </div>
+1324-
+1325-          <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+1326:            Le paiement est traité sur Whop. L’activation et la prolongation
+1327-            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+1328-          </small>
+1329-        </section>
+1330-      )}
+1331-
+
+===== AUTHENTIFICATION ET PROFIL =====
+src/AuthGate.jsx-52-  useEffect(() => {
+src/AuthGate.jsx-53-    let active = true
+src/AuthGate.jsx-54-
+src/AuthGate.jsx:55:    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+src/AuthGate.jsx-56-      if (!active) return
+src/AuthGate.jsx-57-
+src/AuthGate.jsx-58-      setChecking(true)
+src/AuthGate.jsx-59-      setProfileError('')
+src/AuthGate.jsx-60-      setUser(null)
+src/AuthGate.jsx-61-
+src/AuthGate.jsx:62:      if (!currentUser) {
+src/AuthGate.jsx-63-        setPlan('free')
+src/AuthGate.jsx-64-        setVerificationEmail('')
+src/AuthGate.jsx-65-        setChecking(false)
+src/AuthGate.jsx-66-        return
+src/AuthGate.jsx-67-      }
+src/AuthGate.jsx-68-
+src/AuthGate.jsx:69:      if (!currentUser.emailVerified) {
+src/AuthGate.jsx:70:        setVerificationEmail(currentUser.email || '')
+src/AuthGate.jsx-71-        setPlan('free')
+src/AuthGate.jsx-72-        setChecking(false)
+src/AuthGate.jsx-73-        return
+--
+src/AuthGate.jsx-76-      setVerificationEmail('')
+src/AuthGate.jsx-77-
+src/AuthGate.jsx-78-      try {
+src/AuthGate.jsx:79:        const profileRef = doc(db, 'users_planner', currentUser.uid)
+src/AuthGate.jsx-80-        const profileSnapshot = await getDoc(profileRef)
+src/AuthGate.jsx-81-
+src/AuthGate.jsx-82-        let profileData
+--
+src/AuthGate.jsx-89-          // Les champs absents sont complétés uniquement en mémoire.
+src/AuthGate.jsx-90-          profileData = {
+src/AuthGate.jsx-91-            ...savedProfile,
+src/AuthGate.jsx:92:            email: savedProfile.email || currentUser.email || '',
+src/AuthGate.jsx-93-            plan: savedProfile.plan || 'free',
+src/AuthGate.jsx-94-            paye: savedProfile.paye ?? false,
+src/AuthGate.jsx-95-            active: savedProfile.active ?? false,
+--
+src/AuthGate.jsx-98-        } else {
+src/AuthGate.jsx-99-          // Création d'un profil si le document n'existe pas.
+src/AuthGate.jsx-100-          profileData = {
+src/AuthGate.jsx:101:            email: currentUser.email || '',
+src/AuthGate.jsx-102-            plan: 'free',
+src/AuthGate.jsx-103-            paye: false,
+src/AuthGate.jsx-104-            active: true,
+src/AuthGate.jsx-105-            expiry: 0,
+src/AuthGate.jsx-106-            createdAt: serverTimestamp(),
+src/AuthGate.jsx-107-
+src/AuthGate.jsx:108:            subscriptionType: 'free',
+src/AuthGate.jsx-109-            paymentStatus: 'unpaid',
+src/AuthGate.jsx-110-            billingPeriodStart: 0,
+src/AuthGate.jsx-111-            billingPeriodEnd: 0,
+--
+src/AuthGate.jsx-119-        if (!active) return
+src/AuthGate.jsx-120-
+src/AuthGate.jsx-121-        setPlan(hasValidProAccess(profileData) ? 'pro' : 'free')
+src/AuthGate.jsx:122:        setUser(currentUser)
+src/AuthGate.jsx-123-      } catch (err) {
+src/AuthGate.jsx-124-        console.error('Erreur profil PlannerBuilder :', err)
+src/AuthGate.jsx-125-        console.error('Code erreur Firebase :', err.code)
+--
+src/AuthGate.jsx-173-        password
+src/AuthGate.jsx-174-      )
+src/AuthGate.jsx-175-
+src/AuthGate.jsx:176:      await setDoc(doc(db, 'users_planner', credential.user.uid), {
+src/AuthGate.jsx-177-        email: credential.user.email || email.trim(),
+src/AuthGate.jsx-178-        plan: 'free',
+src/AuthGate.jsx-179-        paye: false,
+--
+src/AuthGate.jsx-181-        expiry: 0,
+src/AuthGate.jsx-182-        createdAt: serverTimestamp(),
+src/AuthGate.jsx-183-
+src/AuthGate.jsx:184:        subscriptionType: 'free',
+src/AuthGate.jsx-185-        paymentStatus: 'unpaid',
+src/AuthGate.jsx-186-        billingPeriodStart: 0,
+src/AuthGate.jsx-187-        billingPeriodEnd: 0,
+--
+src/AuthGate.jsx-252-    setLoading(true)
+src/AuthGate.jsx-253-
+src/AuthGate.jsx-254-    try {
+src/AuthGate.jsx:255:      const currentUser = auth.currentUser
+src/AuthGate.jsx-256-
+src/AuthGate.jsx:257:      if (!currentUser) {
+src/AuthGate.jsx-258-        setError('Reconnectez-vous pour recevoir un nouvel e-mail.')
+src/AuthGate.jsx-259-        return
+src/AuthGate.jsx-260-      }
+src/AuthGate.jsx-261-
+src/AuthGate.jsx:262:      await sendEmailVerification(currentUser)
+src/AuthGate.jsx-263-      setNotice('Un nouvel e-mail de vérification a été envoyé.')
+src/AuthGate.jsx-264-    } catch (err) {
+src/AuthGate.jsx-265-      console.error('Erreur envoi vérification :', err)
+--
+src/AuthGate.jsx-275-    setLoading(true)
+src/AuthGate.jsx-276-
+src/AuthGate.jsx-277-    try {
+src/AuthGate.jsx:278:      const currentUser = auth.currentUser
+src/AuthGate.jsx-279-
+src/AuthGate.jsx:280:      if (!currentUser) {
+src/AuthGate.jsx-281-        setError('Votre session a expiré. Reconnectez-vous.')
+src/AuthGate.jsx-282-        setVerificationEmail('')
+src/AuthGate.jsx-283-        setMode('login')
+src/AuthGate.jsx-284-        return
+src/AuthGate.jsx-285-      }
+src/AuthGate.jsx-286-
+src/AuthGate.jsx:287:      await currentUser.reload()
+src/AuthGate.jsx-288-
+src/AuthGate.jsx:289:      if (auth.currentUser?.emailVerified) {
+src/AuthGate.jsx-290-        window.location.reload()
+src/AuthGate.jsx-291-      } else {
+src/AuthGate.jsx-292-        setError(

@@ -1,0 +1,27 @@
+]633;E;echo "===== APPELS API ET AUTHENTIFICATION DANS APP =====";0621b8bb-3752-45c7-b533-7ec8d5586a1e]633;C===== APPELS API ET AUTHENTIFICATION DANS APP =====
+459-        .replace(/^-|-$/g, '')
+460-
+461-      // Vérification obligatoire auprès de Railway avant le téléchargement.
+462:      const apiUrl = import.meta.env.VITE_PLANNERBUILDER_API_URL
+463-
+464-      if (!apiUrl) {
+465-        throw new Error(
+466:          'URL du serveur Railway manquante. Vérifiez VITE_PLANNERBUILDER_API_URL.'
+467-        )
+468-      }
+469-
+470:      const token = await user.getIdToken()
+471-
+472:      const response = await fetch(
+473-        `${apiUrl.replace(/\/+$/, '')}/api/exports/authorize`,
+474-        {
+475-          method: 'POST',
+476-          headers: {
+477:            Authorization: `Bearer ${token}`,
+478-            'Content-Type': 'application/json',
+479-          },
+480-          body: JSON.stringify({}),
+
+===== ROUTES ADMIN DU BACKEND =====
+bash: cd: /workspaces/PlannerBuilder-Server: No such file or directory
+grep: server.js: No such file or directory

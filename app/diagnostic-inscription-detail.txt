@@ -1,0 +1,76 @@
+  }
+
+  async function handleRegister(event) {
+    event.preventDefault()
+    setError('')
+    setNotice('')
+
+    if (password.length < 6) {
+      setError('Le mot de passe doit contenir au moins 6 caractères.')
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError('Les deux mots de passe ne correspondent pas.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const credential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+      )
+
+      await setDoc(doc(db, 'users_planner', credential.user.uid), {
+        email: credential.user.email || email.trim(),
+        plan: 'free',
+        paye: false,
+        active: true,
+        expiry: 0,
+        createdAt: serverTimestamp(),
+
+        subscriptionType: 'free',
+        paymentStatus: 'unpaid',
+        billingPeriodStart: 0,
+        billingPeriodEnd: 0,
+        lastPaymentAt: 0,
+        paymentProvider: null,
+      })
+
+      await sendEmailVerification(credential.user)
+
+      setVerificationEmail(credential.user.email || email.trim())
+      setMode('verification')
+      setNotice('Un e-mail de vérification a été envoyé.')
+      setPassword('')
+      setConfirmPassword('')
+    } catch (err) {
+      console.error('Erreur inscription :', err)
+
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Cette adresse e-mail possède déjà un compte.')
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Adresse e-mail invalide.')
+      } else if (err.code === 'auth/weak-password') {
+        setError('Le mot de passe est trop faible.')
+      } else if (err.code === 'permission-denied') {
+        setError(
+          "Le compte a été créé, mais Firestore a refusé la création du profil. Vérifiez les règles Firestore."
+        )
+      } else {
+        setError("Impossible de créer le compte ou d'envoyer l'e-mail.")
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleLogin(event) {
+    event.preventDefault()
+    setError('')
+    setNotice('')
+    setLoading(true)
+

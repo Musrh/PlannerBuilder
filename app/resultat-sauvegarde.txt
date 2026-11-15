@@ -1,0 +1,6 @@
+===== CREATION DES SAUVEGARDES =====
+Admin.jsx : OK
+Admin.css : OK
+===== VERIFICATION =====
+-rw-rw-rw- 1 codespace codespace 3.2K Nov 15 00:33 src/Admin.css.backup-before-payments
+-rw-rw-rw- 1 codespace codespace 5.6K Nov 15 00:33 src/Admin.jsx.backup-before-payments

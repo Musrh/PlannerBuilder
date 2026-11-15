@@ -1,0 +1,16 @@
+]633;E;set -e;92642776-c840-4524-8a18-78fff19f9be0]633;C===== SAUVEGARDE CREEE =====
+../sauvegardes/avant-upload-mockup-personnalise-20261028-150344
+total 12K
+-rw-rw-rw- 1 codespace codespace 1.9K Oct 28 15:03 AdminMockups.css
+-rw-rw-rw- 1 codespace codespace 6.7K Oct 28 15:03 AdminMockups.jsx
+
+===== VERIFICATION DES MARQUEURS =====
+import React existant: 1 occurrence(s)
+etat du fichier PDF: 1 occurrence(s)
+fonction de telechargement: 1 occurrence(s)
+zone de controles: 1 occurrence(s)
+zone de resultat: 1 occurrence(s)
+export du composant: 1 occurrence(s)
+VERIFICATION OK : marqueurs uniques.
+
+===== FIN ETAPE 2 =====

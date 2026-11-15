@@ -1,0 +1,8 @@
+===== VERIFICATION ADMIN JSX =====
+482 src/Admin.jsx
+79:          getData('/api/admin/payment-settings'),
+182:  async function savePaymentSettings() {
+195:        `${API_URL.replace(/\/+$/, '')}/api/admin/payment-settings`,
+416:          <section className="admin-users admin-payment-settings">
+419:                <h2>Moyens de paiement</h2>
+468:                  onClick={savePaymentSettings}

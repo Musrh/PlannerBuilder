@@ -1,0 +1,44 @@
+]633;E;echo "===== VERIFICATION DES REGLES PROPOSEES =====";27f61465-d0b4-49ce-9268-9ace19bd1e39]633;C===== VERIFICATION DES REGLES PROPOSEES =====
+42 regles_plannerbuilder_proposees.txt
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Profils PlannerBuilder : lecture de son propre profil.
+    // Les rôles ne peuvent pas être modifiés directement par les utilisateurs.
+    match /plannerBuilderUsers/{userId} {
+      allow read: if request.auth != null
+                  && request.auth.uid == userId;
+      allow create, update, delete: if false;
+    }
+
+    // Maquettes partagées : lecture réservée aux utilisateurs connectés.
+    // Écriture à configurer pour les administrateurs autorisés.
+    match /plannerBuilderMockups/{mockupId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Motifs prédéfinis partagés.
+    match /plannerBuilderPatternPresets/{patternId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Motifs personnels : chaque utilisateur ne peut accéder qu'aux siens.
+    match /plannerBuilderUserPatterns/{patternId} {
+      allow read: if request.auth != null
+                  && resource.data.ownerId == request.auth.uid;
+
+      allow create: if request.auth != null
+                    && request.resource.data.ownerId == request.auth.uid;
+
+      allow update: if request.auth != null
+                    && resource.data.ownerId == request.auth.uid
+                    && request.resource.data.ownerId == request.auth.uid;
+
+      allow delete: if request.auth != null
+                    && resource.data.ownerId == request.auth.uid;
+    }
+  }
+}

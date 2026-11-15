@@ -1,0 +1,7 @@
+89:  function exportPDF() {
+90:    setNotice('Dans la fenêtre d’impression, choisis « Enregistrer au format PDF ». Cette première version exporte l’aperçu affiché.')
+91:    window.setTimeout(() => window.print(), 250)
+287:          <div className="export-area">
+288:            <button className="export-button" type="button" onClick={exportPDF}>
+289:              <span>↓</span> Exporter en PDF
+306:export default App

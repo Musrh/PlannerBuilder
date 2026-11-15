@@ -1,0 +1,2 @@
+]633;E;echo "===== VERIFICATION =====";27f61465-d0b4-49ce-9268-9ace19bd1e39]633;C===== VERIFICATION =====
+OK : UID enregistré.

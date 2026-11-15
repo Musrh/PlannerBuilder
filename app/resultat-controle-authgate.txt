@@ -1,0 +1,41 @@
+]633;E;echo "===== FICHIER AUTHGATE =====";94b5b532-8403-4e9c-ae34-b7f91fbf27fa]633;C===== FICHIER AUTHGATE =====
+-rw-rw-rw- 1 codespace codespace 5.0K Oct 30 23:19 src/AuthGate.jsx
+
+===== RECHERCHE DES FONCTIONS =====
+9:  getDoc,
+11:  setDoc,
+14:import { isPlannerBuilderAdmin } from './plannerBuilderConfig.js'
+17:export const AuthContext = createContext(null)
+20:  return useContext(AuthContext)
+51:        const profileSnapshot = await getDoc(profileRef)
+63:          await setDoc(profileRef, profileData)
+180:  const isAdmin = isPlannerBuilderAdmin(user)
+183:    <AuthContext.Provider value={{ user, plan, isAdmin }}>
+193:    </AuthContext.Provider>
+
+===== DEBUT DU FICHIER =====
+import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth'
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore'
+import { auth, db } from './firebase.js'
+import { isPlannerBuilderAdmin } from './plannerBuilderConfig.js'
+import './AuthGate.css'
+
+export const AuthContext = createContext(null)
+
+export function usePlannerBuilderAuth() {
+  return useContext(AuthContext)
+}
+
+export default function AuthGate({ children }) {
+  const [user, setUser] = useState(null)
+  const [plan, setPlan] = useState('free')

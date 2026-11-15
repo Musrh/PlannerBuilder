@@ -1,0 +1,21 @@
+]633;E;echo "===== IMPORTS FIREBASE =====";39969c40-4e9a-4da4-aeaf-2dba4ece3b83]633;C===== IMPORTS FIREBASE =====
+2:import { onAuthStateChanged } from 'firebase/auth'
+10:} from 'firebase/firestore'
+11:import { auth, db } from './firebase.js'
+
+===== ANCIEN STOCKAGE =====
+
+===== NOUVEAU STOCKAGE =====
+2:import { onAuthStateChanged } from 'firebase/auth'
+5:  addDoc,
+8:  updateDoc,
+9:  deleteDoc,
+38:  const readPatternLibrary = async () => {
+53:    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+65:        const patterns = await readPatternLibrary()
+103:      await addDoc(ref, {
+109:      setSavedPatterns(await readPatternLibrary())
+142:      await updateDoc(
+146:      setSavedPatterns(await readPatternLibrary())
+166:      await deleteDoc(
+169:      setSavedPatterns(await readPatternLibrary())

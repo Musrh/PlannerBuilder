@@ -1,0 +1,66 @@
+]633;E;echo "===== BOUTONS STRIPE =====";560057e5-cc76-4cdb-ade0-e3eccd9d4c11]633;C===== BOUTONS STRIPE =====
+117:  async function handleStripeCheckout(period) {
+118-    if (!user) {
+119-      setNotice('Connectez-vous avant de procéder au paiement.')
+120-      return
+121-    }
+122-
+123-    setStripeLoading(period)
+124-    setNotice('Préparation du paiement Stripe...')
+125-
+126-    try {
+127-      const apiUrl = import.meta.env.VITE_PLANNERBUILDER_API_URL
+128-
+129-      if (!apiUrl) {
+130-        throw new Error('URL du serveur Railway manquante.')
+131-      }
+132-
+133-      const token = await user.getIdToken()
+134-
+135-      const response = await fetch(
+--
+1319:                onClick={() => handleStripeCheckout('monthly')}
+1320-                style={{
+1321-                  display: 'block',
+1322-                  width: '100%',
+1323-                  marginTop: 12,
+1324-                  padding: '11px 18px',
+1325-                  border: 'none',
+1326-                  borderRadius: 9,
+1327-                  background: '#635BFF',
+1328-                  color: '#fff',
+1329-                  fontWeight: 700,
+1330-                  cursor: 'pointer',
+1331-                }}
+1332-              >
+1333-                {stripeLoading === 'monthly' ? 'Préparation...' : 'Payer par carte avec Stripe'}
+1334-              </button>
+1335-
+1336-              <a
+1337-                href={WHOP_MONTHLY_URL}
+--
+1373:                onClick={() => handleStripeCheckout('annual')}
+1374-                style={{
+1375-                  display: 'block',
+1376-                  width: '100%',
+1377-                  marginTop: 12,
+1378-                  padding: '11px 18px',
+1379-                  border: 'none',
+1380-                  borderRadius: 9,
+1381-                  background: '#635BFF',
+1382-                  color: '#fff',
+1383-                  fontWeight: 700,
+1384-                  cursor: 'pointer',
+1385-                }}
+1386-              >
+1387-                {stripeLoading === 'annual' ? 'Préparation...' : 'Payer par carte avec Stripe'}
+1388-              </button>
+1389-
+1390-              <a
+1391-                href={WHOP_ANNUAL_URL}
+
+===== VERIFICATION WHOP =====
+11:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+12:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+1337:                href={WHOP_MONTHLY_URL}
+1391:                href={WHOP_ANNUAL_URL}

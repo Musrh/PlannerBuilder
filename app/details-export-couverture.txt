@@ -1,0 +1,443 @@
+]633;E;echo "===== FONCTION EXPORT PDF COMPLETE =====";d872d25c-0626-4261-ac38-9f6ea0916082]633;C===== FONCTION EXPORT PDF COMPLETE =====
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  function exportPDF() {
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+          parseInt(value.substring(4, 6), 16),
+        ]
+      }
+
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const titleBackgroundRgb = toRgb(titleBackground)
+      const titleTextRgb = toRgb(titleTextColor)
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+      const pdfFont = fontMap[font] || 'helvetica'
+      const compact = density === 'compacte'
+      const sectionGap = compact ? 5 : 8
+      const lineGap = compact ? 6 : 8
+
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+        if (pageIndex > 0) doc.addPage()
+
+        doc.setFillColor(...backgroundRgb)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.8)
+        doc.line(margin, 13, pageWidth - margin, 13)
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('MON PLANNER', margin, 10)
+        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+          align: 'right',
+        })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(...primaryRgb)
+        doc.text(selected.category.toUpperCase(), margin, 26)
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(23)
+        doc.setTextColor(0, 0, 0)
+        const titleLines = doc.splitTextToSize(content.title, usableWidth)
+        doc.text(titleLines, margin, 37)
+
+        let y = 37 + titleLines.length * 9
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(90, 95, 85)
+        const subtitleLines = doc.splitTextToSize(content.subtitle, usableWidth)
+        doc.text(subtitleLines, margin, y)
+        y += subtitleLines.length * 5 + 8
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('DATE', margin, y)
+        doc.setDrawColor(190, 195, 180)
+        doc.setLineWidth(0.3)
+        doc.line(margin + 15, y + 1, pageWidth - margin, y + 1)
+        y += 10
+
+        content.sections.forEach((section, sectionIndex) => {
+          const bottomLimit = pageHeight - 19
+          if (y + 25 > bottomLimit) return
+
+          doc.setFillColor(255, 255, 255)
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(0.25)
+          doc.roundedRect(margin, y, usableWidth, compact ? 39 : 44, 3, 3, 'FD')
+
+          doc.setFillColor(...titleBackgroundRgb)
+          doc.roundedRect(margin, y, usableWidth, 9, 2, 2, 'F')
+          doc.rect(margin, y + 5, usableWidth, 4, 'F')
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(11)
+          doc.setTextColor(...titleTextRgb)
+          doc.text(section, margin + 4, y + 6)
+
+          let rowY = y + 16
+          const rowCount = compact ? 3 : 3
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            if (rowY > y + (compact ? 35 : 40)) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+              : ''
+
+            if (['food', 'student', 'habits'].includes(selectedId)) {
+              doc.setDrawColor(...primaryRgb)
+              doc.roundedRect(margin + 4, rowY - 3, 3, 3, 0.5, 0.5, 'S')
+            }
+
+            if (rowText) {
+              doc.setFont(pdfFont, 'bold')
+              doc.setFontSize(11)
+              doc.setTextColor(0, 0, 0)
+              doc.text(rowText, margin + 10, rowY)
+            }
+
+            doc.setDrawColor(215, 218, 207)
+            doc.line(
+              margin + (['food', 'student', 'habits'].includes(selectedId) ? 34 : 5),
+              rowY + 2,
+              pageWidth - margin - 5,
+              rowY + 2
+            )
+            rowY += lineGap
+          }
+
+          y += (compact ? 39 : 44) + sectionGap
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+
+===== FIN DE LA FONCTION ET DE L'APERÇU =====
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+      setNotice(`PDF créé : ${pages} page(s). Le téléchargement devrait commencer.`)
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+        <span className="private-label"><span /> Espace de création</span>
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>
+            <span className="count">{filtered.length}</span>
+          </div>
+
+          <label className="field-label" htmlFor="category">Catégorie</label>
+          <select id="category" value={category} onChange={(event) => setCategory(event.target.value)}>
+            {categories.map((item) => <option key={item}>{item}</option>)}
+          </select>
+
+          <div className="template-list">
+            {filtered.map((template) => (
+              <button
+                className={`template-option ${selectedId === template.id ? 'selected' : ''}`}
+                key={template.id}
+                onClick={() => chooseTemplate(template)}
+                type="button"
+              >
+                <span className="template-icon">{template.icon}</span>
+                <span className="template-name">
+                  <strong>{template.name}</strong>
+                  <small>{template.category}</small>
+                </span>
+                {selectedId === template.id && <span className="selected-check">✓</span>}
+              </button>
+            ))}
+          </div>
+
+          <div className="sidebar-tip">
+            <span>✦</span>
+            <p>Votre créativité, vos règles. Personnalisez votre document à tout moment.</p>
+          </div>
+        </aside>
+
+        <section className="preview-column">
+          <div className="preview-toolbar">
+            <div>
+              <p className="eyebrow">APERÇU EN DIRECT</p>
+              <h2>{selected.name}</h2>
+            </div>
+            <span className="preview-status"><span /> Prévisualisation</span>
+          </div>
+
+          <div className="paper-stage">
+            <article className={`planner-page planner-style-${visualStyle}`} style={{ backgroundColor: background }}>
+              <div className="page-topline">
+                <span>MON PLANNER</span>
+                <span>✳</span>
+              </div>
+              <div className="planner-cover-mark">❋</div>
+              <p className="planner-kicker">{selected.category.toUpperCase()}</p>
+              <h2 className="planner-title">{content.title}</h2>
+              <p className="planner-subtitle">{content.subtitle}</p>
+
+              <div className="planner-date">
+                <span>DATE</span>
+                <span className="date-line" />
+              </div>
+
+              <div className="planner-sections">
+                {content.sections.map((section, index) => (
+                  <section className={`planner-section section-${index}`} key={section}>
+                    <h3><span>{['✳', '◇', '○', '✦'][index]}</span> {section}</h3>
+                    {index === 1 && selectedId === 'weekly' ? (
+                      <div className="week-grid">
+                        {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, i) => (
+                          <div key={`${day}-${i}`}><b>{day}</b><span /></div>
+                        ))}
+                      </div>
+                    ) : index === 1 && selectedId === 'monthly' ? (
+                      <div className="month-grid">
+                        {Array.from({ length: 21 }, (_, i) => <span key={i}>{i + 1}</span>)}
+                      </div>
+                    ) : (
+                      <div className="writing-lines">
+                        {(index === 0 ? content.rows : ['', '', '']).map((row, i) => (
+                          <div className="writing-row" key={i}>
+                            {selectedId === 'habits' || selectedId === 'student' || selectedId === 'food'
+                              ? <span className="empty-check" />
+                              : null}
+                            <span>{row}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </section>
+                ))}
+              </div>
+              <footer className="page-footer">
+                <span>UNE PAGE À LA FOIS</span>
+                <span>01</span>
+              </footer>
+            </article>
+          </div>
+          <p className="preview-caption">Aperçu indicatif · Le document final pourra contenir plusieurs pages.</p>
+        </section>
+
+        <aside className="settings panel">
+
+===== DEBUT DES REGLAGES ET BOUTON EXPORT =====
+        <aside className="settings panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 2</p>
+              <h2>Personnaliser</h2>
+            </div>
+            <span className="settings-icon">⚙</span>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="visual-style">Style visuel</label>
+            <select id="visual-style" value={visualStyle} onChange={(event) => setVisualStyle(event.target.value)}>
+              <option value="minimaliste">Minimaliste</option>
+              <option value="colore">Coloré</option>
+              <option value="elegant">Élégant</option>
+              <option value="compact">Compact</option>
+              <option value="professionnel">Professionnel</option>
+              <option value="nature">Nature</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="pages">Nombre de pages</label>
+            <div className="number-control">
+              <button type="button" onClick={() => setPages((value) => Math.max(1, value - 1))} aria-label="Diminuer le nombre de pages">−</button>
+              <input id="pages" type="number" min="1" max="365" value={pages} onChange={(event) => setPages(Math.max(1, Math.min(365, Number(event.target.value) || 1)))} />
+              <button type="button" onClick={() => setPages((value) => Math.min(365, value + 1))} aria-label="Augmenter le nombre de pages">+</button>
+            </div>
+            <small className="helper">De 1 à 365 pages dans cette version de démonstration.</small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur principale</span>
+            <div className="color-control">
+              <label className="color-swatch" style={{ background: primary }} htmlFor="primary-color" />
+              <input id="primary-color" type="color" value={primary} onChange={(event) => setPrimary(event.target.value)} />
+              <code>{primary.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Fond des pages</span>
+            <div className="color-control">
+              <label className="color-swatch paper-swatch" style={{ background: background }} htmlFor="background-color" />
+              <input id="background-color" type="color" value={background} onChange={(event) => setBackground(event.target.value)} />
+              <code>{background.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Arrière-plan des titres</span>
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleBackground }}
+                htmlFor="title-background-color"
+              />
+              <input
+                id="title-background-color"
+                type="color"
+                value={titleBackground}
+                onChange={(event) => setTitleBackground(event.target.value)}
+              />
+              <code>{titleBackground.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur du texte des titres</span>
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleTextColor }}
+                htmlFor="title-text-color"
+              />
+              <input
+                id="title-text-color"
+                type="color"
+                value={titleTextColor}
+                onChange={(event) => setTitleTextColor(event.target.value)}
+              />
+              <code>{titleTextColor.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">Typographie</label>
+            <select id="font" value={font} onChange={(event) => setFont(event.target.value)}>
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button key={value} type="button" className={density === value ? 'active' : ''} onClick={() => setDensity(value)}>
+                  {value === 'compacte' ? 'Compacte' : 'Aérée'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button className="reset-button" type="button" onClick={() => {
+            setPrimary('#718B70')
+            setBackground('#F7F5EF')
+            setTitleBackground('#718B70')
+            setTitleTextColor('#FFFFFF')
+            setFont('moderne')
+            setDensity('confortable')
+            setVisualStyle('minimaliste')
+            setNotice('')
+          }}>
+            ↺ Réinitialiser le style
+          </button>
+
+          <div className="export-area">
+            <button className="export-button" type="button" onClick={exportPDF}>
+              <span>↓</span> Exporter en PDF
+            </button>
+            <p>Votre aperçu sera envoyé à la fenêtre d’impression du navigateur.</p>
+          </div>
+        </aside>
+      </div>
+
+      {notice && <div className="notice" role="status">{notice}</div>}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>

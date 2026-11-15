@@ -1,0 +1,16 @@
+===== CODE AUTOUR DE LA LIGNE 1238 =====
+  1225	          <p className="eyebrow">
+  1226	            {plan === 'pro' ? 'VOTRE ABONNEMENT PRO' : 'PASSEZ À LA VERSION PRO'}
+  1227	          </p>
+  1228	
+  1229	          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+  1230	            {plan === 'pro'
+  1231	              ? 'Renouvelez votre abonnement'
+  1232	              : 'Libérez tout votre potentiel'}
+  1233	          </h2>
+  1234	
+  1235	          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+  1236	            {plan === 'pro'
+  1237	              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+  1238	              : 'Débloquez les exports PDF illimités et profitez de PlannerBuil
+  1239	              

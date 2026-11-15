@@ -1,0 +1,75 @@
+app/src/AdminMockups.jsx:449:      ctx.fillText('A digital planner made for you', 65, 505)
+app/src/AdminMockups.jsx:457:      ctx.fillText('PLAN  •  CREATE  •  GROW', 930, 790)
+app/src/AdminMockups.jsx:476:    const safeName = (file?.name || 'planner')
+app/src/AdminMockups.jsx:483:      link.download = `${safeName || 'planner'}-mockup.${extension}`
+app/src/xApp.jsx:11:  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+app/src/xApp.jsx:12:  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+app/src/xApp.jsx:13:  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+app/src/xApp.jsx:14:  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+app/src/xApp.jsx:17:  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+app/src/xApp.jsx:24:    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+app/src/xApp.jsx:40:    title: 'Mon planner alimentaire',
+app/src/xApp.jsx:41:    subtitle: 'Mieux manger, planifier et savourer.',
+app/src/xApp.jsx:46:    title: 'Mon planner étudiant',
+app/src/xApp.jsx:48:    sections: ['Objectifs scolaires', 'Devoirs et examens', 'Planning de révision', 'Notes de cours'],
+app/src/xApp.jsx:64:    title: 'Mon planner professionnel',
+app/src/xApp.jsx:201:      doc.text('PLANNERBUILDER', pageWidth / 2, 88, { align: 'center' })
+app/src/xApp.jsx:237:        doc.text('MON PLANNER', margin, 10)
+app/src/xApp.jsx:330:        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+app/src/xApp.jsx:346:      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+app/src/xApp.jsx:365:        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+app/src/xApp.jsx:367:          <span>Planner<span className="brand-light">Builder</span></span>
+app/src/xApp.jsx:384:          <h1>Créez un planner <em>à votre image.</em></h1>
+app/src/xApp.jsx:443:            <article className={`planner-page planner-style-${visualStyle}`} style={{ backgroundColor: background }}>
+app/src/xApp.jsx:445:                <span>MON PLANNER</span>
+app/src/xApp.jsx:448:              <div className="planner-cover-mark">❋</div>
+app/src/xApp.jsx:449:              <p className="planner-kicker">{selected.category.toUpperCase()}</p>
+app/src/xApp.jsx:450:              <h2 className="planner-title">{content.title}</h2>
+app/src/xApp.jsx:451:              <p className="planner-subtitle">{content.subtitle}</p>
+app/src/xApp.jsx:453:              <div className="planner-date">
+app/src/xApp.jsx:458:              <div className="planner-sections">
+app/src/xApp.jsx:460:                  <section className={`planner-section section-${index}`} key={section}>
+app/src/xApp.jsx:561:            <small className="helper">La couverture sera la page 1 du PDF. Le planner commencera en page 2.</small>
+app/src/xApp.jsx:593:            <span className="field-label">Arrière-plan des titres</span>
+app/src/App.jsx:11:  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+app/src/App.jsx:12:  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+app/src/App.jsx:13:  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+app/src/App.jsx:14:  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+app/src/App.jsx:17:  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+app/src/App.jsx:24:    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+app/src/App.jsx:40:    title: 'Mon planner alimentaire',
+app/src/App.jsx:41:    subtitle: 'Mieux manger, planifier et savourer.',
+app/src/App.jsx:46:    title: 'Mon planner étudiant',
+app/src/App.jsx:48:    sections: ['Objectifs scolaires', 'Devoirs et examens', 'Planning de révision', 'Notes de cours'],
+app/src/App.jsx:64:    title: 'Mon planner professionnel',
+app/src/App.jsx:86:  const [freeExports, setFreeExports] = useState(() => {
+app/src/App.jsx:87:    const saved = Number(localStorage.getItem('plannerbuilder_free_exports') || 0)
+app/src/App.jsx:113:    if (freeExports >= 3) {
+app/src/App.jsx:115:        'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+app/src/App.jsx:215:      doc.text('PLANNERBUILDER', pageWidth / 2, 88, { align: 'center' })
+app/src/App.jsx:251:        doc.text('MON PLANNER', margin, 10)
+app/src/App.jsx:344:        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+app/src/App.jsx:360:      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+app/src/App.jsx:362:      const nextExports = freeExports + 1
+app/src/App.jsx:364:        'plannerbuilder_free_exports',
+app/src/App.jsx:367:      setFreeExports(nextExports)
+app/src/App.jsx:389:        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+app/src/App.jsx:391:          <span>Planner<span className="brand-light">Builder</span></span>
+app/src/App.jsx:408:          <h1>Créez un planner <em>à votre image.</em></h1>
+app/src/App.jsx:467:            <article className={`planner-page planner-style-${visualStyle}`} style={{ backgroundColor: background }}>
+app/src/App.jsx:469:                <span>MON PLANNER</span>
+app/src/App.jsx:472:              <div className="planner-cover-mark">❋</div>
+app/src/App.jsx:473:              <p className="planner-kicker">{selected.category.toUpperCase()}</p>
+app/src/App.jsx:474:              <h2 className="planner-title">{content.title}</h2>
+app/src/App.jsx:475:              <p className="planner-subtitle">{content.subtitle}</p>
+app/src/App.jsx:477:              <div className="planner-date">
+app/src/App.jsx:482:              <div className="planner-sections">
+app/src/App.jsx:484:                  <section className={`planner-section section-${index}`} key={section}>
+app/src/App.jsx:585:            <small className="helper">La couverture sera la page 1 du PDF. Le planner commencera en page 2.</small>
+app/src/App.jsx:617:            <span className="field-label">Arrière-plan des titres</span>
+app/src/App.jsx:697:        <span>PlannerBuilder</span>
+app/src/AuthGate.jsx:60:          <h1>Bienvenue sur PlannerBuilder</h1>
+app/src/plannerBuilderConfig.js:1:// Configuration temporaire de développement PlannerBuilder.
+app/src/plannerBuilderConfig.js:5:export const PLANNERBUILDER_ADMIN_UID =
+app/src/plannerBuilderConfig.js:8:export const isPlannerBuilderAdmin = (user) =>
+app/src/plannerBuilderConfig.js:9:  Boolean(user && user.uid === PLANNERBUILDER_ADMIN_UID)

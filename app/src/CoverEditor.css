@@ -1,0 +1,85 @@
+
+.cover-editor {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.cover-editor-toolbar,
+.cover-editor-layer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cover-editor button,
+.cover-editor select,
+.cover-editor input {
+  max-width: 100%;
+}
+
+.cover-editor button {
+  padding: 9px 12px;
+  border: 1px solid #d5d9d1;
+  border-radius: 8px;
+  background: white;
+  color: #263b2b;
+}
+
+.cover-editor button:disabled {
+  opacity: .4;
+}
+
+.cover-editor-workspace {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+  background: #e9e9e5;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cover-editor-page {
+  position: relative;
+  width: min(100%, 420px);
+  aspect-ratio: 210 / 297;
+  overflow: hidden;
+  box-shadow: 0 3px 15px #0002;
+  touch-action: none;
+}
+
+.cover-editor-properties {
+  display: grid;
+  gap: 12px;
+}
+
+.cover-editor-properties label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.cover-editor-properties input:not([type="color"]):not([type="checkbox"]):not([type="range"]),
+.cover-editor-properties select {
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid #d5d9d1;
+  border-radius: 7px;
+}
+
+.cover-editor-properties input[type="range"] {
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .cover-editor-toolbar button {
+    flex: 1 1 auto;
+  }
+
+  .cover-editor-workspace {
+    padding: 6px;
+  }
+}
+
+

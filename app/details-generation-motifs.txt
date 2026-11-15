@@ -1,0 +1,214 @@
+===== FONCTION DE GENERATION =====
+import { useState } from 'react'
+import * as pdfjsLib from 'pdfjs-dist'
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import './AdminMockups.css'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+
+function AdminMockups() {
+  const [file, setFile] = useState(null)
+  const [style, setStyle] = useState('nature')
+  const [preview, setPreview] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [customImage, setCustomImage] = useState('')
+  const [customTitle, setCustomTitle] = useState('YOUR NEXT CHAPTER')
+  const [customBackground, setCustomBackground] = useState('#e5eadc')
+  const [downloadFormat, setDownloadFormat] = useState('png')
+
+  async function createCustomMockup() {
+    if (!customImage) {
+      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+      return
+    }
+
+    setLoading(true)
+    setMessage('')
+
+    try {
+      const image = new Image()
+      image.src = customImage
+
+      await new Promise((resolve, reject) => {
+        image.onload = resolve
+        image.onerror = () => reject(
+          new Error('Impossible de lire cette image.')
+        )
+      })
+
+      const canvas = document.createElement('canvas')
+      canvas.width = 1200
+      canvas.height = 900
+
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        throw new Error('Impossible de préparer le canvas.')
+      }
+
+      ctx.fillStyle = customBackground
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      const margin = 70
+      const maxWidth = canvas.width - margin * 2
+      const maxHeight = 650
+      const ratio = Math.min(
+        maxWidth / image.width,
+        maxHeight / image.height
+      )
+      const width = image.width * ratio
+      const height = image.height * ratio
+      const x = (canvas.width - width) / 2
+      const y = 40 + (maxHeight - height) / 2
+
+      ctx.save()
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.20)'
+      ctx.shadowBlur = 24
+      ctx.shadowOffsetY = 10
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(x - 10, y - 10, width + 20, height + 20)
+      ctx.restore()
+
+      ctx.drawImage(image, x, y, width, height)
+
+      const title = customTitle.trim()
+      if (title) {
+        ctx.fillStyle = '#24344b'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.font = 'bold 38px Arial, sans-serif'
+
+        const maxTextWidth = canvas.width - 100
+        let displayedTitle = title
+        while (
+          ctx.measureText(displayedTitle).width > maxTextWidth &&
+          displayedTitle.length > 3
+        ) {
+          displayedTitle = displayedTitle.slice(0, -4) + '…'
+        }
+
+        ctx.fillText(displayedTitle, canvas.width / 2, 790)
+      }
+
+      setPreview(canvas.toDataURL('image/png'))
+      setMessage('Mockup personnalisé créé. Vous pouvez le télécharger.')
+    } catch (error) {
+      console.error('Erreur de création du mockup personnalisé :', error)
+      setMessage('Impossible de créer le mockup. Essayez une autre image.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+===== IMPORT DE L'IMAGE PERSONNALISEE =====
+6-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+7-
+8-function AdminMockups() {
+9-  const [file, setFile] = useState(null)
+10-  const [style, setStyle] = useState('nature')
+11-  const [preview, setPreview] = useState('')
+12-  const [message, setMessage] = useState('')
+13-  const [loading, setLoading] = useState(false)
+14:  const [customImage, setCustomImage] = useState('')
+15-  const [customTitle, setCustomTitle] = useState('YOUR NEXT CHAPTER')
+16-  const [customBackground, setCustomBackground] = useState('#e5eadc')
+17-  const [downloadFormat, setDownloadFormat] = useState('png')
+18-
+19-  async function createCustomMockup() {
+20-    if (!customImage) {
+21-      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+22-      return
+23-    }
+24-
+25-    setLoading(true)
+26-    setMessage('')
+27-
+28-    try {
+29-      const image = new Image()
+30-      image.src = customImage
+31-
+32-      await new Promise((resolve, reject) => {
+33-        image.onload = resolve
+34-        image.onerror = () => reject(
+35-          new Error('Impossible de lire cette image.')
+36-        )
+37-      })
+38-
+39-      const canvas = document.createElement('canvas')
+40-      canvas.width = 1200
+41-      canvas.height = 900
+42-
+43-      const ctx = canvas.getContext('2d')
+44-      if (!ctx) {
+45-        throw new Error('Impossible de préparer le canvas.')
+46-      }
+47-
+48-      ctx.fillStyle = customBackground
+49-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+--
+326-          type="file"
+327-          accept="image/png,image/jpeg,image/webp"
+328-          onChange={(event) => {
+329-            const nextFile = event.target.files?.[0]
+330-            setPreview('')
+331-            setMessage('')
+332-
+333-            if (!nextFile) {
+334:              setCustomImage('')
+335-              return
+336-            }
+337-
+338-            if (nextFile.size > 20 * 1024 * 1024) {
+339-              event.target.value = ''
+340:              setCustomImage('')
+341-              setMessage('L’image dépasse la limite de 20 Mo.')
+342-              return
+343-            }
+344-
+345-            if (!['image/png', 'image/jpeg', 'image/webp'].includes(nextFile.type)) {
+346-              event.target.value = ''
+347:              setCustomImage('')
+348-              setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+349-              return
+350-            }
+351-
+352-            const reader = new FileReader()
+353-            reader.onload = () => {
+354:              setCustomImage(String(reader.result || ''))
+355-              setMessage('Image importée. Personnalisez le texte et le fond.')
+356-            }
+357-            reader.onerror = () => setMessage('Impossible de lire ce fichier image.')
+358-            reader.readAsDataURL(nextFile)
+359-          }}
+360-        />
+361-
+362-        <label htmlFor="mockup-custom-title">Texte à afficher sous l’image</label>
+363-        <input
+364-          id="mockup-custom-title"
+365-          type="text"
+366-          maxLength={100}
+367-          value={customTitle}
+368-          onChange={(event) => {
+369-            setCustomTitle(event.target.value)
+370-            setPreview('')
+371-          }}
+372-          placeholder="Ex. : YOUR NEXT CHAPTER"
+373-        />
+374-
+375-        <label htmlFor="mockup-custom-background">Couleur de fond</label>
+376-        <input
+377-          id="mockup-custom-background"
+378-          type="color"
+379-          value={customBackground}
+380-          onChange={(event) => {
+381-            setCustomBackground(event.target.value)
+382-            setPreview('')
+383-          }}
+384-        />
+385-
+386-        <button
+387-          className="mockup-primary-button"
+388-          type="button"
+389-          onClick={createCustomMockup}
+
+===== FIN =====

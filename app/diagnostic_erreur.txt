@@ -1,0 +1,26 @@
+]633;E;echo "===== BLOC D'ENREGISTREMENT FIRESTORE =====";cda81bdc-fa3b-4dd4-a7c8-44f0dc210cbd]633;C===== BLOC D'ENREGISTREMENT FIRESTORE =====
+105-        dataUrl: customPatternImage,
+106-        updatedAt: Date.now(),
+107-      })
+108-
+109-      setSavedPatterns(await readPatternLibrary())
+110-      setPatternName('')
+111-      setMessage(`Motif « ${name} » enregistré dans votre compte.`)
+112-    } catch (error) {
+113:      console.error('Enregistrement Firestore impossible :', error)
+114-      setMessage('Échec de l’enregistrement. Vérifiez les règles Firestore et la taille de l’image.')
+115-    }
+116-  }
+117-
+118-  const applySavedPattern = (pattern) => {
+119-    setCustomPatternImage(pattern.dataUrl)
+120-    setBackgroundType('upload')
+121-    setPreview('')
+122-    setMessage(`Motif « ${pattern.name} » sélectionné.`)
+123-  }
+124-
+125-  const renameSavedPattern = async (pattern) => {
+126-    const proposedName = window.prompt('Nouveau nom du motif :', pattern.name)
+127-    if (proposedName === null) return
+
+===== REGLES FIRESTORE LOCALES =====

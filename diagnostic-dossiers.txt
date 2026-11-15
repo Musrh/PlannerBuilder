@@ -1,0 +1,42 @@
+]633;E;echo "===== DOSSIER PRINCIPAL =====";99dc26be-0010-4dc0-9eb9-62f404fb942d]633;C===== DOSSIER PRINCIPAL =====
+/workspaces/PlannerBuilder
+total 416
+drwxrwxrwx+  8 codespace root        4096 Nov 14 02:39 .
+drwxr-xrwx+  5 codespace root        4096 Nov 12 17:38 ..
+drwxrwxrwx+  8 codespace root        4096 Nov 13 00:57 .git
+-rw-rw-rw-   1 codespace root          51 Oct 27 22:49 README.md
+-rw-rw-rw-   1 codespace codespace   6760 Oct 30 02:24 abonnements.txt
+drwxrwxrwx+ 10 codespace codespace  16384 Nov 14 02:28 app
+-rw-rw-rw-   1 codespace codespace   2775 Oct 30 02:20 authgate-verification.txt
+-rw-rw-rw-   1 codespace codespace 241343 Oct 29 23:17 backup-avant-modifications.tar.gz
+drwxrwxrwx+  2 codespace codespace   4096 Oct 28 13:19 backup-couverture-20261028-131937
+drwxrwxrwx+  2 codespace codespace   4096 Oct 28 13:00 backup-plannerbuilder-20261028-130012
+drwxrwxrwx+  2 codespace codespace   4096 Oct 28 13:13 backup-styles-20261028-131313
+-rw-rw-rw-   1 codespace codespace    460 Nov 13 01:49 build-result.txt
+-rw-rw-rw-   1 codespace codespace    355 Oct 30 02:26 config-admin.txt
+-rw-rw-rw-   1 codespace codespace   1436 Oct 30 02:14 controle-export.txt
+-rw-rw-rw-   1 codespace codespace   1237 Oct 30 02:16 controle-limite.txt
+-rw-rw-rw-   1 codespace codespace  46532 Nov 14 02:33 diagnostic-App-complet.txt
+-rw-rw-rw-   1 codespace codespace    450 Nov 14 02:08 diagnostic-backend.txt
+-rw-rw-rw-   1 codespace codespace    147 Nov 14 02:39 diagnostic-dossiers.txt
+-rw-rw-rw-   1 codespace codespace   1037 Nov 14 02:37 diagnostic-verification.txt
+-rw-rw-rw-   1 codespace codespace    255 Nov 14 02:11 fichiers-projet.txt
+-rw-rw-rw-   1 codespace codespace   1814 Oct 30 02:41 firebase-verification.txt
+-rw-rw-rw-   1 codespace codespace    428 Oct 29 03:22 inspection_auth_plannerbuilder.txt
+-rw-rw-rw-   1 codespace codespace    955 Nov  1 20:28 resultat-apres-cover-editor.txt
+-rw-rw-rw-   1 codespace codespace   1061 Nov  1 19:19 resultat-tests.txt
+-rw-rw-rw-   1 codespace codespace    129 Oct 30 02:05 resultat.txt
+-rw-rw-rw-   1 codespace codespace    460 Nov 12 17:31 resultat_tests.txt
+drwxrwxrwx+ 16 codespace codespace   4096 Oct 28 17:44 sauvegardes
+-rw-rw-rw-   1 codespace codespace      0 Oct 29 23:14 suivi.txt
+-rw-rw-rw-   1 codespace codespace    854 Nov 13 18:15 verification-App.txt
+-rw-rw-rw-   1 codespace codespace     85 Oct 29 23:19 verification-sauvegarde.txt
+-rw-rw-rw-   1 codespace codespace    129 Oct 30 02:11 verification.txt
+-rw-rw-rw-   1 codespace codespace    134 Oct 27 23:42 versions.txt
+
+===== RECHERCHE PACKAGE.JSON =====
+./app/package.json
+./backup-plannerbuilder-20261028-130012/package.json
+./sauvegardes/avant-mockups-20261028-135713/package.json
+./sauvegardes/avant-mockups-admin-20261028-140404/package.json
+./sauvegardes/avant-mockups-admin-20261028-140507/package.json

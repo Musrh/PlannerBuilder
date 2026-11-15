@@ -1,0 +1,196 @@
+]633;E;echo "===== LECTURE DE LA BIBLIOTHEQUE =====";cb8d34f4-024a-4e0f-8e0f-68db0219af92]633;C===== LECTURE DE LA BIBLIOTHEQUE =====
+
+    request.onupgradeneeded = () => {
+      const db = request.result
+      if (!db.objectStoreNames.contains('patterns')) {
+        db.createObjectStore('patterns', { keyPath: 'id' })
+      }
+    }
+
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+
+  const readPatternLibrary = async () => {
+    const db = await openPatternDatabase()
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('patterns', 'readonly')
+      const request = transaction.objectStore('patterns').getAll()
+
+      request.onsuccess = () => {
+        resolve(request.result.sort((a, b) => b.updatedAt - a.updatedAt))
+      }
+      request.onerror = () => reject(request.error)
+      transaction.oncomplete = () => db.close()
+      transaction.onerror = () => {
+        db.close()
+        reject(transaction.error)
+      }
+    })
+  }
+
+  const writePatternLibrary = async (pattern) => {
+    const db = await openPatternDatabase()
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('patterns', 'readwrite')
+      transaction.objectStore('patterns').put(pattern)
+      transaction.oncomplete = () => {
+        db.close()
+        resolve()
+      }
+      transaction.onerror = () => {
+        db.close()
+        reject(transaction.error)
+      }
+      transaction.onabort = () => {
+        db.close()
+        reject(transaction.error || new Error('Enregistrement annulé.'))
+      }
+    })
+  }
+
+  const removePatternFromLibrary = async (id) => {
+    const db = await openPatternDatabase()
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction('patterns', 'readwrite')
+      transaction.objectStore('patterns').delete(id)
+      transaction.oncomplete = () => {
+        db.close()
+        resolve()
+      }
+      transaction.onerror = () => {
+        db.close()
+        reject(transaction.error)
+      }
+      transaction.onabort = () => {
+        db.close()
+        reject(transaction.error || new Error('Suppression annulée.'))
+      }
+    })
+  }
+
+  useEffect(() => {
+    let active = true
+
+    readPatternLibrary()
+      .then((patterns) => {
+        if (active) setSavedPatterns(patterns)
+      })
+      .catch(() => {
+        if (active) {
+          setMessage('Impossible de lire la bibliothèque locale de motifs.')
+        }
+      })
+      .finally(() => {
+        if (active) setLibraryLoading(false)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+
+===== SAUVEGARDE D'UN MOTIF =====
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const saveCurrentPattern = async () => {
+    if (!customPatternImage) {
+      setMessage('Importe d’abord une image de motif.')
+      return
+    }
+
+    const name = patternName.trim()
+    if (!name) {
+      setMessage('Donne un nom à ce motif avant de l’enregistrer.')
+      return
+    }
+
+    try {
+      const pattern = {
+        id: window.crypto?.randomUUID
+          ? window.crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        name,
+        dataUrl: customPatternImage,
+        updatedAt: Date.now(),
+      }
+
+      await writePatternLibrary(pattern)
+      setSavedPatterns(await readPatternLibrary())
+      setPatternName('')
+      setMessage(`Motif « ${name} » enregistré dans la bibliothèque.`)
+    } catch (error) {
+      console.error('Enregistrement du motif impossible :', error)
+      setMessage('Échec de l’enregistrement. Vérifie l’espace disponible du navigateur.')
+    }
+  }
+
+  const applySavedPattern = (pattern) => {
+    setCustomPatternImage(pattern.dataUrl)
+    setBackgroundType('upload')
+    setPreview('')
+    setMessage(`Motif « ${pattern.name} » sélectionné.`)
+  }
+
+  const renameSavedPattern = async (pattern) => {
+    const proposedName = window.prompt('Nouveau nom du motif :', pattern.name)
+    if (proposedName === null) return
+
+    const name = proposedName.trim()
+    if (!name) {
+      setMessage('Le nom du motif ne peut pas être vide.')
+      return
+    }
+
+    try {
+      await writePatternLibrary({ ...pattern, name, updatedAt: Date.now() })
+      setSavedPatterns(await readPatternLibrary())
+      setMessage('Nom du motif mis à jour.')
+    } catch (error) {
+      console.error('Renommage impossible :', error)
+      setMessage('Impossible de renommer ce motif.')
+    }
+  }
+
+  const deleteSavedPattern = async (pattern) => {
+    if (!window.confirm(`Supprimer le motif « ${pattern.name} » de la bibliothèque ?`)) {
+      return
+    }
+
+    try {
+      await removePatternFromLibrary(pattern.id)
+      setSavedPatterns(await readPatternLibrary())
+      setMessage(`Motif « ${pattern.name} » supprimé de la bibliothèque.`)
+    } catch (error) {
+      console.error('Suppression impossible :', error)
+      setMessage('Impossible de supprimer ce motif.')
+    }
+  }
+
+
+  async function createCustomMockup() {
+    if (!customImage) {
+      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+      return
+    }
+
+    setLoading(true)
+    setMessage('')
+
+    try {
+
+===== IMPORTS FIREBASE DISPONIBLES =====
+2:import { initializeApp, getApp, getApps } from 'firebase/app'
+3:import { getAuth } from 'firebase/auth'
+4:import { getFirestore } from 'firebase/firestore'
+5:import { getAnalytics, isSupported } from 'firebase/analytics'
+7:const firebaseConfig = {
+9:    authDomain: 'recettes-2c62a.firebaseapp.com',
+10:      databaseURL: 'https://recettes-2c62a-default-rtdb.firebaseio.com',
+12:          storageBucket: 'recettes-2c62a.firebasestorage.app',
+18:                const app = getApps().length ? getApp() : initializeApp(firebaseConfig)

@@ -1,0 +1,421 @@
+]633;E;echo "===== ETAPE 1 : INSPECTION DU MODULE =====";92642776-c840-4524-8a18-78fff19f9be0]633;C===== ETAPE 1 : INSPECTION DU MODULE =====
+Wed Oct 28 15:00:44 UTC 2026
+
+===== FICHIERS EXISTANTS =====
+-rw-rw-rw- 1 codespace codespace 1.9K Oct 28 14:17 src/AdminMockups.css
+-rw-rw-rw- 1 codespace codespace 6.7K Oct 28 14:17 src/AdminMockups.jsx
+
+===== IMPORTS ET ETATS REACT =====
+1:import { useState } from 'react'
+2:import * as pdfjsLib from 'pdfjs-dist'
+3:import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+4:import './AdminMockups.css'
+8:function AdminMockups() {
+9:  const [file, setFile] = useState(null)
+10:  const [style, setStyle] = useState('nature')
+11:  const [preview, setPreview] = useState('')
+12:  const [message, setMessage] = useState('')
+13:  const [loading, setLoading] = useState(false)
+231:export default AdminMockups
+
+===== ZONES D'UPLOAD ET D'EXPORT =====
+2:import * as pdfjsLib from 'pdfjs-dist'
+3:import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+6:pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+17:      setMessage('Importez d’abord un fichier PDF.')
+27:      const pdf = await pdfjsLib.getDocument({ data }).promise
+28:      const page = await pdf.getPage(1)
+30:      const pageCanvas = document.createElement('canvas')
+31:      const pageContext = pageCanvas.getContext('2d')
+37:      pageCanvas.width = Math.ceil(viewport.width)
+38:      pageCanvas.height = Math.ceil(viewport.height)
+41:        canvas: pageCanvas,
+42:        canvasContext: pageContext,
+46:      const canvas = document.createElement('canvas')
+47:      canvas.width = 1200
+48:      canvas.height = 900
+49:      const ctx = canvas.getContext('2d')
+52:        throw new Error('Impossible de créer l’image publicitaire.')
+64:      ctx.fillRect(0, 0, canvas.width, canvas.height)
+85:      const imageRatio = pageCanvas.width / pageCanvas.height
+88:      let imageWidth = maxWidth
+89:      let imageHeight = imageWidth / imageRatio
+91:      if (imageHeight > maxHeight) {
+92:        imageHeight = maxHeight
+93:        imageWidth = imageHeight * imageRatio
+96:      ctx.drawImage(
+97:        pageCanvas,
+98:        330 + (470 - imageWidth) / 2,
+99:        125 + (640 - imageHeight) / 2,
+100:        imageWidth,
+101:        imageHeight,
+118:      ctx.fillText('DIGITAL DOWNLOAD', 65, 830)
+125:      setPreview(canvas.toDataURL('image/png'))
+127:      await pdf.destroy()
+131:        'Impossible de lire ce PDF. Essayez un PDF valide et non protégé par mot de passe.',
+138:  function downloadMockup() {
+143:      .replace(/\.pdf$/i, '')
+147:    link.download = `${safeName || 'planner'}-mockup.png`
+151:  return (
+155:        <h2>Générateur de mockups PDF</h2>
+157:          Importez un PDF, créez une image publicitaire et téléchargez-la
+158:          en PNG. Le PDF original n’est pas modifié.
+163:        <label htmlFor="mockup-pdf">Fichier PDF</label>
+164:        <input
+165:          id="mockup-pdf"
+166:          type="file"
+167:          accept="application/pdf,.pdf"
+176:              setMessage('Le PDF dépasse la limite de 40 Mo.')
+211:          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+215:            onClick={downloadMockup}
+223:        Prototype local : le PDF est traité dans le navigateur et n’est pas
+
+===== CONTENU COMPLET DU COMPOSANT =====
+import { useState } from 'react'
+import * as pdfjsLib from 'pdfjs-dist'
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import './AdminMockups.css'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+
+function AdminMockups() {
+  const [file, setFile] = useState(null)
+  const [style, setStyle] = useState('nature')
+  const [preview, setPreview] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  async function createMockup() {
+    if (!file) {
+      setMessage('Importez d’abord un fichier PDF.')
+      return
+    }
+
+    setLoading(true)
+    setMessage('')
+    setPreview('')
+
+    try {
+      const data = await file.arrayBuffer()
+      const pdf = await pdfjsLib.getDocument({ data }).promise
+      const page = await pdf.getPage(1)
+      const viewport = page.getViewport({ scale: 1.5 })
+      const pageCanvas = document.createElement('canvas')
+      const pageContext = pageCanvas.getContext('2d')
+
+      if (!pageContext) {
+        throw new Error('Impossible de préparer le rendu de la page.')
+      }
+
+      pageCanvas.width = Math.ceil(viewport.width)
+      pageCanvas.height = Math.ceil(viewport.height)
+
+      await page.render({
+        canvas: pageCanvas,
+        canvasContext: pageContext,
+        viewport,
+      }).promise
+
+      const canvas = document.createElement('canvas')
+      canvas.width = 1200
+      canvas.height = 900
+      const ctx = canvas.getContext('2d')
+
+      if (!ctx) {
+        throw new Error('Impossible de créer l’image publicitaire.')
+      }
+
+      const palettes = {
+        nature: ['#e5eadc', '#6e8665', '#354331'],
+        elegant: ['#eee5dc', '#a47d62', '#49372d'],
+        professional: ['#dfe6f0', '#455d80', '#24344b'],
+        colorful: ['#fae4d7', '#d77a60', '#713d35'],
+      }
+      const [background, accent, ink] = palettes[style]
+
+      ctx.fillStyle = background
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      ctx.fillStyle = accent
+      ctx.beginPath()
+      ctx.arc(1050, 110, 210, 0, Math.PI * 2)
+      ctx.fill()
+
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.roundRect(300, 85, 570, 730, 22)
+      ctx.fill()
+
+      ctx.save()
+      ctx.shadowColor = 'rgba(35, 40, 30, 0.25)'
+      ctx.shadowBlur = 35
+      ctx.shadowOffsetX = 18
+      ctx.shadowOffsetY = 22
+      ctx.fillStyle = '#fff'
+      ctx.fillRect(330, 110, 470, 665)
+      ctx.restore()
+
+      const imageRatio = pageCanvas.width / pageCanvas.height
+      const maxWidth = 440
+      const maxHeight = 620
+      let imageWidth = maxWidth
+      let imageHeight = imageWidth / imageRatio
+
+      if (imageHeight > maxHeight) {
+        imageHeight = maxHeight
+        imageWidth = imageHeight * imageRatio
+      }
+
+      ctx.drawImage(
+        pageCanvas,
+        330 + (470 - imageWidth) / 2,
+        125 + (640 - imageHeight) / 2,
+        imageWidth,
+        imageHeight,
+      )
+
+      ctx.fillStyle = ink
+      ctx.font = 'bold 37px Georgia, serif'
+      ctx.textAlign = 'left'
+      ctx.fillText('YOUR NEXT', 65, 390)
+      ctx.fillText('CHAPTER', 65, 438)
+
+      ctx.fillStyle = accent
+      ctx.fillRect(67, 462, 100, 5)
+
+      ctx.font = '20px Arial, sans-serif'
+      ctx.fillStyle = ink
+      ctx.fillText('A digital planner made for you', 65, 505)
+
+      ctx.font = 'bold 17px Arial, sans-serif'
+      ctx.fillText('DIGITAL DOWNLOAD', 65, 830)
+
+      ctx.font = '16px Arial, sans-serif'
+      ctx.fillStyle = '#ffffff'
+      ctx.textAlign = 'center'
+      ctx.fillText('PLAN  •  CREATE  •  GROW', 930, 790)
+
+      setPreview(canvas.toDataURL('image/png'))
+      setMessage(`Mockup créé à partir de la première page de « ${file.name} ».`)
+      await pdf.destroy()
+    } catch (error) {
+      console.error('Erreur de création du mockup :', error)
+      setMessage(
+        'Impossible de lire ce PDF. Essayez un PDF valide et non protégé par mot de passe.',
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function downloadMockup() {
+    if (!preview) return
+
+    const link = document.createElement('a')
+    const safeName = (file?.name || 'planner')
+      .replace(/\.pdf$/i, '')
+      .replace(/[^a-z0-9-_]+/gi, '-')
+
+    link.href = preview
+    link.download = `${safeName || 'planner'}-mockup.png`
+    link.click()
+  }
+
+  return (
+    <section className="admin-mockups">
+      <div className="admin-mockups-heading">
+        <p className="admin-mockups-eyebrow">OUTIL DE PROMOTION</p>
+        <h2>Générateur de mockups PDF</h2>
+        <p>
+          Importez un PDF, créez une image publicitaire et téléchargez-la
+          en PNG. Le PDF original n’est pas modifié.
+        </p>
+      </div>
+
+      <div className="mockup-controls">
+        <label htmlFor="mockup-pdf">Fichier PDF</label>
+        <input
+          id="mockup-pdf"
+          type="file"
+          accept="application/pdf,.pdf"
+          onChange={(event) => {
+            const nextFile = event.target.files?.[0] || null
+            setFile(nextFile)
+            setPreview('')
+            setMessage('')
+            if (nextFile && nextFile.size > 40 * 1024 * 1024) {
+              setFile(null)
+              event.target.value = ''
+              setMessage('Le PDF dépasse la limite de 40 Mo.')
+            }
+          }}
+        />
+
+        <label htmlFor="mockup-style">Ambiance publicitaire</label>
+        <select
+          id="mockup-style"
+          value={style}
+          onChange={(event) => {
+            setStyle(event.target.value)
+            setPreview('')
+          }}
+        >
+          <option value="nature">Nature</option>
+          <option value="elegant">Élégante</option>
+          <option value="professional">Professionnelle</option>
+          <option value="colorful">Colorée</option>
+        </select>
+
+        <button
+          className="mockup-primary-button"
+          type="button"
+          onClick={createMockup}
+          disabled={!file || loading}
+        >
+          {loading ? 'Création en cours…' : 'Créer le mockup'}
+        </button>
+
+        {message && <p className="mockup-message" role="status">{message}</p>}
+      </div>
+
+      {preview && (
+        <div className="mockup-result">
+          <h3>Aperçu publicitaire</h3>
+          <img src={preview} alt="Aperçu du mockup publicitaire du PDF" />
+          <button
+            className="mockup-primary-button"
+            type="button"
+            onClick={downloadMockup}
+          >
+            Télécharger le mockup PNG
+          </button>
+        </div>
+      )}
+
+      <p className="mockup-local-note">
+        Prototype local : le PDF est traité dans le navigateur et n’est pas
+        envoyé à un serveur par ce composant. Cette page n’est pas encore
+        protégée par une authentification administrateur.
+      </p>
+    </section>
+  )
+}
+
+export default AdminMockups
+
+===== STYLES EXISTANTS =====
+.admin-mockups {
+  width: min(1100px, calc(100% - 32px));
+  margin: 32px auto;
+  padding: 28px;
+  border: 1px solid #e4e6dc;
+  border-radius: 18px;
+  background: #fff;
+  color: #454b43;
+  box-shadow: 0 8px 28px rgb(57 65 49 / 5%);
+}
+
+.admin-mockups-heading {
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+.admin-mockups-eyebrow {
+  margin: 0 0 8px;
+  color: #718b70;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.admin-mockups-heading h2 {
+  margin: 0 0 10px;
+  font-size: clamp(22px, 4vw, 30px);
+}
+
+.admin-mockups-heading > p:last-child,
+.mockup-local-note {
+  color: #74796f;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.mockup-controls {
+  display: grid;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.mockup-controls label {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mockup-controls input[type='file'],
+.mockup-controls select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid #e4e6dc;
+  border-radius: 9px;
+  background: #fff;
+  color: #454b43;
+}
+
+.mockup-primary-button {
+  min-height: 44px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: #718b70;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mockup-primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.mockup-message {
+  margin: 4px 0;
+  color: #4c5149;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mockup-result {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.mockup-result h3 {
+  margin: 0;
+}
+
+.mockup-result img {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  border: 1px solid #e4e6dc;
+  border-radius: 12px;
+}
+
+.mockup-local-note {
+  margin: 24px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #e4e6dc;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .admin-mockups {
+    width: calc(100% - 20px);
+    padding: 18px;
+  }
+}

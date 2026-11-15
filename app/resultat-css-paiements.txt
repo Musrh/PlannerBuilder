@@ -1,0 +1,11 @@
+===== VERIFICATION CSS PAIEMENTS =====
+227:/* ===== CONFIGURATION DES PAIEMENTS ===== */
+277:.admin-prices-grid {
+328:.admin-save-button {
+340:.admin-save-button:hover {
+344:.admin-save-button:disabled {
+349:.admin-success {
+357:  .admin-prices-grid {
+373:  .admin-save-button {
+===== NOMBRE DE LIGNES =====
+376 src/Admin.css

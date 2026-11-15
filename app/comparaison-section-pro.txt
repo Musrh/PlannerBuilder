@@ -1,0 +1,215 @@
+]633;E;echo "===== APP.JSX ACTUEL : LIGNES 1170 À 1239 =====";642b5468-3c32-482c-b6e7-41930e9c0c9f]633;C===== APP.JSX ACTUEL : LIGNES 1170 À 1239 =====
+  1170	            >
+  1171	              <strong style={{ fontSize: 13 }}>
+  1172	                {isUnlimited
+  1173	                  ? 'Exports illimités'
+  1174	                  : freeExports === null
+  1175	                    ? 'Compteur à vérifier sur Railway'
+  1176	                    : `${Math.max(0, 3 - freeExports)} export(s) gratuit(s) restant(s)`}
+  1177	              </strong>
+  1178	
+  1179	              <span
+  1180	                style={{
+  1181	                  fontWeight: 700,
+  1182	                  fontSize: 13,
+  1183	                  whiteSpace: 'nowrap',
+  1184	                }}
+  1185	              >
+  1186	                {isUnlimited
+  1187	                  ? 'PRO'
+  1188	                  : freeExports === null
+  1189	                    ? '— / 3'
+  1190	                    : `${Math.min(freeExports, 3)} / 3`}
+  1191	              </span>
+  1192	            </div>
+  1193	          </div>
+  1194	
+  1195	          {/* EXPORT PDF : AUTORISATION RAILWAY AVANT TÉLÉCHARGEMENT */}
+  1196	          <div className="export-area">
+  1197	            <button
+  1198	              className="export-button"
+  1199	              type="button"
+  1200	              onClick={exportPDF}
+  1201	            >
+  1202	              <span>↓</span> Télécharger le PDF
+  1203	            </button>
+  1204	
+  1205	            <p>
+  1206	              Le fichier PDF sera téléchargé directement sur votre appareil.
+  1207	            </p>
+  1208	          </div>
+  1209	        </aside>
+  1210	      </div>
+  1211	
+  1212	      {!isAdmin && (
+  1213	        <section
+  1214	          className="pro-upgrade"
+  1215	          aria-labelledby="pro-upgrade-title"
+  1216	          style={{
+  1217	            maxWidth: 1100,
+  1218	            margin: '32px auto',
+  1219	            padding: '28px',
+  1220	            border: '1px solid #dfe6dc',
+  1221	            borderRadius: 18,
+  1222	            background: '#fbfcf9',
+  1223	          }}
+  1224	        >
+  1225	          <p className="eyebrow">
+  1226	            {plan === 'pro' ? 'VOTRE ABONNEMENT PRO' : 'PASSEZ À LA VERSION PRO'}
+  1227	          </p>
+  1228	
+  1229	          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+  1230	            {plan === 'pro'
+  1231	              ? 'Renouvelez votre abonnement'
+  1232	              : 'Libérez tout votre potentiel'}
+  1233	          </h2>
+  1234	
+  1235	          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+  1236	            {plan === 'pro'
+  1237	              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+  1238	              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+  1239	          </p>
+
+===== APP.JSXWAC : LIGNES 1170 À 1320 =====
+  1170	            <p>
+  1171	              Le fichier PDF sera téléchargé directement sur votre appareil.
+  1172	            </p>
+  1173	          </div>
+  1174	        </aside>
+  1175	      </div>
+  1176	
+  1177	      {!isAdmin && (
+  1178	        <section
+  1179	          className="pro-upgrade"
+  1180	          aria-labelledby="pro-upgrade-title"
+  1181	          style={{
+  1182	            maxWidth: 1100,
+  1183	            margin: '32px auto',
+  1184	            padding: '28px',
+  1185	            border: '1px solid #dfe6dc',
+  1186	            borderRadius: 18,
+  1187	            background: '#fbfcf9',
+  1188	          }}
+  1189	        >
+  1190	          <p className="eyebrow">
+  1191	            {plan === 'pro' ? 'VOTRE ABONNEMENT PRO' : 'PASSEZ À LA VERSION PRO'}
+  1192	          </p>
+  1193	
+  1194	          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+  1195	            {plan === 'pro'
+  1196	              ? 'Renouvelez votre abonnement'
+  1197	              : 'Libérez tout votre potentiel'}
+  1198	          </h2>
+  1199	
+  1200	          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+  1201	            {plan === 'pro'
+  1202	              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+  1203	              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+  1204	          </p>
+  1205	
+  1206	          <div
+  1207	            style={{
+  1208	              display: 'grid',
+  1209	              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+  1210	              gap: 16,
+  1211	            }}
+  1212	          >
+  1213	            <article
+  1214	              style={{
+  1215	                padding: 20,
+  1216	                borderRadius: 14,
+  1217	                border: '1px solid #dfe6dc',
+  1218	                background: '#fff',
+  1219	              }}
+  1220	            >
+  1221	              <h3 style={{ margin: '0 0 8px' }}>Pro mensuel</h3>
+  1222	              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+  1223	                2 $
+  1224	              </p>
+  1225	              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+  1226	                30 jours d’accès Pro
+  1227	              </p>
+  1228	
+  1229	              <a
+  1230	                href={WHOP_MONTHLY_URL}
+  1231	                target="_blank"
+  1232	                rel="noopener noreferrer"
+  1233	                style={{
+  1234	                  display: 'inline-block',
+  1235	                  padding: '11px 18px',
+  1236	                  borderRadius: 9,
+  1237	                  background: '#718B70',
+  1238	                  color: '#fff',
+  1239	                  textDecoration: 'none',
+  1240	                  fontWeight: 700,
+  1241	                }}
+  1242	              >
+  1243	                {plan === 'pro' ? 'Renouveler 30 jours' : 'Choisir mensuel'}
+  1244	              </a>
+  1245	            </article>
+  1246	
+  1247	            <article
+  1248	              style={{
+  1249	                padding: 20,
+  1250	                borderRadius: 14,
+  1251	                border: '1px solid #dfe6dc',
+  1252	                background: '#fff',
+  1253	              }}
+  1254	            >
+  1255	              <h3 style={{ margin: '0 0 8px' }}>Pro annuel</h3>
+  1256	              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+  1257	                20 $
+  1258	              </p>
+  1259	              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+  1260	                365 jours d’accès Pro
+  1261	              </p>
+  1262	
+  1263	              <a
+  1264	                href={WHOP_ANNUAL_URL}
+  1265	                target="_blank"
+  1266	                rel="noopener noreferrer"
+  1267	                style={{
+  1268	                  display: 'inline-block',
+  1269	                  padding: '11px 18px',
+  1270	                  borderRadius: 9,
+  1271	                  background: '#263b2b',
+  1272	                  color: '#fff',
+  1273	                  textDecoration: 'none',
+  1274	                  fontWeight: 700,
+  1275	                }}
+  1276	              >
+  1277	                {plan === 'pro' ? 'Renouveler 365 jours' : 'Choisir annuel'}
+  1278	              </a>
+  1279	            </article>
+  1280	          </div>
+  1281	
+  1282	          <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+  1283	            Le paiement est traité sur Whop. L’activation et la prolongation
+  1284	            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+  1285	          </small>
+  1286	        </section>
+  1287	      )}
+  1288	
+  1289	      {notice && (
+  1290	        <div className="notice" role="status">
+  1291	          {notice}
+  1292	        </div>
+  1293	      )}
+  1294	
+  1295	      <footer className="app-footer">
+  1296	        <span>PlannerBuilder</span>
+  1297	        <span>Créez avec intention. Organisez avec simplicité.</span>
+  1298	      </footer>
+  1299	    </main>
+  1300	  )
+  1301	}
+  1302	
+  1303	function AppWithAuth() {
+  1304	  return (
+  1305	    <AuthGate>
+  1306	      <App />
+  1307	    </AuthGate>
+  1308	  )
+  1309	}
+  1310	
+  1311	export default AppWithAuth

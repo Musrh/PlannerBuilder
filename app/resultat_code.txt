@@ -1,0 +1,16 @@
+16:const pageContent = {
+67:function App() {
+68:  const [selectedId, setSelectedId] = useState('food')
+77:  const selected = templates.find((item) => item.id === selectedId)
+78:  const content = pageContent[selectedId]
+90:  function exportPDF() {
+124:      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+198:            if (['food', 'student', 'habits'].includes(selectedId)) {
+212:              margin + (['food', 'student', 'habits'].includes(selectedId) ? 34 : 5),
+296:                className={`template-option ${selectedId === template.id ? 'selected' : ''}`}
+306:                {selectedId === template.id && <span className="selected-check">✓</span>}
+346:                    {index === 1 && selectedId === 'weekly' ? (
+347:                      <div className="week-grid">
+352:                    ) : index === 1 && selectedId === 'monthly' ? (
+353:                      <div className="month-grid">
+360:                            {selectedId === 'habits' || selectedId === 'student' || selectedId === 'food'

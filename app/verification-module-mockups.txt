@@ -1,0 +1,176 @@
+]633;E;echo "===== FICHIERS PDF.JS =====";901377c7-5a55-4911-974b-9cea672f1e3a]633;C===== FICHIERS PDF.JS =====
+node_modules/pdfjs-dist/build/pdf.mjs
+node_modules/pdfjs-dist/build/pdf.worker.min.mjs
+
+===== POINTS D'INTEGRATION DANS APP.JSX =====
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+      setNotice(`PDF créé : ${pages + 1} page(s), couverture comprise. Le téléchargement devrait commencer.`)
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+        <span className="private-label"><span /> Espace de création</span>
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>
+            <span className="count">{filtered.length}</span>
+          </div>
+
+          <label className="field-label" htmlFor="category">Catégorie</label>
+          <select id="category" value={category} onChange={(event) => setCategory(event.target.value)}>
+            {categories.map((item) => <option key={item}>{item}</option>)}
+          </select>
+
+          <div className="template-list">
+            {filtered.map((template) => (
+              <button
+                className={`template-option ${selectedId === template.id ? 'selected' : ''}`}
+                key={template.id}
+                onClick={() => chooseTemplate(template)}
+                type="button"
+              >
+                <span className="template-icon">{template.icon}</span>
+                <span className="template-name">
+                  <strong>{template.name}</strong>
+                  <small>{template.category}</small>
+                </span>
+                {selectedId === template.id && <span className="selected-check">✓</span>}
+              </button>
+            ))}
+          </div>
+
+          <div className="sidebar-tip">
+            <span>✦</span>
+            <p>Votre créativité, vos règles. Personnalisez votre document à tout moment.</p>
+          </div>
+        </aside>
+
+        <section className="preview-column">
+          <div className="preview-toolbar">
+            <div>
+              <p className="eyebrow">APERÇU EN DIRECT</p>
+              <h2>{selected.name}</h2>
+            </div>
+            <span className="preview-status"><span /> Prévisualisation</span>
+          </div>
+
+          <div className="paper-stage">
+            <article className={`planner-page planner-style-${visualStyle}`} style={{ backgroundColor: background }}>
+              <div className="page-topline">
+                <span>MON PLANNER</span>
+                <span>✳</span>
+
+===== FIN DU JSX =====
+                htmlFor="title-text-color"
+              />
+              <input
+                id="title-text-color"
+                type="color"
+                value={titleTextColor}
+                onChange={(event) => setTitleTextColor(event.target.value)}
+              />
+              <code>{titleTextColor.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">Typographie</label>
+            <select id="font" value={font} onChange={(event) => setFont(event.target.value)}>
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button key={value} type="button" className={density === value ? 'active' : ''} onClick={() => setDensity(value)}>
+                  {value === 'compacte' ? 'Compacte' : 'Aérée'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button className="reset-button" type="button" onClick={() => {
+            setPrimary('#718B70')
+            setBackground('#F7F5EF')
+            setTitleBackground('#718B70')
+            setTitleTextColor('#FFFFFF')
+            setFont('moderne')
+            setDensity('confortable')
+            setVisualStyle('minimaliste')
+            setNotice('')
+          }}>
+            ↺ Réinitialiser le style
+          </button>
+
+          <div className="export-area">
+            <button className="export-button" type="button" onClick={exportPDF}>
+              <span>↓</span> Exporter en PDF
+            </button>
+            <p>Votre aperçu sera envoyé à la fenêtre d’impression du navigateur.</p>
+          </div>
+        </aside>
+      </div>
+
+      {notice && <div className="notice" role="status">{notice}</div>}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+export default App
+
+===== SAUVEGARDES EXISTANTES =====
+drwxrwxrwx+ 3 codespace codespace 4096 Oct 28 14:05 ../sauvegardes/avant-mockups-admin-20261028-140507

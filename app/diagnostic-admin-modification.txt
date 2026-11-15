@@ -1,0 +1,85 @@
+]633;E;echo "===== BOUTON ADMIN =====";0621b8bb-3752-45c7-b533-7ec8d5586a1e]633;C===== BOUTON ADMIN =====
+   580	            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+   581	          </button>
+   582	        )}
+   583	
+   584	        {isAdmin && (
+   585	          <button
+   586	            type="button"
+   587	            className="mockup-dev-toggle"
+   588	            onClick={() => setShowAdminPanel((value) => !value)}
+   589	          >
+   590	            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+   591	          </button>
+   592	        )}
+   593	      </header>
+   594	
+   595	      <section className="welcome" id="top">
+   596	        <div>
+   597	          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+   598	          <h1>Créez un planner <em>à votre image.</em></h1>
+   599	          <p className="welcome-text">
+   600	            Choisissez un modèle, personnalisez son style et préparez votre document.
+   601	          </p>
+   602	        </div>
+   603	
+   604	        <div className="welcome-decoration" aria-hidden="true">❋</div>
+   605	      </section>
+   606	
+   607	      {import.meta.env.DEV && showMockups && <AdminMockups />}
+   608	      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+   609	
+   610	      <div className="workspace">
+   611	        <aside className="sidebar panel">
+   612	          <div className="panel-heading">
+   613	            <div>
+   614	              <p className="eyebrow">ÉTAPE 1</p>
+   615	              <h2>Mes modèles</h2>
+   616	            </div>
+   617	            <span className="count">{filtered.length}</span>
+   618	          </div>
+   619	
+   620	          <label className="field-label" htmlFor="category">Catégorie</label>
+   621	
+   622	          <select
+   623	            id="category"
+   624	            value={category}
+   625	            onChange={(event) => setCategory(event.target.value)}
+
+===== PANNEAU ADMIN LOCAL =====
+2-import CoverEditor from './CoverEditor.jsx'
+3-import { jsPDF } from 'jspdf'
+4-import AdminMockups from './AdminMockups.jsx'
+5:import AdminLocalPanel from './AdminLocalPanel.jsx'
+6-import AuthGate from './AuthGate.jsx'
+7-import { usePlannerBuilderAuth } from './AuthGate.jsx'
+8-import './App.css'
+--
+84-  const isUnlimited = plan === 'pro' || isAdmin
+85-
+86-  const [showMockups, setShowMockups] = useState(false)
+87:  const [showAdminPanel, setShowAdminPanel] = useState(false)
+88-  const [selectedId, setSelectedId] = useState('food')
+89-  const [visualStyle, setVisualStyle] = useState('minimaliste')
+90-  const [layoutModel, setLayoutModel] = useState('classique')
+--
+587-            className="mockup-dev-toggle"
+588-            onClick={() => setShowAdminPanel((value) => !value)}
+589-          >
+590:            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+591-          </button>
+592-        )}
+593-      </header>
+--
+605-      </section>
+606-
+607-      {import.meta.env.DEV && showMockups && <AdminMockups />}
+608:      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+609-
+610-      <div className="workspace">
+611-        <aside className="sidebar panel">
+
+===== ROUTER INSTALLE =====
+app@0.0.0 /workspaces/PlannerBuilder/app
+└── react-router-dom@7.18.5
+

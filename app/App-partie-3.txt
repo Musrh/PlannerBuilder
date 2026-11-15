@@ -1,0 +1,711 @@
+
+                <span className="template-name">
+                  <strong>{template.name}</strong>
+                  <small>{template.category}</small>
+                </span>
+
+                {selectedId === template.id && (
+                  <span className="selected-check">✓</span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="sidebar-tip">
+            <span>✦</span>
+            <p>Votre créativité, vos règles. Personnalisez votre document à tout moment.</p>
+          </div>
+        </aside>
+
+        <section className="preview-column">
+          <div className="preview-toolbar">
+            <div>
+              <p className="eyebrow">APERÇU EN DIRECT</p>
+              <h2>{selected.name}</h2>
+            </div>
+
+            <span className="preview-status"><span /> Prévisualisation</span>
+          </div>
+
+          <div className="paper-stage">
+            {coverMode === 'custom' && (
+              <div style={{ display: 'block' }}>
+                <CoverEditor ref={coverEditorRef} />
+              </div>
+            )}
+
+            {coverMode === 'preset' && (
+              <article
+                className={`planner-page planner-style-${visualStyle}`}
+                style={{ backgroundColor: background }}
+              >
+                <div className="page-topline">
+                  <span>MON PLANNER</span>
+                  <span>✳</span>
+                </div>
+
+                <div className="planner-cover-mark">❋</div>
+                <p className="planner-kicker">{selected.category.toUpperCase()}</p>
+                <h2 className="planner-title">{content.title}</h2>
+                <p className="planner-subtitle">{content.subtitle}</p>
+
+                <div className="planner-date">
+                  <span>DATE</span>
+                  <span className="date-line" />
+                </div>
+
+                <div
+                  className={`planner-sections layout-${layoutModel}`}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns:
+                      layoutModel === 'colonnes' || layoutModel === 'grille'
+                        ? 'repeat(2, minmax(0, 1fr))'
+                        : '1fr',
+                    gap: layoutModel === 'grille'
+                      ? 8
+                      : layoutModel === 'epure'
+                        ? 18
+                        : 12,
+                    alignItems: 'stretch',
+                  }}
+                >
+                  {content.sections.map((section, index) => (
+                    <section
+                      className={`planner-section section-${index}`}
+                      key={section}
+                      style={{
+                        minWidth: 0,
+                        padding: layoutModel === 'epure'
+                          ? '8px 2px'
+                          : layoutModel === 'grille'
+                            ? 8
+                            : 10,
+                        border: layoutModel === 'epure'
+                          ? '0'
+                          : '1px solid var(--primary)',
+                        borderTop: layoutModel === 'epure'
+                          ? '1px solid var(--primary)'
+                          : undefined,
+                        borderRadius: layoutModel === 'grille' ? 6 : 10,
+                        background: layoutModel === 'grille'
+                          ? 'rgba(255,255,255,.72)'
+                          : 'transparent',
+                      }}
+                    >
+                      <h3>
+                        <span>{['✳', '◇', '○', '✦'][index]}</span> {section}
+                      </h3>
+
+                      {index === 1 && selectedId === 'weekly' ? (
+                        <div className="week-grid">
+                          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, i) => (
+                            <div key={`${day}-${i}`}>
+                              <b>{day}</b>
+                              <span />
+                            </div>
+                          ))}
+                        </div>
+                      ) : index === 1 && selectedId === 'monthly' ? (
+                        <div className="month-grid">
+                          {Array.from({ length: 21 }, (_, i) => (
+                            <span key={i}>{i + 1}</span>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="writing-lines">
+                          {(index === 0 ? content.rows : ['', '', '']).map((row, i) => (
+                            <div className="writing-row" key={i}>
+                              {selectedId === 'habits'
+                                || selectedId === 'student'
+                                || selectedId === 'food'
+                                  ? <span className="empty-check" />
+                                  : null}
+                              <span>{row}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </section>
+                  ))}
+                </div>
+
+                <footer className="page-footer">
+                  <span>UNE PAGE À LA FOIS</span>
+                  <span>01</span>
+                </footer>
+              </article>
+            )}
+          </div>
+
+          <p className="preview-caption">
+            Aperçu indicatif · Le document final pourra contenir plusieurs pages.
+          </p>
+        </section>
+  
+          <aside className="settings panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 2</p>
+              <h2>Personnaliser</h2>
+            </div>
+            <span className="settings-icon">⚙</span>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="visual-style">
+              Style visuel
+            </label>
+
+            <select
+              id="visual-style"
+              value={visualStyle}
+              onChange={(event) => setVisualStyle(event.target.value)}
+            >
+              <option value="minimaliste">Minimaliste</option>
+              <option value="colore">Coloré</option>
+              <option value="elegant">Élégant</option>
+              <option value="compact">Compact</option>
+              <option value="professionnel">Professionnel</option>
+              <option value="nature">Nature</option>
+            </select>
+          </div>
+
+          {/* MODÈLES DE MISE EN PAGE VISIBLES */}
+          <div className="setting-group">
+            <span className="field-label">
+              Mise en page des pages intérieures
+            </span>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                gap: 8,
+                marginTop: 8,
+              }}
+            >
+              {layoutModels.map((model) => {
+                const active = layoutModel === model.id
+
+                return (
+                  <button
+                    key={model.id}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setLayoutModel(model.id)}
+                    style={{
+                      minHeight: 76,
+                      padding: '12px 8px',
+                      borderRadius: 10,
+                      border: active
+                        ? '2px solid var(--primary)'
+                        : '1px solid #d9dfd6',
+                      background: active ? '#edf3eb' : '#fff',
+                      color: '#263326',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <strong
+                      style={{
+                        display: 'block',
+                        marginBottom: 5,
+                        fontSize: 13,
+                      }}
+                    >
+                      {active ? '✓ ' : ''}
+                      {model.name}
+                    </strong>
+
+                    <small
+                      style={{
+                        display: 'block',
+                        color: '#687367',
+                        fontSize: 11,
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {model.description}
+                    </small>
+                  </button>
+                )
+              })}
+            </div>
+
+            <small className="helper">
+              Le choix s’applique à l’aperçu et à toutes les pages intérieures
+              du PDF, sans modifier la couverture.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Mode de couverture</span>
+
+            <div className="segmented">
+              <button
+                type="button"
+                className={coverMode === 'preset' ? 'active' : ''}
+                onClick={() => setCoverMode('preset')}
+              >
+                Prédéfinie
+              </button>
+
+              <button
+                type="button"
+                className={coverMode === 'custom' ? 'active' : ''}
+                onClick={() => setCoverMode('custom')}
+              >
+                Éditeur personnalisé
+              </button>
+            </div>
+
+            <small className="helper">
+              La couverture personnalisée est indépendante du style des pages intérieures.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="cover-choice">
+              Couverture prédéfinie (obligatoire en mode prédéfini)
+            </label>
+
+            <select
+              id="cover-choice"
+              value={coverId}
+              onChange={(event) => {
+                setCoverId(event.target.value)
+                setCoverImage('')
+                setCoverMode('preset')
+              }}
+            >
+              <option value="">-- Choisir une couverture --</option>
+              <option value="minimaliste">Minimaliste</option>
+              <option value="nature">Nature</option>
+              <option value="professionnelle">Professionnelle</option>
+              <option value="coloree">Colorée</option>
+              <option value="elegante">Élégante</option>
+              <option value="florale">Florale</option>
+              <option value="geometrique">Géométrique</option>
+              <option value="sombre">Sombre</option>
+            </select>
+
+            <label className="field-label" htmlFor="cover-upload">
+              Ou importer une couverture (JPG, PNG ou WebP)
+            </label>
+
+            <input
+              id="cover-upload"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={(event) => {
+                const file = event.target.files?.[0]
+
+                if (!file) return
+
+                if (file.size > 10 * 1024 * 1024) {
+                  setNotice('Image trop volumineuse : limite de 10 Mo.')
+                  event.target.value = ''
+                  return
+                }
+
+                const reader = new FileReader()
+
+                reader.onload = () => {
+                  setCoverImage(String(reader.result || ''))
+                  setCoverId('')
+                  setCoverMode('preset')
+                  setNotice('Couverture personnelle chargée.')
+                }
+
+                reader.onerror = () => {
+                  setNotice('Impossible de lire cette image.')
+                }
+
+                reader.readAsDataURL(file)
+              }}
+            />
+
+            {coverImage && (
+              <button
+                type="button"
+                className="reset-button"
+                onClick={() => {
+                  setCoverImage('')
+                  setCoverId('')
+                  setNotice(
+                    'Image de couverture retirée. Choisissez une couverture prédéfinie.'
+                  )
+                }}
+              >
+                Retirer mon image
+              </button>
+            )}
+
+            <small className="helper">
+              La couverture sera la page 1 du PDF. Le planner commencera en page 2.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="pages">
+              Nombre de pages
+            </label>
+
+            <div className="number-control">
+              <button
+                type="button"
+                onClick={() => setPages((value) => Math.max(1, value - 1))}
+                aria-label="Diminuer le nombre de pages"
+              >
+                −
+              </button>
+
+              <input
+                id="pages"
+                type="number"
+                min="1"
+                max="365"
+                value={pages}
+                onChange={(event) => {
+                  setPages(
+                    Math.max(1, Math.min(365, Number(event.target.value) || 1))
+                  )
+                }}
+              />
+
+              <button
+                type="button"
+                onClick={() => setPages((value) => Math.min(365, value + 1))}
+                aria-label="Augmenter le nombre de pages"
+              >
+                +
+              </button>
+            </div>
+
+            <small className="helper">
+              De 1 à 365 pages dans cette version de démonstration.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur principale</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: primary }}
+                htmlFor="primary-color"
+              />
+
+              <input
+                id="primary-color"
+                type="color"
+                value={primary}
+                onChange={(event) => setPrimary(event.target.value)}
+              />
+
+              <code>{primary.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Fond des pages</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch paper-swatch"
+                style={{ background: background }}
+                htmlFor="background-color"
+              />
+
+              <input
+                id="background-color"
+                type="color"
+                value={background}
+                onChange={(event) => setBackground(event.target.value)}
+              />
+
+              <code>{background.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Arrière-plan des titres</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleBackground }}
+                htmlFor="title-background-color"
+              />
+
+              <input
+                id="title-background-color"
+                type="color"
+                value={titleBackground}
+                onChange={(event) => setTitleBackground(event.target.value)}
+              />
+
+              <code>{titleBackground.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur du texte des titres</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleTextColor }}
+                htmlFor="title-text-color"
+              />
+
+              <input
+                id="title-text-color"
+                type="color"
+                value={titleTextColor}
+                onChange={(event) => setTitleTextColor(event.target.value)}
+              />
+
+              <code>{titleTextColor.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">
+              Typographie
+            </label>
+
+            <select
+              id="font"
+              value={font}
+              onChange={(event) => setFont(event.target.value)}
+            >
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={density === value ? 'active' : ''}
+                  onClick={() => setDensity(value)}
+                >
+                  {value === 'compacte' ? 'Compacte' : 'Aérée'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            className="reset-button"
+            type="button"
+            onClick={() => {
+              setPrimary('#718B70')
+              setBackground('#F7F5EF')
+              setTitleBackground('#718B70')
+              setTitleTextColor('#FFFFFF')
+              setFont('moderne')
+              setDensity('confortable')
+              setVisualStyle('minimaliste')
+              setLayoutModel('classique')
+              setNotice('')
+            }}
+          >
+            ↺ Réinitialiser le style
+          </button>
+
+          {/* COMPTEUR DES EXPORTS */}
+          <div className="setting-group">
+            <span className="field-label">Compteur d'exports PDF</span>
+
+            <div
+              style={{
+                padding: 14,
+                borderRadius: 10,
+                background: '#f1f4ee',
+                border: '1px solid #dfe6dc',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <strong style={{ fontSize: 13 }}>
+                {isUnlimited
+                  ? 'Exports illimités'
+                  : `${Math.max(0, 3 - freeExports)} export(s) gratuit(s) restant(s)`}
+              </strong>
+
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: 13,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {isUnlimited ? 'PRO' : `${Math.min(freeExports, 3)} / 3`}
+              </span>
+            </div>
+          </div>
+
+          {/* EXPORT PDF : TÉLÉCHARGEMENT DIRECT */}
+          <div className="export-area">
+            <button
+              className="export-button"
+              type="button"
+              onClick={exportPDF}
+            >
+              <span>↓</span> Télécharger le PDF
+            </button>
+
+            <p>
+              Le fichier PDF sera téléchargé directement sur votre appareil.
+            </p>
+          </div>
+        </aside>
+      </div>
+
+      {!isAdmin && (
+        <section
+          className="pro-upgrade"
+          aria-labelledby="pro-upgrade-title"
+          style={{
+            maxWidth: 1100,
+            margin: '32px auto',
+            padding: '28px',
+            border: '1px solid #dfe6dc',
+            borderRadius: 18,
+            background: '#fbfcf9',
+          }}
+        >
+          <p className="eyebrow">
+            {plan === 'pro' ? 'VOTRE ABONNEMENT PRO' : 'PASSEZ À LA VERSION PRO'}
+          </p>
+
+          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+            {plan === 'pro'
+              ? 'Renouvelez votre abonnement'
+              : 'Libérez tout votre potentiel'}
+          </h2>
+
+          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+            {plan === 'pro'
+              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+          </p>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 16,
+            }}
+          >
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro mensuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                2 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                30 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_MONTHLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#718B70',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 30 jours' : 'Choisir mensuel'}
+              </a>
+            </article>
+
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro annuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                20 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                365 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_ANNUAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#263b2b',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 365 jours' : 'Choisir annuel'}
+              </a>
+            </article>
+          </div>
+
+          <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+            Le paiement est traité sur Whop. L’activation et la prolongation
+            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+          </small>
+        </section>
+      )}
+
+      {notice && (
+        <div className="notice" role="status">
+          {notice}
+        </div>
+      )}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+function AppWithAuth() {
+  return (
+    <AuthGate>
+      <App />
+    </AuthGate>
+  )
+}
+
+export default AppWithAuth

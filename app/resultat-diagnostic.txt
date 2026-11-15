@@ -1,0 +1,12 @@
+]633;E;echo "===== JOURNAL VITE =====";cd132e28-4b5b-40dc-b2cd-2cef3186537a]633;C===== JOURNAL VITE =====
+
+> app@0.0.0 dev
+> vite --host 0.0.0.0
+
+Port 5173 is in use, trying another one...
+
+  VITE v8.3.5  ready in 213 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: http://10.0.6.50:5174/  eth0
+  ➜  press h + enter to show help

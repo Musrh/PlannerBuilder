@@ -1,0 +1,140 @@
+===== CONFIGURATION ADMIN =====
+// Configuration temporaire de développement PlannerBuilder.
+// Ce fichier sert uniquement à l'affichage de l'interface.
+// Il ne constitue PAS une protection de sécurité.
+
+export const PLANNERBUILDER_ADMIN_UID =
+  's4R51uEux5Rmo48OgALEwW55F0k1'
+
+export const isPlannerBuilderAdmin = (user) =>
+  Boolean(user && user.uid === PLANNERBUILDER_ADMIN_UID)
+
+===== AFFICHAGE ADMIN DANS APP =====
+1-import { useRef, useState } from 'react'
+2-import CoverEditor from './CoverEditor.jsx'
+3-import { jsPDF } from 'jspdf'
+4-import AdminMockups from './AdminMockups.jsx'
+5:import AdminLocalPanel from './AdminLocalPanel.jsx'
+6-import AuthGate from './AuthGate.jsx'
+7-import { usePlannerBuilderAuth } from './AuthGate.jsx'
+8-import './App.css'
+9-
+10-const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+11-const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+12-
+13-const layoutModels = [
+--
+75-    title: 'Mon planner professionnel',
+76-    subtitle: 'Donner de la clarté à mes projets.',
+77-    sections: ['Objectifs professionnels', 'Tâches prioritaires', 'Réunions', 'Prochaines étapes'],
+78-    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+79-  },
+80-}
+81-
+82-function App() {
+83:  const { user, plan, isAdmin } = usePlannerBuilderAuth()
+84:  const isUnlimited = plan === 'pro' || isAdmin
+85-
+86-  const [showMockups, setShowMockups] = useState(false)
+87:  const [showAdminPanel, setShowAdminPanel] = useState(false)
+88-  const [selectedId, setSelectedId] = useState('food')
+89-  const [visualStyle, setVisualStyle] = useState('minimaliste')
+90-  const [layoutModel, setLayoutModel] = useState('classique')
+91-  const [coverId, setCoverId] = useState('')
+92-  const [coverImage, setCoverImage] = useState('')
+93-  const coverEditorRef = useRef(null)
+94-  const [coverMode, setCoverMode] = useState('preset')
+95-  const [pages, setPages] = useState(12)
+--
+576-            type="button"
+577-            className="mockup-dev-toggle"
+578-            onClick={() => setShowMockups((value) => !value)}
+579-          >
+580-            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+581-          </button>
+582-        )}
+583-
+584:        {isAdmin && (
+585-          <button
+586-            type="button"
+587-            className="mockup-dev-toggle"
+588-            onClick={() => setShowAdminPanel((value) => !value)}
+589-          >
+590:            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+591-          </button>
+592-        )}
+593-      </header>
+594-
+595-      <section className="welcome" id="top">
+596-        <div>
+597-          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+598-          <h1>Créez un planner <em>à votre image.</em></h1>
+--
+600-            Choisissez un modèle, personnalisez son style et préparez votre document.
+601-          </p>
+602-        </div>
+603-
+604-        <div className="welcome-decoration" aria-hidden="true">❋</div>
+605-      </section>
+606-
+607-      {import.meta.env.DEV && showMockups && <AdminMockups />}
+608:      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+609-
+610-      <div className="workspace">
+611-        <aside className="sidebar panel">
+612-          <div className="panel-heading">
+613-            <div>
+614-              <p className="eyebrow">ÉTAPE 1</p>
+615-              <h2>Mes modèles</h2>
+616-            </div>
+--
+1212-
+1213-            <p>
+1214-              Le fichier PDF sera téléchargé directement sur votre appareil.
+1215-            </p>
+1216-          </div>
+1217-        </aside>
+1218-      </div>
+1219-
+1220:      {!isAdmin && (
+1221-        <section
+1222-          className="pro-upgrade"
+1223-          aria-labelledby="pro-upgrade-title"
+1224-          style={{
+1225-            maxWidth: 1100,
+1226-            margin: '32px auto',
+1227-            padding: '28px',
+1228-            border: '1px solid #dfe6dc',
+
+===== PACKAGE JSON =====
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^13.1.0",
+    "jspdf": "^4.2.1",
+    "pdfjs-dist": "^6.4.299",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "vite": "^8.3.5"
+  }
+}

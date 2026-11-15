@@ -1,0 +1,2 @@
+757:          <h3>Ma bibliothèque de motifs</h3>
+828:          {loading ? 'Création en cours…' : 'Créer le mockup personnalisé'}

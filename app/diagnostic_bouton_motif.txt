@@ -1,0 +1,81 @@
+              onChange={(event) => {
+                setBackgroundPattern(event.target.value)
+                setPreview('')
+              }}
+            >
+              <option value="dots">Points</option>
+              <option value="grid">Grille</option>
+              <option value="stripes">Rayures</option>
+              <option value="leaves">Feuilles</option>
+            </select>
+          </>
+        )}
+
+        {backgroundType === 'upload' && (
+          <>
+            <label htmlFor="mockup-pattern-image">Importer une image de motif</label>
+            <input
+              id="mockup-pattern-image"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={(event) => {
+                const f = event.target.files?.[0]
+                setPreview('')
+                if (!f) {
+                  setCustomPatternImage('')
+                  return
+                }
+                if (f.size > 20 * 1024 * 1024) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+                  return
+                }
+                if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type)) {
+                  event.target.value = ''
+                  setCustomPatternImage('')
+                  setMessage('Format non accepté. Choisissez PNG, JPG ou WebP.')
+                  return
+                }
+                const reader = new FileReader()
+                reader.onload = () => {
+                  setCustomPatternImage(String(reader.result || ''))
+                  setMessage('Image de motif importée.')
+                }
+                reader.onerror = () => setMessage('Impossible de lire cette image de motif.')
+                reader.readAsDataURL(f)
+              }}
+            />
+          </>
+        )}
+
+        {backgroundType !== 'solid' && (
+          <>
+            <label htmlFor="mockup-pattern-size">Taille du motif : {patternSize}</label>
+            <input
+              id="mockup-pattern-size"
+              type="range"
+              min="20"
+              max="100"
+              step="5"
+              value={patternSize}
+              onChange={(event) => {
+                setPatternSize(Number(event.target.value))
+                setPreview('')
+              }}
+            />
+            <label htmlFor="mockup-pattern-repeat">Disposition du motif</label>
+            <select
+              id="mockup-pattern-repeat"
+              value={patternRepeat}
+              onChange={(event) => {
+                setPatternRepeat(event.target.value)
+                setPreview('')
+              }}
+            >
+              <option value="repeat">Répéter le motif</option>
+              <option value="stretch">Étendre sur tout le fond</option>
+            </select>
+          </>
+        )}
+

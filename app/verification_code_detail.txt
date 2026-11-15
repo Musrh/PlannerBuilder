@@ -1,0 +1,61 @@
+]633;E;echo "===== DEBUT DE AdminMockups.jsx =====";cb8d34f4-024a-4e0f-8e0f-68db0219af92]633;C===== DEBUT DE AdminMockups.jsx =====
+import { useEffect, useState } from 'react'
+import * as pdfjsLib from 'pdfjs-dist'
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import './AdminMockups.css'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+
+function AdminMockups() {
+  const [file, setFile] = useState(null)
+  const [style, setStyle] = useState('nature')
+  const [preview, setPreview] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [customImage, setCustomImage] = useState('')
+  const [customTitle, setCustomTitle] = useState('YOUR NEXT CHAPTER')
+  const [customBackground, setCustomBackground] = useState('#e5eadc')
+  const [backgroundType, setBackgroundType] = useState('solid')
+  const [backgroundPattern, setBackgroundPattern] = useState('dots')
+  const [patternSize, setPatternSize] = useState(50)
+  const [patternRepeat, setPatternRepeat] = useState('repeat')
+  const [customPatternImage, setCustomPatternImage] = useState('')
+  const [downloadFormat, setDownloadFormat] = useState('png')
+
+  const [savedPatterns, setSavedPatterns] = useState([])
+  const [patternName, setPatternName] = useState('')
+  const [libraryLoading, setLibraryLoading] = useState(true)
+
+  const openPatternDatabase = () => new Promise((resolve, reject) => {
+    if (!window.indexedDB) {
+      reject(new Error('IndexedDB indisponible dans ce navigateur.'))
+      return
+    }
+
+    const request = window.indexedDB.open('plannerbuilder-mockup-library', 1)
+
+    request.onupgradeneeded = () => {
+      const db = request.result
+      if (!db.objectStoreNames.contains('patterns')) {
+        db.createObjectStore('patterns', { keyPath: 'id' })
+      }
+    }
+
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+
+===== FONCTIONS FIRESTORE ET AUTH =====
+24:  const [savedPatterns, setSavedPatterns] = useState([])
+47:  const readPatternLibrary = async () => {
+108:    readPatternLibrary()
+126:  const saveCurrentPattern = async () => {
+149:      setSavedPatterns(await readPatternLibrary())
+177:      setSavedPatterns(await readPatternLibrary())
+192:      setSavedPatterns(await readPatternLibrary())
+776:                onClick={saveCurrentPattern}
+785:          ) : savedPatterns.length === 0 ? (
+791:              {savedPatterns.map((pattern) => (
+862:        protégée par une authentification administrateur.
+
+===== FIN DU DIAGNOSTIC =====

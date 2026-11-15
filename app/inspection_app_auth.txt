@@ -1,0 +1,186 @@
+]633;E;echo "===== IMPORTS ET DEBUT APP =====";8627d5f1-591f-467c-8448-cd11e7ba0d99]633;C===== IMPORTS ET DEBUT APP =====
+import { useState } from 'react'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import './App.css'
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+]
+
+const pageContent = {
+  daily: {
+    title: 'Ma journée',
+    subtitle: 'Organiser chaque instant avec intention.',
+    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+    rows: ['Priorité 1', 'Priorité 2', 'Priorité 3'],
+  },
+  weekly: {
+    title: 'Ma semaine',
+    subtitle: 'Une semaine organisée à mon rythme.',
+    sections: ['Mes objectifs', 'Lundi – Dimanche', 'Rendez-vous', 'Notes'],
+    rows: ['Objectif principal', 'Tâches importantes', 'Moment pour moi'],
+  },
+  monthly: {
+    title: 'Mon mois',
+    subtitle: 'Prendre du recul et préparer la suite.',
+    sections: ['Objectifs du mois', 'Dates importantes', 'Projets', 'Bilan du mois'],
+    rows: ['Objectif 1', 'Objectif 2', 'Objectif 3'],
+  },
+  food: {
+    title: 'Mon planner alimentaire',
+    subtitle: 'Mieux manger, planifier et savourer.',
+    sections: ['Menu de la semaine', 'Liste de courses', 'Préparation des repas', 'Notes nutrition'],
+    rows: ['Petit-déjeuner', 'Déjeuner', 'Dîner'],
+  },
+  student: {
+    title: 'Mon planner étudiant',
+    subtitle: 'Apprendre, progresser et réussir.',
+    sections: ['Objectifs scolaires', 'Devoirs et examens', 'Planning de révision', 'Notes de cours'],
+    rows: ['Matière 1', 'Matière 2', 'Matière 3'],
+  },
+  budget: {
+    title: 'Mon budget',
+    subtitle: 'Garder le contrôle de mes finances.',
+    sections: ['Revenus du mois', 'Dépenses prévues', 'Épargne', 'Bilan financier'],
+    rows: ['Logement', 'Alimentation', 'Transport'],
+  },
+  habits: {
+    title: 'Mes habitudes',
+    subtitle: 'Les petits gestes créent de grands changements.',
+    sections: ['Habitudes à suivre', 'Suivi de la semaine', 'Mes progrès', 'Réflexions'],
+    rows: ['Boire de l’eau', 'Bouger chaque jour', 'Lire 10 minutes'],
+  },
+  business: {
+    title: 'Mon planner professionnel',
+    subtitle: 'Donner de la clarté à mes projets.',
+    sections: ['Objectifs professionnels', 'Tâches prioritaires', 'Réunions', 'Prochaines étapes'],
+    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+  },
+}
+
+function App() {
+  const [showMockups, setShowMockups] = useState(false)
+  const [selectedId, setSelectedId] = useState('food')
+  const [visualStyle, setVisualStyle] = useState('minimaliste')
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  function exportPDF() {
+    if (!coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+
+===== BOUTON MOCKUPS =====
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+        <span className="private-label"><span /> Espace de création</span>
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowMockups((value) => !value)}
+          >
+            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+          </button>
+        )}
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>
+            <span className="count">{filtered.length}</span>
+          </div>
+
+
+===== FIN APP =====
+            setTitleBackground('#718B70')
+            setTitleTextColor('#FFFFFF')
+            setFont('moderne')
+            setDensity('confortable')
+            setVisualStyle('minimaliste')
+            setNotice('')
+          }}>
+            ↺ Réinitialiser le style
+          </button>
+
+          <div className="export-area">
+            <button className="export-button" type="button" onClick={exportPDF}>
+              <span>↓</span> Exporter en PDF
+            </button>
+            <p>Votre aperçu sera envoyé à la fenêtre d’impression du navigateur.</p>
+          </div>
+        </aside>
+      </div>
+
+      {notice && <div className="notice" role="status">{notice}</div>}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+export default App

@@ -1,0 +1,8 @@
+?? ./
+?? ../backup-couverture-20261028-131937/
+?? ../backup-plannerbuilder-20261028-130012/
+?? ../backup-styles-20261028-131313/
+?? ../inspection_auth_plannerbuilder.txt
+?? ../resultat.txt
+?? ../sauvegardes/
+?? ../versions.txt

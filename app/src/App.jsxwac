@@ -1,0 +1,1311 @@
+import { useEffect, useRef, useState } from 'react'
+import CoverEditor from './CoverEditor.jsx'
+import { jsPDF } from 'jspdf'
+import AdminMockups from './AdminMockups.jsx'
+import AdminLocalPanel from './AdminLocalPanel.jsx'
+import AuthGate from './AuthGate.jsx'
+import { usePlannerBuilderAuth } from './AuthGate.jsx'
+import './App.css'
+
+const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+
+const layoutModels = [
+  { id: 'classique', name: 'Classique', description: 'Sections verticales' },
+  { id: 'colonnes', name: 'Deux colonnes', description: 'Deux zones par ligne' },
+  { id: 'grille', name: 'Grille', description: 'Blocs compacts' },
+  { id: 'epure', name: 'Épuré', description: 'Présentation aérée' },
+]
+
+const templates = [
+  { id: 'daily', name: 'Agenda quotidien', category: 'Organisation', icon: '☀️', pages: 30 },
+  { id: 'weekly', name: 'Planner hebdomadaire', category: 'Organisation', icon: '📅', pages: 12 },
+  { id: 'monthly', name: 'Planner mensuel', category: 'Organisation', icon: '🗓️', pages: 12 },
+  { id: 'food', name: 'Planner alimentaire', category: 'Repas', icon: '🥗', pages: 52 },
+  { id: 'student', name: 'Planner étudiant', category: 'Études', icon: '📚', pages: 30 },
+  { id: 'budget', name: 'Budget personnel', category: 'Finances', icon: '💰', pages: 12 },
+  { id: 'habits', name: 'Suivi des habitudes', category: 'Bien-être', icon: '🌱', pages: 30 },
+  { id: 'business', name: 'Planner professionnel', category: 'Travail', icon: '💼', pages: 20 },
+]
+
+const pageContent = {
+  daily: {
+    title: 'Ma journée',
+    subtitle: 'Organiser chaque instant avec intention.',
+    sections: ['Mes priorités', 'Planning de la journée', 'À ne pas oublier', 'Notes et idées'],
+    rows: ['Priorité 1', 'Priorité 2', 'Priorité 3'],
+  },
+  weekly: {
+    title: 'Ma semaine',
+    subtitle: 'Une semaine organisée à mon rythme.',
+    sections: ['Mes objectifs', 'Lundi – Dimanche', 'Rendez-vous', 'Notes'],
+    rows: ['Objectif principal', 'Tâches importantes', 'Moment pour moi'],
+  },
+  monthly: {
+    title: 'Mon mois',
+    subtitle: 'Prendre du recul et préparer la suite.',
+    sections: ['Objectifs du mois', 'Dates importantes', 'Projets', 'Bilan du mois'],
+    rows: ['Objectif 1', 'Objectif 2', 'Objectif 3'],
+  },
+  food: {
+    title: 'Mon planner alimentaire',
+    subtitle: 'Mieux manger, planifier et savourer.',
+    sections: ['Menu de la semaine', 'Liste de courses', 'Préparation des repas', 'Notes nutrition'],
+    rows: ['Petit-déjeuner', 'Déjeuner', 'Dîner'],
+  },
+  student: {
+    title: 'Mon planner étudiant',
+    subtitle: 'Apprendre, progresser et réussir.',
+    sections: ['Objectifs scolaires', 'Devoirs et examens', 'Planning de révision', 'Notes de cours'],
+    rows: ['Matière 1', 'Matière 2', 'Matière 3'],
+  },
+  budget: {
+    title: 'Mon budget',
+    subtitle: 'Garder le contrôle de mes finances.',
+    sections: ['Revenus du mois', 'Dépenses prévues', 'Épargne', 'Bilan financier'],
+    rows: ['Logement', 'Alimentation', 'Transport'],
+  },
+  habits: {
+    title: 'Mes habitudes',
+    subtitle: 'Les petits gestes créent de grands changements.',
+    sections: ['Habitudes à suivre', 'Suivi de la semaine', 'Mes progrès', 'Réflexions'],
+    rows: ['Boire de l’eau', 'Bouger chaque jour', 'Lire 10 minutes'],
+  },
+  business: {
+    title: 'Mon planner professionnel',
+    subtitle: 'Donner de la clarté à mes projets.',
+    sections: ['Objectifs professionnels', 'Tâches prioritaires', 'Réunions', 'Prochaines étapes'],
+    rows: ['Projet prioritaire', 'Action à réaliser', 'Suivi nécessaire'],
+  },
+}
+
+function App() {
+  const { user, plan, isAdmin } = usePlannerBuilderAuth()
+  const isUnlimited = plan === 'pro' || isAdmin
+
+  // Compteur d'exports gratuits propre à chaque compte Firebase
+  const exportStorageKey = user?.uid
+    ? `plannerbuilder_free_exports_${user.uid}`
+    : null
+
+  const [showMockups, setShowMockups] = useState(false)
+  const [showAdminPanel, setShowAdminPanel] = useState(false)
+  const [selectedId, setSelectedId] = useState('food')
+  const [visualStyle, setVisualStyle] = useState('minimaliste')
+  const [layoutModel, setLayoutModel] = useState('classique')
+  const [coverId, setCoverId] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const coverEditorRef = useRef(null)
+  const [coverMode, setCoverMode] = useState('preset')
+  const [pages, setPages] = useState(12)
+  const [primary, setPrimary] = useState('#718B70')
+  const [background, setBackground] = useState('#F7F5EF')
+  const [titleBackground, setTitleBackground] = useState('#718B70')
+  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+  const [font, setFont] = useState('moderne')
+  const [density, setDensity] = useState('confortable')
+  const [category, setCategory] = useState('Tous')
+  const [notice, setNotice] = useState('')
+
+  function readFreeExports(storageKey) {
+    if (!storageKey) return 0
+
+    try {
+      const saved = Number(localStorage.getItem(storageKey) || 0)
+
+      return Number.isFinite(saved) && saved >= 0
+        ? Math.floor(saved)
+        : 0
+    } catch {
+      return 0
+    }
+  }
+
+  const [freeExports, setFreeExports] = useState(() =>
+    readFreeExports(exportStorageKey)
+  )
+
+  // Recharge le compteur si un autre compte se connecte sur le même navigateur
+  useEffect(() => {
+    setFreeExports(readFreeExports(exportStorageKey))
+  }, [exportStorageKey])
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  async function exportPDF() {
+    if (coverMode === 'preset' && !coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+    }
+
+    if (!isUnlimited && !exportStorageKey) {
+      setNotice('Connectez-vous pour exporter votre PDF.')
+      return
+    }
+
+    if (!isUnlimited && freeExports >= 3) {
+      setNotice(
+        'Vous avez utilisé vos 3 exports gratuits. Passez à PlannerBuilder Pro pour exporter sans limite.'
+      )
+      return
+    }
+
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+          parseInt(value.substring(4, 6), 16),
+        ]
+      }
+
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const titleBackgroundRgb = toRgb(titleBackground)
+      const titleTextRgb = toRgb(titleTextColor)
+
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+
+      const pdfFont = fontMap[font] || 'helvetica'
+      const compact = density === 'compacte'
+      const sectionGap = compact ? 5 : 8
+      const lineGap = compact ? 6 : 8
+
+      // PAGE 1 : couverture indépendante du style intérieur.
+      const coverThemes = {
+        minimaliste: { bg: [250, 249, 246], accent: [55, 55, 55], shape: 'minimal' },
+        nature: { bg: [237, 242, 231], accent: [74, 112, 76], shape: 'nature' },
+        professionnelle: { bg: [238, 242, 248], accent: [39, 63, 95], shape: 'professional' },
+        coloree: { bg: [255, 239, 220], accent: [190, 75, 67], shape: 'color' },
+        elegante: { bg: [247, 241, 235], accent: [128, 91, 72], shape: 'elegant' },
+        florale: { bg: [250, 237, 242], accent: [160, 83, 119], shape: 'floral' },
+        geometrique: { bg: [237, 239, 247], accent: [70, 75, 150], shape: 'geometric' },
+        sombre: { bg: [35, 38, 43], accent: [225, 192, 125], shape: 'dark' },
+      }
+
+      const cover = coverThemes[coverId]
+
+      if (coverMode === 'custom') {
+        if (!coverEditorRef.current) {
+          throw new Error('Éditeur de couverture indisponible.')
+        }
+
+        const customImage = await coverEditorRef.current.exportImage()
+        doc.addImage(customImage, 'PNG', 0, 0, pageWidth, pageHeight)
+      } else if (coverImage) {
+        const format = coverImage.startsWith('data:image/png')
+          ? 'PNG'
+          : coverImage.startsWith('data:image/webp')
+            ? 'WEBP'
+            : 'JPEG'
+
+        doc.addImage(coverImage, format, 0, 0, pageWidth, pageHeight)
+        doc.setFillColor(255, 255, 255)
+        doc.roundedRect(18, 95, pageWidth - 36, 90, 4, 4, 'F')
+        doc.setTextColor(30, 30, 30)
+      } else {
+        if (!cover) {
+          throw new Error('Veuillez choisir une couverture prédéfinie.')
+        }
+
+        doc.setFillColor(...cover.bg)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+        doc.setFillColor(...cover.accent)
+
+        if (cover.shape === 'nature') {
+          doc.circle(175, 45, 30, 'F')
+          doc.circle(25, 245, 35, 'F')
+        } else if (cover.shape === 'professional') {
+          doc.rect(0, 0, 12, pageHeight, 'F')
+          doc.rect(25, 35, 160, 1.5, 'F')
+        } else if (cover.shape === 'color') {
+          doc.circle(170, 50, 38, 'F')
+          doc.circle(35, 260, 27, 'F')
+        } else if (cover.shape === 'elegant') {
+          doc.setDrawColor(...cover.accent)
+          doc.setLineWidth(0.8)
+          doc.rect(12, 12, pageWidth - 24, pageHeight - 24, 'S')
+          doc.rect(17, 17, pageWidth - 34, pageHeight - 34, 'S')
+        } else if (cover.shape === 'floral') {
+          doc.circle(35, 40, 18, 'F')
+          doc.circle(175, 255, 25, 'F')
+          doc.circle(35, 58, 8, 'F')
+        } else if (cover.shape === 'geometric') {
+          doc.triangle(150, 20, 205, 80, 155, 105, 'F')
+          doc.rect(0, 230, pageWidth, 67, 'F')
+        } else if (cover.shape === 'dark') {
+          doc.setDrawColor(...cover.accent)
+          doc.setLineWidth(1.2)
+          doc.rect(12, 12, pageWidth - 24, pageHeight - 24, 'S')
+        } else {
+          doc.rect(20, 35, 42, 1, 'F')
+          doc.rect(20, 40, 24, 1, 'F')
+        }
+
+        doc.setTextColor(...cover.accent)
+      }
+
+      if (coverMode === 'preset' && !coverImage) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(11)
+        doc.text('PLANNERBUILDER', pageWidth / 2, 88, { align: 'center' })
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(27)
+        const coverTitle = doc.splitTextToSize(content.title, pageWidth - 42)
+        doc.text(coverTitle, pageWidth / 2, 125, { align: 'center' })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(12)
+        doc.text(
+          doc.splitTextToSize(content.subtitle, pageWidth - 48),
+          pageWidth / 2,
+          145,
+          { align: 'center' }
+        )
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(10)
+        doc.text(selected.category.toUpperCase(), pageWidth / 2, 175, { align: 'center' })
+        doc.setFontSize(8)
+        doc.text('COUVERTURE', pageWidth / 2, pageHeight - 18, { align: 'center' })
+      }
+
+      // Les pages intérieures commencent toujours en page 2.
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+        doc.addPage()
+
+        doc.setFillColor(...backgroundRgb)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.8)
+        doc.line(margin, 13, pageWidth - margin, 13)
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('MON PLANNER', margin, 10)
+        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+          align: 'right',
+        })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(...primaryRgb)
+        doc.text(selected.category.toUpperCase(), margin, 26)
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(23)
+        doc.setTextColor(0, 0, 0)
+        const titleLines = doc.splitTextToSize(content.title, usableWidth)
+        doc.text(titleLines, margin, 37)
+
+        let y = 37 + titleLines.length * 9
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(90, 95, 85)
+
+        const subtitleLines = doc.splitTextToSize(content.subtitle, usableWidth)
+        doc.text(subtitleLines, margin, y)
+        y += subtitleLines.length * 5 + 8
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('DATE', margin, y)
+
+        doc.setDrawColor(190, 195, 180)
+        doc.setLineWidth(0.3)
+        doc.line(margin + 15, y + 1, pageWidth - margin, y + 1)
+        y += 10
+
+        // Les quatre modèles de mise en page concernent les pages intérieures.
+        const twoColumns = layoutModel === 'colonnes' || layoutModel === 'grille'
+        const cardGap = layoutModel === 'grille' ? 5 : 8
+        const cardWidth = twoColumns ? (usableWidth - cardGap) / 2 : usableWidth
+        const cardHeight = layoutModel === 'grille'
+          ? 76
+          : layoutModel === 'colonnes'
+            ? 82
+            : layoutModel === 'epure'
+              ? 42
+              : 46
+
+        const sectionGapForLayout = layoutModel === 'epure'
+          ? 11
+          : layoutModel === 'grille'
+            ? 6
+            : 8
+
+        const cardsPerRow = twoColumns ? 2 : 1
+        const cardRows = Math.ceil(content.sections.length / cardsPerRow)
+        const bottomLimit = pageHeight - 19
+        const availableHeight = Math.max(30, bottomLimit - y)
+        const requiredHeight = cardRows * cardHeight
+          + Math.max(0, cardRows - 1) * sectionGapForLayout
+
+        const scale = Math.min(1, availableHeight / requiredHeight)
+        const actualCardHeight = cardHeight * scale
+        const actualGap = sectionGapForLayout * scale
+        const actualCardWidth = cardWidth
+
+        content.sections.forEach((section, sectionIndex) => {
+          const rowIndex = Math.floor(sectionIndex / cardsPerRow)
+          const columnIndex = sectionIndex % cardsPerRow
+          const x = margin + columnIndex * (actualCardWidth + cardGap)
+          const cardY = y + rowIndex * (actualCardHeight + actualGap)
+
+          if (cardY + actualCardHeight > bottomLimit + 0.1) return
+
+          doc.setFillColor(255, 255, 255)
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(layoutModel === 'epure' ? 0.18 : 0.25)
+
+          if (layoutModel === 'epure') {
+            doc.line(x, cardY, x + actualCardWidth, cardY)
+          } else {
+            const radius = layoutModel === 'grille' ? 1.5 : 3
+            doc.roundedRect(
+              x,
+              cardY,
+              actualCardWidth,
+              actualCardHeight,
+              radius,
+              radius,
+              'FD'
+            )
+          }
+
+          const headerHeight = layoutModel === 'epure' ? 7 : 9
+          doc.setFillColor(...titleBackgroundRgb)
+
+          if (layoutModel !== 'epure') {
+            doc.roundedRect(x, cardY, actualCardWidth, headerHeight, 2, 2, 'F')
+            doc.rect(x, cardY + 5, actualCardWidth, 4, 'F')
+          }
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(layoutModel === 'grille' ? 8 : 10)
+          doc.setTextColor(...(layoutModel === 'epure' ? primaryRgb : titleTextRgb))
+
+          const sectionTitle = doc.splitTextToSize(section, actualCardWidth - 8)
+          doc.text(sectionTitle.slice(0, 2), x + 4, cardY + (layoutModel === 'epure' ? 5 : 6))
+
+          const checkboxMode = ['food', 'student', 'habits'].includes(selectedId)
+          const rowCount = 3
+          const rowStart = cardY + (layoutModel === 'epure' ? 12 : 17)
+          const rowEnd = cardY + actualCardHeight - 5
+          const rowStep = Math.max(5, (rowEnd - rowStart) / rowCount)
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            const rowY = rowStart + rowIndex * rowStep
+
+            if (rowY + 2 > rowEnd) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+              : ''
+
+            if (checkboxMode) {
+              doc.setDrawColor(...primaryRgb)
+              doc.roundedRect(x + 4, rowY - 2.5, 2.8, 2.8, 0.4, 0.4, 'S')
+            }
+
+            if (rowText) {
+              doc.setFont(pdfFont, 'bold')
+              doc.setFontSize(layoutModel === 'grille' ? 7 : 9)
+              doc.setTextColor(0, 0, 0)
+
+              doc.text(
+                doc.splitTextToSize(
+                  rowText,
+                  actualCardWidth - (checkboxMode ? 14 : 9)
+                ).slice(0, 1),
+                x + (checkboxMode ? 10 : 5),
+                rowY
+              )
+            }
+
+            doc.setDrawColor(215, 218, 207)
+            doc.line(
+              x + (checkboxMode ? 10 : 5),
+              rowY + 2,
+              x + actualCardWidth - 4,
+              rowY + 2
+            )
+          }
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      // Téléchargement direct du PDF sur l'appareil.
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+
+      if (isUnlimited) {
+        setNotice(`PDF créé : ${pages + 1} page(s), couverture comprise.`)
+      } else {
+        const nextExports = freeExports + 1
+
+        try {
+          localStorage.setItem(exportStorageKey, String(nextExports))
+        } catch (storageError) {
+          console.error('Compteur d’exports non sauvegardé :', storageError)
+        }
+
+        setFreeExports(nextExports)
+
+        setNotice(
+          `PDF créé : ${pages + 1} page(s), couverture comprise. ${3 - nextExports} export(s) gratuit(s) restant(s).`
+        )
+      }
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">
+          <span className="brand-mark">P</span>
+          <span>Planner<span className="brand-light">Builder</span></span>
+        </a>
+
+        <span className="private-label"><span /> Espace de création</span>
+
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowMockups((value) => !value)}
+          >
+            {showMockups ? 'Fermer les mockups' : 'Mockups (prototype)'}
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            type="button"
+            className="mockup-dev-toggle"
+            onClick={() => setShowAdminPanel((value) => !value)}
+          >
+            {showAdminPanel ? 'Fermer administration' : 'Administration'}
+          </button>
+        )}
+      </header>
+
+      <section className="welcome" id="top">
+        <div>
+          <p className="eyebrow">VOTRE ATELIER CRÉATIF</p>
+          <h1>Créez un planner <em>à votre image.</em></h1>
+          <p className="welcome-text">
+            Choisissez un modèle, personnalisez son style et préparez votre document.
+          </p>
+        </div>
+
+        <div className="welcome-decoration" aria-hidden="true">❋</div>
+      </section>
+
+      {import.meta.env.DEV && showMockups && <AdminMockups />}
+      {isAdmin && showAdminPanel && <AdminLocalPanel />}
+
+      <div className="workspace">
+        <aside className="sidebar panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 1</p>
+              <h2>Mes modèles</h2>
+            </div>
+            <span className="count">{filtered.length}</span>
+          </div>
+
+          <label className="field-label" htmlFor="category">Catégorie</label>
+
+          <select
+            id="category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            {categories.map((item) => <option key={item}>{item}</option>)}
+          </select>
+
+          <div className="template-list">
+            {filtered.map((template) => (
+              <button
+                className={`template-option ${selectedId === template.id ? 'selected' : ''}`}
+                key={template.id}
+                onClick={() => chooseTemplate(template)}
+                type="button"
+              >
+                <span className="template-icon">{template.icon}</span>
+
+                <span className="template-name">
+                  <strong>{template.name}</strong>
+                  <small>{template.category}</small>
+                </span>
+
+                {selectedId === template.id && (
+                  <span className="selected-check">✓</span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="sidebar-tip">
+            <span>✦</span>
+            <p>Votre créativité, vos règles. Personnalisez votre document à tout moment.</p>
+          </div>
+        </aside>
+
+        <section className="preview-column">
+          <div className="preview-toolbar">
+            <div>
+              <p className="eyebrow">APERÇU EN DIRECT</p>
+              <h2>{selected.name}</h2>
+            </div>
+
+            <span className="preview-status"><span /> Prévisualisation</span>
+          </div>
+
+          <div className="paper-stage">
+            {coverMode === 'custom' && (
+              <div style={{ display: 'block' }}>
+                <CoverEditor ref={coverEditorRef} />
+              </div>
+            )}
+
+            {coverMode === 'preset' && (
+              <article
+                className={`planner-page planner-style-${visualStyle}`}
+                style={{ backgroundColor: background }}
+              >
+                <div className="page-topline">
+                  <span>MON PLANNER</span>
+                  <span>✳</span>
+                </div>
+
+                <div className="planner-cover-mark">❋</div>
+                <p className="planner-kicker">{selected.category.toUpperCase()}</p>
+                <h2 className="planner-title">{content.title}</h2>
+                <p className="planner-subtitle">{content.subtitle}</p>
+
+                <div className="planner-date">
+                  <span>DATE</span>
+                  <span className="date-line" />
+                </div>
+
+                <div
+                  className={`planner-sections layout-${layoutModel}`}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns:
+                      layoutModel === 'colonnes' || layoutModel === 'grille'
+                        ? 'repeat(2, minmax(0, 1fr))'
+                        : '1fr',
+                    gap: layoutModel === 'grille'
+                      ? 8
+                      : layoutModel === 'epure'
+                        ? 18
+                        : 12,
+                    alignItems: 'stretch',
+                  }}
+                >
+                  {content.sections.map((section, index) => (
+                    <section
+                      className={`planner-section section-${index}`}
+                      key={section}
+                      style={{
+                        minWidth: 0,
+                        padding: layoutModel === 'epure'
+                          ? '8px 2px'
+                          : layoutModel === 'grille'
+                            ? 8
+                            : 10,
+                        border: layoutModel === 'epure'
+                          ? '0'
+                          : '1px solid var(--primary)',
+                        borderTop: layoutModel === 'epure'
+                          ? '1px solid var(--primary)'
+                          : undefined,
+                        borderRadius: layoutModel === 'grille' ? 6 : 10,
+                        background: layoutModel === 'grille'
+                          ? 'rgba(255,255,255,.72)'
+                          : 'transparent',
+                      }}
+                    >
+                      <h3>
+                        <span>{['✳', '◇', '○', '✦'][index]}</span> {section}
+                      </h3>
+
+                      {index === 1 && selectedId === 'weekly' ? (
+                        <div className="week-grid">
+                          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, i) => (
+                            <div key={`${day}-${i}`}>
+                              <b>{day}</b>
+                              <span />
+                            </div>
+                          ))}
+                        </div>
+                      ) : index === 1 && selectedId === 'monthly' ? (
+                        <div className="month-grid">
+                          {Array.from({ length: 21 }, (_, i) => (
+                            <span key={i}>{i + 1}</span>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="writing-lines">
+                          {(index === 0 ? content.rows : ['', '', '']).map((row, i) => (
+                            <div className="writing-row" key={i}>
+                              {selectedId === 'habits'
+                                || selectedId === 'student'
+                                || selectedId === 'food'
+                                  ? <span className="empty-check" />
+                                  : null}
+                              <span>{row}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </section>
+                  ))}
+                </div>
+
+                <footer className="page-footer">
+                  <span>UNE PAGE À LA FOIS</span>
+                  <span>01</span>
+                </footer>
+              </article>
+            )}
+          </div>
+
+          <p className="preview-caption">
+            Aperçu indicatif · Le document final pourra contenir plusieurs pages.
+          </p>
+        </section>
+  
+          <aside className="settings panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">ÉTAPE 2</p>
+              <h2>Personnaliser</h2>
+            </div>
+            <span className="settings-icon">⚙</span>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="visual-style">
+              Style visuel
+            </label>
+
+            <select
+              id="visual-style"
+              value={visualStyle}
+              onChange={(event) => setVisualStyle(event.target.value)}
+            >
+              <option value="minimaliste">Minimaliste</option>
+              <option value="colore">Coloré</option>
+              <option value="elegant">Élégant</option>
+              <option value="compact">Compact</option>
+              <option value="professionnel">Professionnel</option>
+              <option value="nature">Nature</option>
+            </select>
+          </div>
+
+          {/* MODÈLES DE MISE EN PAGE VISIBLES */}
+          <div className="setting-group">
+            <span className="field-label">
+              Mise en page des pages intérieures
+            </span>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                gap: 8,
+                marginTop: 8,
+              }}
+            >
+              {layoutModels.map((model) => {
+                const active = layoutModel === model.id
+
+                return (
+                  <button
+                    key={model.id}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setLayoutModel(model.id)}
+                    style={{
+                      minHeight: 76,
+                      padding: '12px 8px',
+                      borderRadius: 10,
+                      border: active
+                        ? '2px solid var(--primary)'
+                        : '1px solid #d9dfd6',
+                      background: active ? '#edf3eb' : '#fff',
+                      color: '#263326',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <strong
+                      style={{
+                        display: 'block',
+                        marginBottom: 5,
+                        fontSize: 13,
+                      }}
+                    >
+                      {active ? '✓ ' : ''}
+                      {model.name}
+                    </strong>
+
+                    <small
+                      style={{
+                        display: 'block',
+                        color: '#687367',
+                        fontSize: 11,
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {model.description}
+                    </small>
+                  </button>
+                )
+              })}
+            </div>
+
+            <small className="helper">
+              Le choix s’applique à l’aperçu et à toutes les pages intérieures
+              du PDF, sans modifier la couverture.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Mode de couverture</span>
+
+            <div className="segmented">
+              <button
+                type="button"
+                className={coverMode === 'preset' ? 'active' : ''}
+                onClick={() => setCoverMode('preset')}
+              >
+                Prédéfinie
+              </button>
+
+              <button
+                type="button"
+                className={coverMode === 'custom' ? 'active' : ''}
+                onClick={() => setCoverMode('custom')}
+              >
+                Éditeur personnalisé
+              </button>
+            </div>
+
+            <small className="helper">
+              La couverture personnalisée est indépendante du style des pages intérieures.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="cover-choice">
+              Couverture prédéfinie (obligatoire en mode prédéfini)
+            </label>
+
+            <select
+              id="cover-choice"
+              value={coverId}
+              onChange={(event) => {
+                setCoverId(event.target.value)
+                setCoverImage('')
+                setCoverMode('preset')
+              }}
+            >
+              <option value="">-- Choisir une couverture --</option>
+              <option value="minimaliste">Minimaliste</option>
+              <option value="nature">Nature</option>
+              <option value="professionnelle">Professionnelle</option>
+              <option value="coloree">Colorée</option>
+              <option value="elegante">Élégante</option>
+              <option value="florale">Florale</option>
+              <option value="geometrique">Géométrique</option>
+              <option value="sombre">Sombre</option>
+            </select>
+
+            <label className="field-label" htmlFor="cover-upload">
+              Ou importer une couverture (JPG, PNG ou WebP)
+            </label>
+
+            <input
+              id="cover-upload"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={(event) => {
+                const file = event.target.files?.[0]
+
+                if (!file) return
+
+                if (file.size > 10 * 1024 * 1024) {
+                  setNotice('Image trop volumineuse : limite de 10 Mo.')
+                  event.target.value = ''
+                  return
+                }
+
+                const reader = new FileReader()
+
+                reader.onload = () => {
+                  setCoverImage(String(reader.result || ''))
+                  setCoverId('')
+                  setCoverMode('preset')
+                  setNotice('Couverture personnelle chargée.')
+                }
+
+                reader.onerror = () => {
+                  setNotice('Impossible de lire cette image.')
+                }
+
+                reader.readAsDataURL(file)
+              }}
+            />
+
+            {coverImage && (
+              <button
+                type="button"
+                className="reset-button"
+                onClick={() => {
+                  setCoverImage('')
+                  setCoverId('')
+                  setNotice(
+                    'Image de couverture retirée. Choisissez une couverture prédéfinie.'
+                  )
+                }}
+              >
+                Retirer mon image
+              </button>
+            )}
+
+            <small className="helper">
+              La couverture sera la page 1 du PDF. Le planner commencera en page 2.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="pages">
+              Nombre de pages
+            </label>
+
+            <div className="number-control">
+              <button
+                type="button"
+                onClick={() => setPages((value) => Math.max(1, value - 1))}
+                aria-label="Diminuer le nombre de pages"
+              >
+                −
+              </button>
+
+              <input
+                id="pages"
+                type="number"
+                min="1"
+                max="365"
+                value={pages}
+                onChange={(event) => {
+                  setPages(
+                    Math.max(1, Math.min(365, Number(event.target.value) || 1))
+                  )
+                }}
+              />
+
+              <button
+                type="button"
+                onClick={() => setPages((value) => Math.min(365, value + 1))}
+                aria-label="Augmenter le nombre de pages"
+              >
+                +
+              </button>
+            </div>
+
+            <small className="helper">
+              De 1 à 365 pages dans cette version de démonstration.
+            </small>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur principale</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: primary }}
+                htmlFor="primary-color"
+              />
+
+              <input
+                id="primary-color"
+                type="color"
+                value={primary}
+                onChange={(event) => setPrimary(event.target.value)}
+              />
+
+              <code>{primary.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Fond des pages</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch paper-swatch"
+                style={{ background: background }}
+                htmlFor="background-color"
+              />
+
+              <input
+                id="background-color"
+                type="color"
+                value={background}
+                onChange={(event) => setBackground(event.target.value)}
+              />
+
+              <code>{background.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Arrière-plan des titres</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleBackground }}
+                htmlFor="title-background-color"
+              />
+
+              <input
+                id="title-background-color"
+                type="color"
+                value={titleBackground}
+                onChange={(event) => setTitleBackground(event.target.value)}
+              />
+
+              <code>{titleBackground.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Couleur du texte des titres</span>
+
+            <div className="color-control">
+              <label
+                className="color-swatch"
+                style={{ background: titleTextColor }}
+                htmlFor="title-text-color"
+              />
+
+              <input
+                id="title-text-color"
+                type="color"
+                value={titleTextColor}
+                onChange={(event) => setTitleTextColor(event.target.value)}
+              />
+
+              <code>{titleTextColor.toUpperCase()}</code>
+            </div>
+          </div>
+
+          <div className="setting-group">
+            <label className="field-label" htmlFor="font">
+              Typographie
+            </label>
+
+            <select
+              id="font"
+              value={font}
+              onChange={(event) => setFont(event.target.value)}
+            >
+              <option value="moderne">Moderne</option>
+              <option value="classique">Classique</option>
+              <option value="elegante">Élégante</option>
+            </select>
+          </div>
+
+          <div className="setting-group">
+            <span className="field-label">Densité de la page</span>
+
+            <div className="segmented">
+              {['compacte', 'confortable'].map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={density === value ? 'active' : ''}
+                  onClick={() => setDensity(value)}
+                >
+                  {value === 'compacte' ? 'Compacte' : 'Aérée'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            className="reset-button"
+            type="button"
+            onClick={() => {
+              setPrimary('#718B70')
+              setBackground('#F7F5EF')
+              setTitleBackground('#718B70')
+              setTitleTextColor('#FFFFFF')
+              setFont('moderne')
+              setDensity('confortable')
+              setVisualStyle('minimaliste')
+              setLayoutModel('classique')
+              setNotice('')
+            }}
+          >
+            ↺ Réinitialiser le style
+          </button>
+
+          {/* COMPTEUR DES EXPORTS */}
+          <div className="setting-group">
+            <span className="field-label">Compteur d'exports PDF</span>
+
+            <div
+              style={{
+                padding: 14,
+                borderRadius: 10,
+                background: '#f1f4ee',
+                border: '1px solid #dfe6dc',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <strong style={{ fontSize: 13 }}>
+                {isUnlimited
+                  ? 'Exports illimités'
+                  : `${Math.max(0, 3 - freeExports)} export(s) gratuit(s) restant(s)`}
+              </strong>
+
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: 13,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {isUnlimited ? 'PRO' : `${Math.min(freeExports, 3)} / 3`}
+              </span>
+            </div>
+          </div>
+
+          {/* EXPORT PDF : TÉLÉCHARGEMENT DIRECT */}
+          <div className="export-area">
+            <button
+              className="export-button"
+              type="button"
+              onClick={exportPDF}
+            >
+              <span>↓</span> Télécharger le PDF
+            </button>
+
+            <p>
+              Le fichier PDF sera téléchargé directement sur votre appareil.
+            </p>
+          </div>
+        </aside>
+      </div>
+
+      {!isAdmin && (
+        <section
+          className="pro-upgrade"
+          aria-labelledby="pro-upgrade-title"
+          style={{
+            maxWidth: 1100,
+            margin: '32px auto',
+            padding: '28px',
+            border: '1px solid #dfe6dc',
+            borderRadius: 18,
+            background: '#fbfcf9',
+          }}
+        >
+          <p className="eyebrow">
+            {plan === 'pro' ? 'VOTRE ABONNEMENT PRO' : 'PASSEZ À LA VERSION PRO'}
+          </p>
+
+          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+            {plan === 'pro'
+              ? 'Renouvelez votre abonnement'
+              : 'Libérez tout votre potentiel'}
+          </h2>
+
+          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+            {plan === 'pro'
+              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+          </p>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 16,
+            }}
+          >
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro mensuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                2 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                30 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_MONTHLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#718B70',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 30 jours' : 'Choisir mensuel'}
+              </a>
+            </article>
+
+            <article
+              style={{
+                padding: 20,
+                borderRadius: 14,
+                border: '1px solid #dfe6dc',
+                background: '#fff',
+              }}
+            >
+              <h3 style={{ margin: '0 0 8px' }}>Pro annuel</h3>
+              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
+                20 $
+              </p>
+              <p style={{ color: '#667064', margin: '0 0 16px' }}>
+                365 jours d’accès Pro
+              </p>
+
+              <a
+                href={WHOP_ANNUAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#263b2b',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                {plan === 'pro' ? 'Renouveler 365 jours' : 'Choisir annuel'}
+              </a>
+            </article>
+          </div>
+
+          <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+            Le paiement est traité sur Whop. L’activation et la prolongation
+            de l’abonnement doivent être confirmées par le webhook sécurisé du serveur.
+          </small>
+        </section>
+      )}
+
+      {notice && (
+        <div className="notice" role="status">
+          {notice}
+        </div>
+      )}
+
+      <footer className="app-footer">
+        <span>PlannerBuilder</span>
+        <span>Créez avec intention. Organisez avec simplicité.</span>
+      </footer>
+    </main>
+  )
+}
+
+function AppWithAuth() {
+  return (
+    <AuthGate>
+      <App />
+    </AuthGate>
+  )
+}
+
+export default AppWithAuth

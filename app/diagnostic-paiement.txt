@@ -1,0 +1,5 @@
+11:const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
+12:const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
+1268:                href={WHOP_MONTHLY_URL}
+1302:                href={WHOP_ANNUAL_URL}
+1321:            Le paiement est traité sur Whop. L’activation et la prolongation

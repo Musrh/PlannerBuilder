@@ -1,0 +1,37 @@
+]633;E;echo "===== LIGNE CORRIGEE =====";560057e5-cc76-4cdb-ade0-e3eccd9d4c11]633;C===== LIGNE CORRIGEE =====
+        throw new Error('URL du serveur Railway manquante.')
+      }
+
+      const token = await user.getIdToken()
+
+      const response = await fetch(
+        `${apiUrl.replace(/\/+$/, '')}/api/payments/stripe/create-session`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+
+===== NOUVEAU BUILD =====
+
+> app@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 258 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              0.45 kB │ gzip:   0.29 kB
+dist/assets/pdf.worker.min-CjEcRF4W.mjs  1,264.34 kB
+dist/assets/index-B4ftsS3u.css              27.75 kB │ gzip:   6.22 kB
+dist/assets/purify.es-Dqk5qvad.js           29.02 kB │ gzip:  11.45 kB
+dist/assets/index.es-BLIDrFar.js           151.37 kB │ gzip:  48.88 kB
+dist/assets/html2canvas-PzUuAKTg.js        199.39 kB │ gzip:  46.73 kB
+dist/assets/index-Cl1x5cSH.js            1,720.17 kB │ gzip: 531.10 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.38s

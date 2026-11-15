@@ -1,0 +1,21 @@
+]633;E;set -e;d78beedd-c3b3-4b94-85c8-d88a248676b9]633;C===== NOUVELLE SAUVEGARDE =====
+../sauvegardes/avant-motifs-arriere-plan-20261028-163144
+total 20K
+-rw-rw-rw- 1 codespace codespace 2.6K Oct 28 16:31 AdminMockups.css
+-rw-rw-rw- 1 codespace codespace  13K Oct 28 16:31 AdminMockups.jsx
+
+===== VERIFICATION DU CODE ACTUEL =====
+
+src/AdminMockups.jsx
+  1 occurrence(s) : const [customBackground, setCustomBackground] = useState('#e5eadc')
+  1 occurrence(s) : async function createCustomMockup()
+  1 occurrence(s) : ctx.fillStyle = customBackground
+  3 occurrence(s) : ctx.fillRect(0, 0, canvas.width, canvas.height)
+  1 occurrence(s) : <label htmlFor="mockup-custom-background">Couleur de fond</label>
+  1 occurrence(s) : export default AdminMockups
+
+src/AdminMockups.css
+  2 occurrence(s) : .mockup-controls input[type='color'] {
+  1 occurrence(s) : .mockup-primary-button {
+  1 occurrence(s) : @media (max-width: 600px)
+ARRET : marqueurs inattendus. Aucun fichier source modifié.

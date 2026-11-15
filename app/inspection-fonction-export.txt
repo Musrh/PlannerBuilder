@@ -1,0 +1,281 @@
+  const [notice, setNotice] = useState('')
+
+  const selected = templates.find((item) => item.id === selectedId)
+  const content = pageContent[selectedId]
+  const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
+  const filtered = category === 'Tous'
+    ? templates
+    : templates.filter((item) => item.category === category)
+
+  function chooseTemplate(template) {
+    setSelectedId(template.id)
+    setPages(template.pages)
+    setNotice('')
+  }
+
+  function exportPDF() {
+    if (!coverId && !coverImage) {
+      setNotice('Choisissez une couverture ou importez votre propre image avant l’export.')
+      return
+    }
+
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      })
+
+      const pageWidth = 210
+      const pageHeight = 297
+      const margin = 15
+      const usableWidth = pageWidth - margin * 2
+
+      const toRgb = (hex) => {
+        const value = hex.replace('#', '')
+        return [
+          parseInt(value.substring(0, 2), 16),
+          parseInt(value.substring(2, 4), 16),
+          parseInt(value.substring(4, 6), 16),
+        ]
+      }
+
+      const primaryRgb = toRgb(primary)
+      const backgroundRgb = toRgb(background)
+      const titleBackgroundRgb = toRgb(titleBackground)
+      const titleTextRgb = toRgb(titleTextColor)
+      const fontMap = {
+        moderne: 'helvetica',
+        classique: 'times',
+        elegante: 'times',
+      }
+      const pdfFont = fontMap[font] || 'helvetica'
+      const compact = density === 'compacte'
+      const sectionGap = compact ? 5 : 8
+      const lineGap = compact ? 6 : 8
+
+      // PAGE 1 : couverture indépendante du style intérieur
+      const coverThemes = {
+        minimaliste: { bg: [250, 249, 246], accent: [55, 55, 55], shape: 'minimal' },
+        nature: { bg: [237, 242, 231], accent: [74, 112, 76], shape: 'nature' },
+        professionnelle: { bg: [238, 242, 248], accent: [39, 63, 95], shape: 'professional' },
+        coloree: { bg: [255, 239, 220], accent: [190, 75, 67], shape: 'color' },
+        elegante: { bg: [247, 241, 235], accent: [128, 91, 72], shape: 'elegant' },
+        florale: { bg: [250, 237, 242], accent: [160, 83, 119], shape: 'floral' },
+        geometrique: { bg: [237, 239, 247], accent: [70, 75, 150], shape: 'geometric' },
+        sombre: { bg: [35, 38, 43], accent: [225, 192, 125], shape: 'dark' },
+      }
+      const cover = coverThemes[coverId]
+
+      if (coverImage) {
+        const format = coverImage.startsWith('data:image/png') ? 'PNG'
+          : coverImage.startsWith('data:image/webp') ? 'WEBP' : 'JPEG'
+        doc.addImage(coverImage, format, 0, 0, pageWidth, pageHeight)
+        doc.setFillColor(255, 255, 255)
+        doc.roundedRect(18, 95, pageWidth - 36, 90, 4, 4, 'F')
+        doc.setTextColor(30, 30, 30)
+      } else {
+        doc.setFillColor(...cover.bg)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+        doc.setFillColor(...cover.accent)
+
+        if (cover.shape === 'nature') {
+          doc.circle(175, 45, 30, 'F')
+          doc.circle(25, 245, 35, 'F')
+        } else if (cover.shape === 'professional') {
+          doc.rect(0, 0, 12, pageHeight, 'F')
+          doc.rect(25, 35, 160, 1.5, 'F')
+        } else if (cover.shape === 'color') {
+          doc.circle(170, 50, 38, 'F')
+          doc.circle(35, 260, 27, 'F')
+        } else if (cover.shape === 'elegant') {
+          doc.setDrawColor(...cover.accent)
+          doc.setLineWidth(0.8)
+          doc.rect(12, 12, pageWidth - 24, pageHeight - 24, 'S')
+          doc.rect(17, 17, pageWidth - 34, pageHeight - 34, 'S')
+        } else if (cover.shape === 'floral') {
+          doc.circle(35, 40, 18, 'F')
+          doc.circle(175, 255, 25, 'F')
+          doc.circle(35, 58, 8, 'F')
+        } else if (cover.shape === 'geometric') {
+          doc.triangle(150, 20, 205, 80, 155, 105, 'F')
+          doc.rect(0, 230, pageWidth, 67, 'F')
+        } else if (cover.shape === 'dark') {
+          doc.setDrawColor(...cover.accent)
+          doc.setLineWidth(1.2)
+          doc.rect(12, 12, pageWidth - 24, pageHeight - 24, 'S')
+        } else {
+          doc.rect(20, 35, 42, 1, 'F')
+          doc.rect(20, 40, 24, 1, 'F')
+        }
+
+        doc.setTextColor(...cover.accent)
+      }
+
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(11)
+      doc.text('PLANNERBUILDER', pageWidth / 2, 88, { align: 'center' })
+
+      doc.setFont(pdfFont, 'bold')
+      doc.setFontSize(27)
+      const coverTitle = doc.splitTextToSize(content.title, pageWidth - 42)
+      doc.text(coverTitle, pageWidth / 2, 125, { align: 'center' })
+
+      doc.setFont(pdfFont, 'normal')
+      doc.setFontSize(12)
+      doc.text(
+        doc.splitTextToSize(content.subtitle, pageWidth - 48),
+        pageWidth / 2,
+        145,
+        { align: 'center' }
+      )
+
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(10)
+      doc.text(selected.category.toUpperCase(), pageWidth / 2, 175, { align: 'center' })
+      doc.setFontSize(8)
+      doc.text('COUVERTURE', pageWidth / 2, pageHeight - 18, { align: 'center' })
+
+      // Les pages intérieures commencent toujours en page 2.
+      for (let pageIndex = 0; pageIndex < pages; pageIndex += 1) {
+        doc.addPage()
+
+        doc.setFillColor(...backgroundRgb)
+        doc.rect(0, 0, pageWidth, pageHeight, 'F')
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.8)
+        doc.line(margin, 13, pageWidth - margin, 13)
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('MON PLANNER', margin, 10)
+        doc.text(String(pageIndex + 1).padStart(2, '0'), pageWidth - margin, 10, {
+          align: 'right',
+        })
+
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(...primaryRgb)
+        doc.text(selected.category.toUpperCase(), margin, 26)
+
+        doc.setFont(pdfFont, 'bold')
+        doc.setFontSize(23)
+        doc.setTextColor(0, 0, 0)
+        const titleLines = doc.splitTextToSize(content.title, usableWidth)
+        doc.text(titleLines, margin, 37)
+
+        let y = 37 + titleLines.length * 9
+        doc.setFont(pdfFont, 'normal')
+        doc.setFontSize(10)
+        doc.setTextColor(90, 95, 85)
+        const subtitleLines = doc.splitTextToSize(content.subtitle, usableWidth)
+        doc.text(subtitleLines, margin, y)
+        y += subtitleLines.length * 5 + 8
+
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('DATE', margin, y)
+        doc.setDrawColor(190, 195, 180)
+        doc.setLineWidth(0.3)
+        doc.line(margin + 15, y + 1, pageWidth - margin, y + 1)
+        y += 10
+
+        content.sections.forEach((section, sectionIndex) => {
+          const bottomLimit = pageHeight - 19
+          if (y + 25 > bottomLimit) return
+
+          doc.setFillColor(255, 255, 255)
+          doc.setDrawColor(...primaryRgb)
+          doc.setLineWidth(0.25)
+          doc.roundedRect(margin, y, usableWidth, compact ? 39 : 44, 3, 3, 'FD')
+
+          doc.setFillColor(...titleBackgroundRgb)
+          doc.roundedRect(margin, y, usableWidth, 9, 2, 2, 'F')
+          doc.rect(margin, y + 5, usableWidth, 4, 'F')
+
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(11)
+          doc.setTextColor(...titleTextRgb)
+          doc.text(section, margin + 4, y + 6)
+
+          let rowY = y + 16
+          const rowCount = compact ? 3 : 3
+
+          for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+            if (rowY > y + (compact ? 35 : 40)) break
+
+            const rowText = sectionIndex === 0
+              ? (content.rows[rowIndex] || '')
+              : ''
+
+            if (['food', 'student', 'habits'].includes(selectedId)) {
+              doc.setDrawColor(...primaryRgb)
+              doc.roundedRect(margin + 4, rowY - 3, 3, 3, 0.5, 0.5, 'S')
+            }
+
+            if (rowText) {
+              doc.setFont(pdfFont, 'bold')
+              doc.setFontSize(11)
+              doc.setTextColor(0, 0, 0)
+              doc.text(rowText, margin + 10, rowY)
+            }
+
+            doc.setDrawColor(215, 218, 207)
+            doc.line(
+              margin + (['food', 'student', 'habits'].includes(selectedId) ? 34 : 5),
+              rowY + 2,
+              pageWidth - margin - 5,
+              rowY + 2
+            )
+            rowY += lineGap
+          }
+
+          y += (compact ? 39 : 44) + sectionGap
+        })
+
+        doc.setDrawColor(...primaryRgb)
+        doc.setLineWidth(0.4)
+        doc.line(margin, pageHeight - 13, pageWidth - margin, pageHeight - 13)
+
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(8)
+        doc.setTextColor(...primaryRgb)
+        doc.text('PLANNERBUILDER', margin, pageHeight - 8)
+        doc.text(
+          `PAGE ${pageIndex + 1} / ${pages}`,
+          pageWidth - margin,
+          pageHeight - 8,
+          { align: 'right' }
+        )
+      }
+
+      const safeName = selected.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+      doc.save(`${safeName || 'planner'}-${pages}-pages.pdf`)
+      setNotice(`PDF créé : ${pages + 1} page(s), couverture comprise. Le téléchargement devrait commencer.`)
+    } catch (error) {
+      console.error('Erreur export PDF :', error)
+      setNotice('Impossible de générer le PDF. Vérifie le terminal et réessaie.')
+    }
+  }
+
+  return (
+    <main
+      className={`app-shell density-${density} font-${font}`}
+      style={{
+        '--primary': primary,
+        '--paper': background,
+        '--title-background': titleBackground,
+        '--title-text': titleTextColor,
+      }}
+    >
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="PlannerBuilder accueil">

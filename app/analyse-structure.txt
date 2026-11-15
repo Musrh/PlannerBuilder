@@ -1,0 +1,85 @@
+]633;E;echo "===== APP.JSX : STRUCTURE =====";d872d25c-0626-4261-ac38-9f6ea0916082]633;C===== APP.JSX : STRUCTURE =====
+1:import { useState } from 'react'
+5:const templates = [
+16:const pageContent = {
+67:function App() {
+68:  const [selectedId, setSelectedId] = useState('food')
+69:  const [pages, setPages] = useState(12)
+70:  const [primary, setPrimary] = useState('#718B70')
+71:  const [background, setBackground] = useState('#F7F5EF')
+72:  const [titleBackground, setTitleBackground] = useState('#718B70')
+73:  const [titleTextColor, setTitleTextColor] = useState('#FFFFFF')
+74:  const [font, setFont] = useState('moderne')
+75:  const [density, setDensity] = useState('confortable')
+76:  const [category, setCategory] = useState('Tous')
+77:  const [notice, setNotice] = useState('')
+92:  function exportPDF() {
+336:            <article className="planner-page" style={{ backgroundColor: background }}>
+351:              <div className="planner-sections">
+353:                  <section className={`planner-section section-${index}`} key={section}>
+482:          <button className="reset-button" type="button" onClick={() => {
+495:            <button className="export-button" type="button" onClick={exportPDF}>
+513:export default App
+
+===== CSS : STYLES ET RESPONSIVE =====
+337:.planner-page {
+413:.planner-sections {
+420:.planner-section {
+428:.planner-section h3 {
+439:.planner-section h3 span {
+532:.setting-group {
+625:.reset-button {
+636:.reset-button:hover {
+646:.export-button {
+665:.export-button:hover {
+669:.export-button:active {
+673:.export-button > span {
+712:.density-compacte .planner-sections {
+716:.density-compacte .planner-section {
+728:.density-compacte .planner-page {
+732:@media (min-width: 1450px) {
+738:@media (max-width: 1050px) {
+754:  .settings .reset-button {
+759:@media (max-width: 650px) {
+856:  .planner-page {
+875:@media print {
+914:  .planner-page {
+926:@media print {
+927:  .app-shell.font-moderne .planner-page,
+928:  .app-shell.font-moderne .planner-page * {
+932:  .app-shell.font-classique .planner-page,
+933:  .app-shell.font-classique .planner-page * {
+937:  .app-shell.font-elegante .planner-page,
+938:  .app-shell.font-elegante .planner-page * {
+942:  .planner-page {
+949:  .planner-page * {
+
+===== DEPENDANCES =====
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "vite": "^8.3.5"
+  }
+}

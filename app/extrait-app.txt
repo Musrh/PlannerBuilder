@@ -1,0 +1,25 @@
+          aria-labelledby="pro-upgrade-title"
+          style={{
+            maxWidth: 1100,
+            margin: '32px auto',
+            padding: '28px',
+            border: '1px solid #dfe6dc',
+            borderRadius: 18,
+            background: '#fbfcf9',
+          }}
+        >
+          <p className="eyebrow">
+            {plan === 'pro' ? 'VOTRE ABONNEMENT PRO' : 'PASSEZ À LA VERSION PRO'}
+          </p>
+
+          <h2 id="pro-upgrade-title" style={{ marginTop: 6 }}>
+            {plan === 'pro'
+              ? 'Renouvelez votre abonnement'
+              : 'Libérez tout votre potentiel'}
+          </h2>
+
+          <p style={{ color: '#667064', margin: '8px 0 20px' }}>
+            {plan === 'pro'
+              ? 'Choisissez une durée pour prolonger votre accès à PlannerBuilder Pro.'
+              : 'Débloquez les exports PDF illimités et profitez de PlannerBuilder Pro.'}
+              

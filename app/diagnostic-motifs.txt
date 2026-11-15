@@ -1,0 +1,118 @@
+9:  deleteDoc,
+24:  const [customImage, setCustomImage] = useState('')
+29:  const [patternSize, setPatternSize] = useState(50)
+31:  const [customPatternImage, setCustomPatternImage] = useState('')
+42:    const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+84:    if (!customPatternImage) {
+85:      setMessage('Importe d’abord une image de motif.')
+102:      const ref = collection(db, 'users', user.uid, 'mockupPatterns')
+105:        dataUrl: customPatternImage,
+120:  const applySavedPattern = (pattern) => {
+121:    setCustomPatternImage(pattern.dataUrl)
+127:  const renameSavedPattern = async (pattern) => {
+145:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+156:  const deleteSavedPattern = async (pattern) => {
+168:      await deleteDoc(
+169:        doc(db, 'users', user.uid, 'mockupPatterns', pattern.id),
+180:    if (!customImage) {
+181:      setMessage('Importez d’abord une image PNG, JPG ou WebP.')
+189:      const image = new Image()
+190:      image.src = customImage
+193:        image.onload = resolve
+194:        image.onerror = () => reject(
+195:          new Error('Impossible de lire cette image.')
+199:      let patternImage = null
+201:        if (!customPatternImage) {
+202:          throw new Error('Importez une image pour le motif de fond.')
+205:        patternImage = new Image()
+206:        patternImage.src = customPatternImage
+209:          patternImage.onload = resolve
+210:          patternImage.onerror = () => reject(
+211:            new Error('Impossible de lire l’image du motif.')
+229:        const size = Math.max(16, Math.min(160, patternSize * 1.2))
+231:        tile.width = size
+232:        tile.height = size
+238:        t.lineWidth = Math.max(1, size / 45)
+242:          t.arc(size / 2, size / 2, Math.max(1.5, size / 18), 0, Math.PI * 2)
+247:          t.lineTo(size, 0)
+249:          t.lineTo(0, size)
+253:          t.moveTo(0, size)
+254:          t.lineTo(size, 0)
+258:          t.translate(size / 2, size / 2)
+261:          t.ellipse(0, 0, size * 0.16, size * 0.34, 0, 0, Math.PI * 2)
+264:          t.moveTo(-size * 0.16, 0)
+265:          t.lineTo(size * 0.16, 0)
+277:          ctx.drawImage(tile, 0, 0, canvas.width, canvas.height)
+279:      } else if (backgroundType === 'upload' && patternImage) {
+281:          const size = Math.max(24, Math.min(320, patternSize * 2))
+283:          tile.width = size
+284:          tile.height = Math.max(1, Math.round(size * patternImage.height / patternImage.width))
+286:          if (!t) throw new Error('Impossible de préparer l’image du motif.')
+287:          t.drawImage(patternImage, 0, 0, tile.width, tile.height)
+294:          ctx.drawImage(patternImage, 0, 0, canvas.width, canvas.height)
+302:        maxWidth / image.width,
+303:        maxHeight / image.height
+305:      const width = image.width * ratio
+306:      const height = image.height * ratio
+318:      ctx.drawImage(image, x, y, width, height)
+339:      setPreview(canvas.toDataURL('image/png'))
+343:      setMessage('Impossible de créer le mockup. Essayez une autre image.')
+386:        throw new Error('Impossible de créer l’image publicitaire.')
+419:      const imageRatio = pageCanvas.width / pageCanvas.height
+422:      let imageWidth = maxWidth
+423:      let imageHeight = imageWidth / imageRatio
+425:      if (imageHeight > maxHeight) {
+426:        imageHeight = maxHeight
+427:        imageWidth = imageHeight * imageRatio
+430:      ctx.drawImage(
+432:        330 + (470 - imageWidth) / 2,
+433:        125 + (640 - imageHeight) / 2,
+434:        imageWidth,
+435:        imageHeight,
+459:      setPreview(canvas.toDataURL('image/png'))
+492:    const image = new Image()
+493:    image.onload = () => {
+495:      canvas.width = image.naturalWidth
+496:      canvas.height = image.naturalHeight
+506:      ctx.drawImage(image, 0, 0)
+508:      finishDownload(canvas.toDataURL('image/jpeg', 0.92))
+510:    image.onerror = () => setMessage('Impossible de convertir l’image en JPG.')
+511:    image.src = preview
+520:          Importez un PDF, créez une image publicitaire et téléchargez-la
+537:            if (nextFile && nextFile.size > 40 * 1024 * 1024) {
+569:        <h3>2. Importer et personnaliser une image</h3>
+570:        <label htmlFor="mockup-custom-image">Image du mockup</label>
+572:          id="mockup-custom-image"
+574:          accept="image/png,image/jpeg,image/webp"
+581:              setCustomImage('')
+585:            if (nextFile.size > 20 * 1024 * 1024) {
+587:              setCustomImage('')
+588:              setMessage('L’image dépasse la limite de 20 Mo.')
+592:            if (!['image/png', 'image/jpeg', 'image/webp'].includes(nextFile.type)) {
+594:              setCustomImage('')
+601:              setCustomImage(String(reader.result || ''))
+602:              setMessage('Image importée. Personnalisez le texte et le fond.')
+604:            reader.onerror = () => setMessage('Impossible de lire ce fichier image.')
+609:        <label htmlFor="mockup-custom-title">Texte à afficher sous l’image</label>
+644:          <option value="upload">Image de motif importée</option>
+668:            <label htmlFor="mockup-pattern-image">Importer une image de motif</label>
+670:              id="mockup-pattern-image"
+672:              accept="image/png,image/jpeg,image/webp"
+677:                  setCustomPatternImage('')
+680:                if (f.size > 20 * 1024 * 1024) {
+682:                  setCustomPatternImage('')
+683:                  setMessage('L’image de motif dépasse la limite de 20 Mo.')
+686:                if (!['image/png', 'image/jpeg', 'image/webp'].includes(f.type)) {
+688:                  setCustomPatternImage('')
+694:                  setCustomPatternImage(String(reader.result || ''))
+695:                  setMessage('Image de motif importée.')
+697:                reader.onerror = () => setMessage('Impossible de lire cette image de motif.')
+706:            <label htmlFor="mockup-pattern-size">Taille du motif : {patternSize}</label>
+708:              id="mockup-pattern-size"
+713:              value={patternSize}
+715:                setPatternSize(Number(event.target.value))
+740:          {customPatternImage && (
+776:                    onClick={() => applySavedPattern(pattern)}
+783:                      onClick={() => renameSavedPattern(pattern)}
+789:                      onClick={() => deleteSavedPattern(pattern)}
+804:          disabled={!customImage || loading}
