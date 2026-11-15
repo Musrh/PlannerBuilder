@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import CoverEditor from './CoverEditor.jsx'
 import { jsPDF } from 'jspdf'
 import AdminMockups from './AdminMockups.jsx'
 import Admin from './Admin.jsx'
 import AuthGate from './AuthGate.jsx'
+import PaymentSuccess from './PaymentSuccess.jsx'
 import { usePlannerBuilderAuth } from './AuthGate.jsx'
 import './App.css'
 
@@ -117,6 +118,29 @@ function App() {
   const filtered = category === 'Tous'
     ? templates
     : templates.filter((item) => item.category === category)
+
+  // Retour de Stripe : ?payment=success ou ?payment=cancelled
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const status = params.get('payment')
+
+    if (!status) return
+
+    if (status === 'success') {
+      setNotice(
+        'Paiement reçu. Votre accès Pro sera activé dans quelques instants : rechargez la page si besoin.'
+      )
+    } else if (status === 'cancelled') {
+      setNotice('Paiement annulé. Vous pouvez réessayer quand vous voulez.')
+    }
+
+    // Nettoie l'adresse pour ne pas réafficher le message au rechargement
+    window.history.replaceState(
+      {},
+      '',
+      window.location.pathname + window.location.hash
+    )
+  }, [])
 
   async function handleStripeCheckout(period) {
     if (!user) {
@@ -1458,6 +1482,13 @@ function AdminRoute() {
 }
 
 function AppWithAuth() {
+  // Retour de Stripe après paiement : page de confirmation (sans connexion requise)
+  const params = new URLSearchParams(window.location.search)
+
+  if (params.get('payment') === 'success') {
+    return <PaymentSuccess sessionId={params.get('session_id')} />
+  }
+
   return (
     <AuthGate>
       <Routes>
