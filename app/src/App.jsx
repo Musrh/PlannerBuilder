@@ -12,10 +12,6 @@ import './App.css'
 const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
 const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
 
-// Prix affichés sur les boutons Stripe (USD).
-// À garder identiques aux tarifs fixés dans l'interface admin.
-const STRIPE_DISPLAY_PRICES = { monthly: '5 $', annual: '50 $' }
-
 const layoutModels = [
   { id: 'classique', name: 'Classique', description: 'Sections verticales' },
   { id: 'colonnes', name: 'Deux colonnes', description: 'Deux zones par ligne' },
@@ -1357,6 +1353,26 @@ function App() {
                 30 jours d’accès Pro
               </p>
 
+              <a
+                href={WHOP_MONTHLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  textAlign: 'center',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#718B70',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                Payer avec Whop · 30 jours
+              </a>
+
               <button
                 type="button"
                 disabled={stripeLoading !== ''}
@@ -1364,6 +1380,7 @@ function App() {
                 style={{
                   display: 'block',
                   width: '100%',
+                  boxSizing: 'border-box',
                   marginTop: 12,
                   padding: '11px 18px',
                   border: 'none',
@@ -1376,25 +1393,8 @@ function App() {
               >
                 {stripeLoading === 'monthly'
                   ? 'Préparation...'
-                  : `Payer par carte avec Stripe · ${STRIPE_DISPLAY_PRICES.monthly}`}
+                  : 'Payer par carte avec Stripe'}
               </button>
-
-              <a
-                href={WHOP_MONTHLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  padding: '11px 18px',
-                  borderRadius: 9,
-                  background: '#718B70',
-                  color: '#fff',
-                  textDecoration: 'none',
-                  fontWeight: 700,
-                }}
-              >
-                {plan === 'pro' ? 'Renouveler 30 jours' : 'Choisir mensuel'}
-              </a>
             </article>
 
             <article
@@ -1413,6 +1413,26 @@ function App() {
                 365 jours d’accès Pro
               </p>
 
+              <a
+                href={WHOP_ANNUAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  textAlign: 'center',
+                  padding: '11px 18px',
+                  borderRadius: 9,
+                  background: '#263b2b',
+                  color: '#fff',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                Payer avec Whop · 365 jours
+              </a>
+
               <button
                 type="button"
                 disabled={stripeLoading !== ''}
@@ -1420,6 +1440,7 @@ function App() {
                 style={{
                   display: 'block',
                   width: '100%',
+                  boxSizing: 'border-box',
                   marginTop: 12,
                   padding: '11px 18px',
                   border: 'none',
@@ -1432,25 +1453,8 @@ function App() {
               >
                 {stripeLoading === 'annual'
                   ? 'Préparation...'
-                  : `Payer par carte avec Stripe · ${STRIPE_DISPLAY_PRICES.annual}`}
+                  : 'Payer par carte avec Stripe'}
               </button>
-
-              <a
-                href={WHOP_ANNUAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  padding: '11px 18px',
-                  borderRadius: 9,
-                  background: '#263b2b',
-                  color: '#fff',
-                  textDecoration: 'none',
-                  fontWeight: 700,
-                }}
-              >
-                {plan === 'pro' ? 'Renouveler 365 jours' : 'Choisir annuel'}
-              </a>
             </article>
           </div>
 
