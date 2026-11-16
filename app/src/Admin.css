@@ -374,3 +374,38 @@
     width: 100%;
   }
 }
+
+
+/* ===== ACTIVATION MANUELLE PRO (WHOP) ===== */
+
+.admin-activate-help {
+  margin: 0 0 14px;
+  color: #718078;
+  font-size: 13px;
+}
+
+.admin-activate-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-activate-button {
+  padding: 7px 12px;
+  border: 1px solid #718b70;
+  border-radius: 8px;
+  background: #fff;
+  color: #405c43;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-activate-button:hover {
+  background: #718b70;
+  color: #fff;
+}
+
+.admin-activate-button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}

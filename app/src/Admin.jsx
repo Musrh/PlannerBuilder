@@ -35,6 +35,10 @@ export default function Admin() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  const [activatingKey, setActivatingKey] = useState('')
+  const [activationMessage, setActivationMessage] = useState('')
+  const [activationError, setActivationError] = useState('')
+
   const [paymentSettings, setPaymentSettings] = useState(DEFAULT_SETTINGS)
   const [settingsLoading, setSettingsLoading] = useState(true)
   const [settingsSaving, setSettingsSaving] = useState(false)
@@ -152,6 +156,76 @@ export default function Admin() {
     return Number.isNaN(date.getTime())
       ? '—'
       : date.toLocaleDateString('fr-FR')
+  }
+
+  async function activateProForUser(item, period) {
+    const label = period === 'annual' ? '365 jours' : '30 jours'
+
+    const confirmed = window.confirm(
+      `Avez-vous vérifié le paiement Whop de ${item.email || item.uid} ?\n\n` +
+      `Activer l’abonnement Pro pour ${label} ?`
+    )
+
+    if (!confirmed) return
+
+    setActivatingKey(`${item.uid}:${period}`)
+    setActivationMessage('')
+    setActivationError('')
+
+    try {
+      if (!API_URL) {
+        throw new Error('URL du serveur Railway manquante.')
+      }
+
+      const base = API_URL.replace(/\/+$/, '')
+      const token = await user.getIdToken()
+
+      const response = await fetch(
+        `${base}/api/admin/users/${encodeURIComponent(item.uid)}/activate-pro`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ period }),
+        }
+      )
+
+      const result = await response.json()
+
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.error || 'Activation impossible.')
+      }
+
+      setUsers((current) =>
+        current.map((entry) =>
+          entry.uid === item.uid ? { ...entry, ...result.user } : entry
+        )
+      )
+
+      setActivationMessage(
+        `Abonnement Pro activé pour ${item.email || item.uid} (${label}).`
+      )
+
+      // Mise à jour des statistiques
+      try {
+        const statsResponse = await fetch(`${base}/api/admin/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        const statsResult = await statsResponse.json()
+
+        if (statsResponse.ok && statsResult.success) {
+          setStats(statsResult.stats)
+        }
+      } catch {
+        // Les statistiques seront mises à jour au prochain chargement.
+      }
+    } catch (err) {
+      setActivationError(err.message || 'Erreur lors de l’activation.')
+    } finally {
+      setActivatingKey('')
+    }
   }
 
   function updateProvider(provider, enabled) {
@@ -368,6 +442,23 @@ export default function Admin() {
               <span>{pagination?.total ?? users.length} comptes</span>
             </div>
 
+            <p className="admin-activate-help">
+              Paiement Whop : après avoir vérifié le paiement dans Whop, activez
+              l’abonnement Pro de l’utilisateur. Stripe s’active automatiquement.
+            </p>
+
+            {activationError && (
+              <div className="admin-error" role="alert">
+                {activationError}
+              </div>
+            )}
+
+            {activationMessage && (
+              <p className="admin-success" role="status">
+                {activationMessage}
+              </p>
+            )}
+
             <div className="admin-table-wrap">
               <table>
                 <thead>
@@ -377,6 +468,7 @@ export default function Admin() {
                     <th>Statut</th>
                     <th>Paiement</th>
                     <th>Expiration</th>
+                    <th>Activer Pro (Whop)</th>
                   </tr>
                 </thead>
 
@@ -392,12 +484,37 @@ export default function Admin() {
                       </td>
                       <td>{item.paymentProvider || '—'}</td>
                       <td>{formatDate(item.expiry)}</td>
+                      <td>
+                        <div className="admin-activate-actions">
+                          <button
+                            type="button"
+                            className="admin-activate-button"
+                            disabled={activatingKey !== ''}
+                            onClick={() => activateProForUser(item, 'monthly')}
+                          >
+                            {activatingKey === `${item.uid}:monthly`
+                              ? 'Activation…'
+                              : '30 jours'}
+                          </button>
+
+                          <button
+                            type="button"
+                            className="admin-activate-button"
+                            disabled={activatingKey !== ''}
+                            onClick={() => activateProForUser(item, 'annual')}
+                          >
+                            {activatingKey === `${item.uid}:annual`
+                              ? 'Activation…'
+                              : '365 jours'}
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
 
                   {users.length === 0 && (
                     <tr>
-                      <td colSpan="5">Aucun utilisateur trouvé.</td>
+                      <td colSpan="6">Aucun utilisateur trouvé.</td>
                     </tr>
                   )}
                 </tbody>
