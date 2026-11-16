@@ -1393,9 +1393,6 @@ function App() {
               }}
             >
               <h3 style={{ margin: '0 0 8px' }}>Pro mensuel</h3>
-              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
-                2 $
-              </p>
               <p style={{ color: '#667064', margin: '0 0 16px' }}>
                 30 jours d’accès Pro
               </p>
@@ -1457,9 +1454,6 @@ function App() {
               }}
             >
               <h3 style={{ margin: '0 0 8px' }}>Pro annuel</h3>
-              <p style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>
-                20 $
-              </p>
               <p style={{ color: '#667064', margin: '0 0 16px' }}>
                 365 jours d’accès Pro
               </p>
