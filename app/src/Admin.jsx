@@ -4,8 +4,11 @@ import './Admin.css'
 
 const API_URL = import.meta.env.VITE_PLANNERBUILDER_API_URL
 
+// Adresse du générateur (page d'accueil de l'application)
+const GENERATOR_URL = 'https://musrh.github.io/PlannerBuilder/'
+
 const DEFAULT_SETTINGS = {
-  whop: { enabled: true },
+  whop: { enabled: true, monthlyUrl: '', annualUrl: '' },
   stripe: {
     enabled: false,
     prices: {
@@ -162,6 +165,17 @@ export default function Admin() {
     setSettingsMessage('')
   }
 
+  function updateWhopLink(field, value) {
+    setPaymentSettings((current) => ({
+      ...current,
+      whop: {
+        ...current.whop,
+        [field]: value,
+      },
+    }))
+    setSettingsMessage('')
+  }
+
   function updatePrice(provider, currency, period, value) {
     setPaymentSettings((current) => ({
       ...current,
@@ -307,7 +321,7 @@ export default function Admin() {
           <p>Gestion des utilisateurs et des abonnements.</p>
         </div>
 
-        <a href="/" className="admin-back">
+        <a href={GENERATOR_URL} className="admin-back">
           Retour au générateur
         </a>
       </header>
@@ -445,6 +459,44 @@ export default function Admin() {
                       </span>
                     </label>
                   </div>
+
+                  <div className="admin-prices-grid">
+                    <div className="admin-price-group">
+                      <h4>Mensuel (30 jours)</h4>
+
+                      <label>
+                        Lien de paiement Whop
+                        <input
+                          type="url"
+                          placeholder="https://whop.com/checkout/plan_..."
+                          value={paymentSettings.whop.monthlyUrl ?? ''}
+                          onChange={(event) =>
+                            updateWhopLink('monthlyUrl', event.target.value)
+                          }
+                        />
+                      </label>
+                    </div>
+
+                    <div className="admin-price-group">
+                      <h4>Annuel (365 jours)</h4>
+
+                      <label>
+                        Lien de paiement Whop
+                        <input
+                          type="url"
+                          placeholder="https://whop.com/checkout/plan_..."
+                          value={paymentSettings.whop.annualUrl ?? ''}
+                          onChange={(event) =>
+                            updateWhopLink('annualUrl', event.target.value)
+                          }
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <p className="admin-payment-note">
+                    Un lien vide masque le bouton Whop correspondant.
+                  </p>
                 </article>
 
                 {renderProviderPrices('stripe', 'Stripe')}
