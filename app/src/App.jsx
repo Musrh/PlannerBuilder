@@ -9,9 +9,6 @@ import PaymentSuccess from './PaymentSuccess.jsx'
 import { usePlannerBuilderAuth } from './AuthGate.jsx'
 import './App.css'
 
-const WHOP_MONTHLY_URL = 'https://whop.com/checkout/plan_s2EaEjQLNmqtP'
-const WHOP_ANNUAL_URL = 'https://whop.com/checkout/plan_MYoWQwEMrukh'
-
 const layoutModels = [
   { id: 'classique', name: 'Classique', description: 'Sections verticales' },
   { id: 'colonnes', name: 'Deux colonnes', description: 'Deux zones par ligne' },
@@ -108,12 +105,62 @@ function App() {
   const [freeExports, setFreeExports] = useState(null)
   const [stripeLoading, setStripeLoading] = useState('')
 
+  // Options de paiement (liens Whop, Stripe activé) configurées dans /admin
+  const [paymentOptions, setPaymentOptions] = useState(null)
+  const [paymentOptionsStatus, setPaymentOptionsStatus] = useState('loading')
+
   const selected = templates.find((item) => item.id === selectedId)
   const content = pageContent[selectedId]
   const categories = ['Tous', ...new Set(templates.map((item) => item.category))]
   const filtered = category === 'Tous'
     ? templates
     : templates.filter((item) => item.category === category)
+
+  useEffect(() => {
+    if (!user) return undefined
+
+    let cancelled = false
+
+    async function loadPaymentOptions() {
+      try {
+        const apiUrl = import.meta.env.VITE_PLANNERBUILDER_API_URL
+
+        if (!apiUrl) {
+          throw new Error('URL du serveur Railway manquante.')
+        }
+
+        const token = await user.getIdToken()
+
+        const response = await fetch(
+          `${apiUrl.replace(/\/+$/, '')}/api/payments/options`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+
+        const result = await response.json()
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Options de paiement indisponibles.')
+        }
+
+        if (!cancelled) {
+          setPaymentOptions(result.options)
+          setPaymentOptionsStatus('ready')
+        }
+      } catch (error) {
+        console.error('Options de paiement :', error)
+
+        if (!cancelled) {
+          setPaymentOptionsStatus('error')
+        }
+      }
+    }
+
+    loadPaymentOptions()
+
+    return () => {
+      cancelled = true
+    }
+  }, [user])
 
   // Retour de Stripe : ?payment=success ou ?payment=cancelled
   useEffect(() => {
@@ -1353,48 +1400,52 @@ function App() {
                 30 jours d’accès Pro
               </p>
 
-              <a
-                href={WHOP_MONTHLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  textAlign: 'center',
-                  padding: '11px 18px',
-                  borderRadius: 9,
-                  background: '#718B70',
-                  color: '#fff',
-                  textDecoration: 'none',
-                  fontWeight: 700,
-                }}
-              >
-                Payer avec Whop · 30 jours
-              </a>
+              {paymentOptions?.whop?.enabled && paymentOptions.whop.monthlyUrl && (
+                <a
+                  href={paymentOptions.whop.monthlyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    textAlign: 'center',
+                    padding: '11px 18px',
+                    borderRadius: 9,
+                    background: '#718B70',
+                    color: '#fff',
+                    textDecoration: 'none',
+                    fontWeight: 700,
+                  }}
+                >
+                  Payer avec Whop · 30 jours
+                </a>
+              )}
 
-              <button
-                type="button"
-                disabled={stripeLoading !== ''}
-                onClick={() => handleStripeCheckout('monthly')}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  marginTop: 12,
-                  padding: '11px 18px',
-                  border: 'none',
-                  borderRadius: 9,
-                  background: '#635BFF',
-                  color: '#fff',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                {stripeLoading === 'monthly'
-                  ? 'Préparation...'
-                  : 'Payer par carte avec Stripe'}
-              </button>
+              {paymentOptions?.stripe?.enabled && (
+                <button
+                  type="button"
+                  disabled={stripeLoading !== ''}
+                  onClick={() => handleStripeCheckout('monthly')}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    marginTop: 12,
+                    padding: '11px 18px',
+                    border: 'none',
+                    borderRadius: 9,
+                    background: '#635BFF',
+                    color: '#fff',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {stripeLoading === 'monthly'
+                    ? 'Préparation...'
+                    : 'Payer par carte avec Stripe'}
+                </button>
+              )}
             </article>
 
             <article
@@ -1413,50 +1464,77 @@ function App() {
                 365 jours d’accès Pro
               </p>
 
-              <a
-                href={WHOP_ANNUAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  textAlign: 'center',
-                  padding: '11px 18px',
-                  borderRadius: 9,
-                  background: '#263b2b',
-                  color: '#fff',
-                  textDecoration: 'none',
-                  fontWeight: 700,
-                }}
-              >
-                Payer avec Whop · 365 jours
-              </a>
+              {paymentOptions?.whop?.enabled && paymentOptions.whop.annualUrl && (
+                <a
+                  href={paymentOptions.whop.annualUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    textAlign: 'center',
+                    padding: '11px 18px',
+                    borderRadius: 9,
+                    background: '#263b2b',
+                    color: '#fff',
+                    textDecoration: 'none',
+                    fontWeight: 700,
+                  }}
+                >
+                  Payer avec Whop · 365 jours
+                </a>
+              )}
 
-              <button
-                type="button"
-                disabled={stripeLoading !== ''}
-                onClick={() => handleStripeCheckout('annual')}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  marginTop: 12,
-                  padding: '11px 18px',
-                  border: 'none',
-                  borderRadius: 9,
-                  background: '#635BFF',
-                  color: '#fff',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                {stripeLoading === 'annual'
-                  ? 'Préparation...'
-                  : 'Payer par carte avec Stripe'}
-              </button>
+              {paymentOptions?.stripe?.enabled && (
+                <button
+                  type="button"
+                  disabled={stripeLoading !== ''}
+                  onClick={() => handleStripeCheckout('annual')}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    marginTop: 12,
+                    padding: '11px 18px',
+                    border: 'none',
+                    borderRadius: 9,
+                    background: '#635BFF',
+                    color: '#fff',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {stripeLoading === 'annual'
+                    ? 'Préparation...'
+                    : 'Payer par carte avec Stripe'}
+                </button>
+              )}
             </article>
           </div>
+
+          {paymentOptionsStatus === 'loading' && (
+            <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+              Chargement des options de paiement…
+            </small>
+          )}
+
+          {paymentOptionsStatus === 'error' && (
+            <small style={{ display: 'block', marginTop: 16, color: '#9b3030' }}>
+              Options de paiement indisponibles pour le moment. Réessayez plus tard.
+            </small>
+          )}
+
+          {paymentOptionsStatus === 'ready' &&
+            !paymentOptions?.stripe?.enabled &&
+            !(
+              paymentOptions?.whop?.enabled &&
+              (paymentOptions.whop.monthlyUrl || paymentOptions.whop.annualUrl)
+            ) && (
+              <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
+                Aucun moyen de paiement n’est disponible pour le moment.
+              </small>
+            )}
 
           <small style={{ display: 'block', marginTop: 16, color: '#778074' }}>
             Le paiement est traité par Stripe (carte) ou par Whop. L’activation
