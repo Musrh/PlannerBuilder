@@ -409,3 +409,13 @@
   opacity: 0.5;
   cursor: wait;
 }
+
+.admin-revert-button {
+  border-color: #b05555;
+  color: #9b3030;
+}
+
+.admin-revert-button:hover {
+  background: #9b3030;
+  color: #fff;
+}

@@ -39,6 +39,15 @@ export default function Admin() {
   const [activationMessage, setActivationMessage] = useState('')
   const [activationError, setActivationError] = useState('')
 
+  const [payments, setPayments] = useState([])
+  const [paymentsPagination, setPaymentsPagination] = useState(null)
+  const [paymentsPage, setPaymentsPage] = useState(1)
+  const [paymentsLoading, setPaymentsLoading] = useState(true)
+  const [paymentsRefresh, setPaymentsRefresh] = useState(0)
+  const [historyError, setHistoryError] = useState('')
+  const [historyMessage, setHistoryMessage] = useState('')
+  const [revertingId, setRevertingId] = useState('')
+
   const [paymentSettings, setPaymentSettings] = useState(DEFAULT_SETTINGS)
   const [settingsLoading, setSettingsLoading] = useState(true)
   const [settingsSaving, setSettingsSaving] = useState(false)
@@ -148,6 +157,160 @@ export default function Admin() {
     }
   }, [user, page])
 
+  useEffect(() => {
+    if (!user) return undefined
+
+    let cancelled = false
+
+    async function loadPayments() {
+      setPaymentsLoading(true)
+      setHistoryError('')
+
+      try {
+        if (!API_URL) {
+          throw new Error('URL du serveur Railway manquante.')
+        }
+
+        const token = await user.getIdToken()
+
+        const response = await fetch(
+          `${API_URL.replace(/\/+$/, '')}/api/admin/payments?page=${paymentsPage}&pageSize=10`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+
+        const result = await response.json()
+
+        if (!response.ok || result.success !== true) {
+          throw new Error(result.error || 'Erreur du serveur.')
+        }
+
+        if (!cancelled) {
+          setPayments(result.payments || [])
+          setPaymentsPagination(result.pagination || null)
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setHistoryError(err.message || 'Impossible de charger l’historique.')
+        }
+      } finally {
+        if (!cancelled) {
+          setPaymentsLoading(false)
+        }
+      }
+    }
+
+    loadPayments()
+
+    return () => {
+      cancelled = true
+    }
+  }, [user, paymentsPage, paymentsRefresh])
+
+  function formatDateTime(timestamp) {
+    if (!timestamp) return '—'
+
+    const date = new Date(timestamp)
+
+    return Number.isNaN(date.getTime())
+      ? '—'
+      : date.toLocaleString('fr-FR', {
+          dateStyle: 'short',
+          timeStyle: 'short',
+        })
+  }
+
+  function formatAmount(payment) {
+    if (payment.amount === null || payment.amount === undefined) return '—'
+
+    return `${payment.amount.toFixed(2)} ${(payment.currency || '').toUpperCase()}`.trim()
+  }
+
+  function providerLabel(payment) {
+    if (payment.provider === 'stripe') return 'Stripe'
+    if (payment.provider === 'whop') return payment.manual ? 'Whop (manuel)' : 'Whop'
+    return payment.provider || '—'
+  }
+
+  function periodLabel(period) {
+    if (period === 'monthly') return '30 jours'
+    if (period === 'annual') return '365 jours'
+    return '—'
+  }
+
+  function statusLabel(status) {
+    if (status === 'paid') return 'Payé'
+    if (status === 'cancelled') return 'Annulé'
+    return status || '—'
+  }
+
+  async function refreshStats(token, base) {
+    try {
+      const statsResponse = await fetch(`${base}/api/admin/dashboard`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const statsResult = await statsResponse.json()
+
+      if (statsResponse.ok && statsResult.success) {
+        setStats(statsResult.stats)
+      }
+    } catch {
+      // Les statistiques seront mises à jour au prochain chargement.
+    }
+  }
+
+  async function revertActivation(payment) {
+    const confirmed = window.confirm(
+      `Annuler l’activation Whop de ${payment.email || payment.uid} ?\n\n` +
+      'L’abonnement sera rétabli à son état précédent.'
+    )
+
+    if (!confirmed) return
+
+    setRevertingId(payment.id)
+    setHistoryMessage('')
+    setHistoryError('')
+
+    try {
+      if (!API_URL) {
+        throw new Error('URL du serveur Railway manquante.')
+      }
+
+      const base = API_URL.replace(/\/+$/, '')
+      const token = await user.getIdToken()
+
+      const response = await fetch(
+        `${base}/api/admin/payments/${encodeURIComponent(payment.id)}/revert`,
+        {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+
+      const result = await response.json()
+
+      if (!response.ok || result.success !== true) {
+        throw new Error(result.error || 'Annulation impossible.')
+      }
+
+      setUsers((current) =>
+        current.map((entry) =>
+          entry.uid === result.user.uid ? { ...entry, ...result.user } : entry
+        )
+      )
+
+      setHistoryMessage(
+        `Activation annulée pour ${payment.email || payment.uid}.`
+      )
+
+      await refreshStats(token, base)
+      setPaymentsRefresh((value) => value + 1)
+    } catch (err) {
+      setHistoryError(err.message || 'Erreur lors de l’annulation.')
+    } finally {
+      setRevertingId('')
+    }
+  }
+
   function formatDate(timestamp) {
     if (!timestamp) return '—'
 
@@ -208,19 +371,9 @@ export default function Admin() {
         `Abonnement Pro activé pour ${item.email || item.uid} (${label}).`
       )
 
-      // Mise à jour des statistiques
-      try {
-        const statsResponse = await fetch(`${base}/api/admin/dashboard`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        const statsResult = await statsResponse.json()
-
-        if (statsResponse.ok && statsResult.success) {
-          setStats(statsResult.stats)
-        }
-      } catch {
-        // Les statistiques seront mises à jour au prochain chargement.
-      }
+      await refreshStats(token, base)
+      setPaymentsPage(1)
+      setPaymentsRefresh((value) => value + 1)
     } catch (err) {
       setActivationError(err.message || 'Erreur lors de l’activation.')
     } finally {
@@ -542,6 +695,112 @@ export default function Admin() {
                 Suivant
               </button>
             </div>
+          </section>
+
+          <section className="admin-users admin-payment-history">
+            <div className="admin-section-heading">
+              <div>
+                <h2>Historique des paiements</h2>
+                <p>Paiements Stripe et activations Whop.</p>
+              </div>
+
+              <span>{paymentsPagination?.total ?? payments.length} paiements</span>
+            </div>
+
+            {historyError && (
+              <div className="admin-error" role="alert">
+                {historyError}
+              </div>
+            )}
+
+            {historyMessage && (
+              <p className="admin-success" role="status">
+                {historyMessage}
+              </p>
+            )}
+
+            {paymentsLoading ? (
+              <p className="admin-loading">Chargement de l’historique…</p>
+            ) : (
+              <>
+                <div className="admin-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>E-mail</th>
+                        <th>Prestataire</th>
+                        <th>Durée</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {payments.map((payment) => (
+                        <tr key={payment.id}>
+                          <td>{formatDateTime(payment.createdAt)}</td>
+                          <td>{payment.email || payment.uid || '—'}</td>
+                          <td>{providerLabel(payment)}</td>
+                          <td>{periodLabel(payment.period)}</td>
+                          <td>{formatAmount(payment)}</td>
+                          <td>{statusLabel(payment.status)}</td>
+                          <td>
+                            {payment.canRevert ? (
+                              <button
+                                type="button"
+                                className="admin-activate-button admin-revert-button"
+                                disabled={revertingId !== ''}
+                                onClick={() => revertActivation(payment)}
+                              >
+                                {revertingId === payment.id
+                                  ? 'Annulation…'
+                                  : 'Annuler'}
+                              </button>
+                            ) : (
+                              '—'
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+
+                      {payments.length === 0 && (
+                        <tr>
+                          <td colSpan="7">Aucun paiement enregistré.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="admin-pagination">
+                  <button
+                    type="button"
+                    disabled={paymentsPage <= 1}
+                    onClick={() => setPaymentsPage((value) => value - 1)}
+                  >
+                    Précédent
+                  </button>
+
+                  <span>
+                    Page {paymentsPagination?.page ?? paymentsPage} /{' '}
+                    {paymentsPagination?.totalPages ?? 1}
+                  </span>
+
+                  <button
+                    type="button"
+                    disabled={
+                      !paymentsPagination ||
+                      paymentsPage >= paymentsPagination.totalPages
+                    }
+                    onClick={() => setPaymentsPage((value) => value + 1)}
+                  >
+                    Suivant
+                  </button>
+                </div>
+              </>
+            )}
           </section>
 
           <section className="admin-users admin-payment-settings">
